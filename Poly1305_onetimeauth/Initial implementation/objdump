@@ -1,0 +1,645 @@
+
+onetime_auth.o:     file format elf32-littleriscv
+
+SYMBOL TABLE:
+00000000 l    df *ABS*	00000000 onetime_auth.c
+00000000 l     O .rodata.str1.1	00000008 .L.str
+00000008 l     O .rodata.str1.1	00000016 .L.str.2
+00000000 l     O .rodata	00000044 minusp
+00000000         *UND*	00000000 __mulsi3
+00000010       O *COM*	00000001 a
+00000020 g     O .data	00000083 c
+00000000 g     F .text	0000076c crypto_onetimeauth
+00000000         *UND*	00000000 getcycles
+00000824 g     F .text	000000ec main
+00000000         *UND*	00000000 memcpy
+00000000         *UND*	00000000 memset
+00000000         *UND*	00000000 printf
+00000000         *UND*	00000000 putchar
+00000000 g     O .data	00000020 rs
+0000076c g     F .text	000000b8 sign
+
+
+
+Disassembly of section .text:
+
+00000000 <crypto_onetimeauth>:
+   0:	e8010113          	addi	sp,sp,-384
+   4:	16112e23          	sw	ra,380(sp)
+   8:	16912c23          	sw	s1,376(sp)
+   c:	17212a23          	sw	s2,372(sp)
+  10:	17312823          	sw	s3,368(sp)
+  14:	17412623          	sw	s4,364(sp)
+  18:	17512423          	sw	s5,360(sp)
+  1c:	17612223          	sw	s6,356(sp)
+  20:	17712023          	sw	s7,352(sp)
+  24:	15812e23          	sw	s8,348(sp)
+  28:	15912c23          	sw	s9,344(sp)
+  2c:	15a12a23          	sw	s10,340(sp)
+  30:	15b12823          	sw	s11,336(sp)
+  34:	00070a93          	mv	s5,a4
+  38:	00068c93          	mv	s9,a3
+  3c:	00060b93          	mv	s7,a2
+  40:	00058c13          	mv	s8,a1
+  44:	00050993          	mv	s3,a0
+  48:	00074503          	lbu	a0,0(a4)
+  4c:	0ca12423          	sw	a0,200(sp)
+  50:	00174503          	lbu	a0,1(a4)
+  54:	0ca12623          	sw	a0,204(sp)
+  58:	00274503          	lbu	a0,2(a4)
+  5c:	0ca12823          	sw	a0,208(sp)
+  60:	00374503          	lbu	a0,3(a4)
+  64:	00f57513          	andi	a0,a0,15
+  68:	0ca12a23          	sw	a0,212(sp)
+  6c:	00474503          	lbu	a0,4(a4)
+  70:	0fc57513          	andi	a0,a0,252
+  74:	0ca12c23          	sw	a0,216(sp)
+  78:	00574503          	lbu	a0,5(a4)
+  7c:	0ca12e23          	sw	a0,220(sp)
+  80:	00674503          	lbu	a0,6(a4)
+  84:	0ea12023          	sw	a0,224(sp)
+  88:	00774503          	lbu	a0,7(a4)
+  8c:	00f57513          	andi	a0,a0,15
+  90:	0ea12223          	sw	a0,228(sp)
+  94:	00874503          	lbu	a0,8(a4)
+  98:	0fc57513          	andi	a0,a0,252
+  9c:	0ea12423          	sw	a0,232(sp)
+  a0:	00974503          	lbu	a0,9(a4)
+  a4:	0ea12623          	sw	a0,236(sp)
+  a8:	00a74503          	lbu	a0,10(a4)
+  ac:	0ea12823          	sw	a0,240(sp)
+  b0:	00b74503          	lbu	a0,11(a4)
+  b4:	00f57513          	andi	a0,a0,15
+  b8:	0ea12a23          	sw	a0,244(sp)
+  bc:	00c74503          	lbu	a0,12(a4)
+  c0:	0fc57513          	andi	a0,a0,252
+  c4:	0ea12c23          	sw	a0,248(sp)
+  c8:	00d74503          	lbu	a0,13(a4)
+  cc:	0ea12e23          	sw	a0,252(sp)
+  d0:	00e74503          	lbu	a0,14(a4)
+  d4:	10a12023          	sw	a0,256(sp)
+  d8:	00f74503          	lbu	a0,15(a4)
+  dc:	00f57513          	andi	a0,a0,15
+  e0:	10a12223          	sw	a0,260(sp)
+  e4:	10012423          	sw	zero,264(sp)
+  e8:	08410513          	addi	a0,sp,132
+  ec:	04400613          	li	a2,68
+  f0:	00000593          	li	a1,0
+  f4:	00000097          	auipc	ra,0x0
+			f4: R_RISCV_CALL	memset
+  f8:	000080e7          	jalr	ra # f4 <crypto_onetimeauth+0xf4>
+  fc:	019be533          	or	a0,s7,s9
+ 100:	44050263          	beqz	a0,544 <crypto_onetimeauth+0x544>
+ 104:	01512623          	sw	s5,12(sp)
+ 108:	01312823          	sw	s3,16(sp)
+ 10c:	04410a93          	addi	s5,sp,68
+ 110:	08810d13          	addi	s10,sp,136
+ 114:	04400613          	li	a2,68
+ 118:	00f00493          	li	s1,15
+ 11c:	04000d93          	li	s11,64
+ 120:	0c810913          	addi	s2,sp,200
+ 124:	ffc00b13          	li	s6,-4
+ 128:	00000a13          	li	s4,0
+ 12c:	04010993          	addi	s3,sp,64
+ 130:	00098513          	mv	a0,s3
+ 134:	00000593          	li	a1,0
+ 138:	00000097          	auipc	ra,0x0
+			138: R_RISCV_CALL	memset
+ 13c:	000080e7          	jalr	ra # 138 <crypto_onetimeauth+0x138>
+ 140:	00098513          	mv	a0,s3
+ 144:	00000993          	li	s3,0
+ 148:	013c05b3          	add	a1,s8,s3
+ 14c:	0005c583          	lbu	a1,0(a1)
+ 150:	00b52023          	sw	a1,0(a0)
+ 154:	00450513          	addi	a0,a0,4
+ 158:	00198993          	addi	s3,s3,1
+ 15c:	0334e063          	bltu	s1,s3,17c <crypto_onetimeauth+0x17c>
+ 160:	000c8a63          	beqz	s9,174 <crypto_onetimeauth+0x174>
+ 164:	000cc5b3          	xor	a1,s9,zero
+ 168:	00b035b3          	snez	a1,a1
+ 16c:	fc059ee3          	bnez	a1,148 <crypto_onetimeauth+0x148>
+ 170:	00c0006f          	j	17c <crypto_onetimeauth+0x17c>
+ 174:	0179b5b3          	sltu	a1,s3,s7
+ 178:	fc0598e3          	bnez	a1,148 <crypto_onetimeauth+0x148>
+ 17c:	00100593          	li	a1,1
+ 180:	00b52023          	sw	a1,0(a0)
+ 184:	04012503          	lw	a0,64(sp)
+ 188:	00aa0533          	add	a0,s4,a0
+ 18c:	0ff57593          	andi	a1,a0,255
+ 190:	08b12223          	sw	a1,132(sp)
+ 194:	013c0c33          	add	s8,s8,s3
+ 198:	00000593          	li	a1,0
+ 19c:	00bd0633          	add	a2,s10,a1
+ 1a0:	00855513          	srli	a0,a0,0x8
+ 1a4:	00062683          	lw	a3,0(a2)
+ 1a8:	00a68533          	add	a0,a3,a0
+ 1ac:	00ba86b3          	add	a3,s5,a1
+ 1b0:	0006a683          	lw	a3,0(a3)
+ 1b4:	00d50533          	add	a0,a0,a3
+ 1b8:	0ff57693          	andi	a3,a0,255
+ 1bc:	00d62023          	sw	a3,0(a2)
+ 1c0:	00458593          	addi	a1,a1,4
+ 1c4:	fdb59ce3          	bne	a1,s11,19c <crypto_onetimeauth+0x19c>
+ 1c8:	03812a23          	sw	s8,52(sp)
+ 1cc:	03712c23          	sw	s7,56(sp)
+ 1d0:	03912e23          	sw	s9,60(sp)
+ 1d4:	00000c93          	li	s9,0
+ 1d8:	00000a93          	li	s5,0
+ 1dc:	000a8a13          	mv	s4,s5
+ 1e0:	000c8493          	mv	s1,s9
+ 1e4:	08410a93          	addi	s5,sp,132
+ 1e8:	00000d93          	li	s11,0
+ 1ec:	00990533          	add	a0,s2,s1
+ 1f0:	00052503          	lw	a0,0(a0)
+ 1f4:	000aa583          	lw	a1,0(s5)
+ 1f8:	00000097          	auipc	ra,0x0
+			1f8: R_RISCV_CALL	__mulsi3
+ 1fc:	000080e7          	jalr	ra # 1f8 <crypto_onetimeauth+0x1f8>
+ 200:	01b50db3          	add	s11,a0,s11
+ 204:	004a8a93          	addi	s5,s5,4
+ 208:	ffc48493          	addi	s1,s1,-4
+ 20c:	ff6490e3          	bne	s1,s6,1ec <crypto_onetimeauth+0x1ec>
+ 210:	001a0a93          	addi	s5,s4,1
+ 214:	01000b93          	li	s7,16
+ 218:	055be063          	bltu	s7,s5,258 <crypto_onetimeauth+0x258>
+ 21c:	000d0c13          	mv	s8,s10
+ 220:	10810493          	addi	s1,sp,264
+ 224:	14000913          	li	s2,320
+ 228:	000c2503          	lw	a0,0(s8)
+ 22c:	0004a583          	lw	a1,0(s1)
+ 230:	00000097          	auipc	ra,0x0
+			230: R_RISCV_CALL	__mulsi3
+ 234:	000080e7          	jalr	ra # 230 <crypto_onetimeauth+0x230>
+ 238:	00090593          	mv	a1,s2
+ 23c:	00000097          	auipc	ra,0x0
+			23c: R_RISCV_CALL	__mulsi3
+ 240:	000080e7          	jalr	ra # 23c <crypto_onetimeauth+0x23c>
+ 244:	01b50db3          	add	s11,a0,s11
+ 248:	004c0c13          	addi	s8,s8,4
+ 24c:	ffc48493          	addi	s1,s1,-4
+ 250:	fffb8b93          	addi	s7,s7,-1
+ 254:	fd7a1ae3          	bne	s4,s7,228 <crypto_onetimeauth+0x228>
+ 258:	002a1513          	slli	a0,s4,0x2
+ 25c:	10c10593          	addi	a1,sp,268
+ 260:	00a58533          	add	a0,a1,a0
+ 264:	01b52023          	sw	s11,0(a0)
+ 268:	004d0d13          	addi	s10,s10,4
+ 26c:	004c8c93          	addi	s9,s9,4
+ 270:	0c810913          	addi	s2,sp,200
+ 274:	01100513          	li	a0,17
+ 278:	f6aa92e3          	bne	s5,a0,1dc <crypto_onetimeauth+0x1dc>
+ 27c:	08410513          	addi	a0,sp,132
+ 280:	04400613          	li	a2,68
+ 284:	00000097          	auipc	ra,0x0
+			284: R_RISCV_CALL	memcpy
+ 288:	000080e7          	jalr	ra # 284 <crypto_onetimeauth+0x284>
+ 28c:	08412a83          	lw	s5,132(sp)
+ 290:	008ad513          	srli	a0,s5,0x8
+ 294:	08812583          	lw	a1,136(sp)
+ 298:	00a58d33          	add	s10,a1,a0
+ 29c:	008d5513          	srli	a0,s10,0x8
+ 2a0:	08c12583          	lw	a1,140(sp)
+ 2a4:	00b50c33          	add	s8,a0,a1
+ 2a8:	03812b83          	lw	s7,56(sp)
+ 2ac:	013bb533          	sltu	a0,s7,s3
+ 2b0:	413b8bb3          	sub	s7,s7,s3
+ 2b4:	008c5593          	srli	a1,s8,0x8
+ 2b8:	09012603          	lw	a2,144(sp)
+ 2bc:	00c584b3          	add	s1,a1,a2
+ 2c0:	03c12583          	lw	a1,60(sp)
+ 2c4:	40a585b3          	sub	a1,a1,a0
+ 2c8:	02b12e23          	sw	a1,60(sp)
+ 2cc:	09412503          	lw	a0,148(sp)
+ 2d0:	0084d593          	srli	a1,s1,0x8
+ 2d4:	00a58a33          	add	s4,a1,a0
+ 2d8:	09812503          	lw	a0,152(sp)
+ 2dc:	008a5593          	srli	a1,s4,0x8
+ 2e0:	00a58cb3          	add	s9,a1,a0
+ 2e4:	09c12503          	lw	a0,156(sp)
+ 2e8:	008cd593          	srli	a1,s9,0x8
+ 2ec:	00a589b3          	add	s3,a1,a0
+ 2f0:	0a012503          	lw	a0,160(sp)
+ 2f4:	0089d593          	srli	a1,s3,0x8
+ 2f8:	00a58db3          	add	s11,a1,a0
+ 2fc:	0a412503          	lw	a0,164(sp)
+ 300:	008dd593          	srli	a1,s11,0x8
+ 304:	00a585b3          	add	a1,a1,a0
+ 308:	00b12a23          	sw	a1,20(sp)
+ 30c:	0a812503          	lw	a0,168(sp)
+ 310:	0085d593          	srli	a1,a1,0x8
+ 314:	00a585b3          	add	a1,a1,a0
+ 318:	00b12c23          	sw	a1,24(sp)
+ 31c:	0ac12503          	lw	a0,172(sp)
+ 320:	0085d593          	srli	a1,a1,0x8
+ 324:	00a585b3          	add	a1,a1,a0
+ 328:	00b12e23          	sw	a1,28(sp)
+ 32c:	0b012503          	lw	a0,176(sp)
+ 330:	0085d593          	srli	a1,a1,0x8
+ 334:	00a585b3          	add	a1,a1,a0
+ 338:	02b12023          	sw	a1,32(sp)
+ 33c:	0b412503          	lw	a0,180(sp)
+ 340:	0085d593          	srli	a1,a1,0x8
+ 344:	00a585b3          	add	a1,a1,a0
+ 348:	02b12223          	sw	a1,36(sp)
+ 34c:	0b812503          	lw	a0,184(sp)
+ 350:	0085d593          	srli	a1,a1,0x8
+ 354:	00a585b3          	add	a1,a1,a0
+ 358:	02b12423          	sw	a1,40(sp)
+ 35c:	0bc12503          	lw	a0,188(sp)
+ 360:	0085d593          	srli	a1,a1,0x8
+ 364:	00a585b3          	add	a1,a1,a0
+ 368:	02b12623          	sw	a1,44(sp)
+ 36c:	0c012503          	lw	a0,192(sp)
+ 370:	0085d593          	srli	a1,a1,0x8
+ 374:	00a585b3          	add	a1,a1,a0
+ 378:	02b12823          	sw	a1,48(sp)
+ 37c:	0c412503          	lw	a0,196(sp)
+ 380:	0085d593          	srli	a1,a1,0x8
+ 384:	00a58533          	add	a0,a1,a0
+ 388:	02a12c23          	sw	a0,56(sp)
+ 38c:	00255513          	srli	a0,a0,0x2
+ 390:	00500593          	li	a1,5
+ 394:	00000097          	auipc	ra,0x0
+			394: R_RISCV_CALL	__mulsi3
+ 398:	000080e7          	jalr	ra # 394 <crypto_onetimeauth+0x394>
+ 39c:	0ffaf593          	andi	a1,s5,255
+ 3a0:	00b50533          	add	a0,a0,a1
+ 3a4:	0ffd7593          	andi	a1,s10,255
+ 3a8:	00855613          	srli	a2,a0,0x8
+ 3ac:	00b605b3          	add	a1,a2,a1
+ 3b0:	0ffc7613          	andi	a2,s8,255
+ 3b4:	0085d693          	srli	a3,a1,0x8
+ 3b8:	00c68633          	add	a2,a3,a2
+ 3bc:	0ff4f693          	andi	a3,s1,255
+ 3c0:	00865713          	srli	a4,a2,0x8
+ 3c4:	00d706b3          	add	a3,a4,a3
+ 3c8:	0ffa7713          	andi	a4,s4,255
+ 3cc:	0086d793          	srli	a5,a3,0x8
+ 3d0:	00e78733          	add	a4,a5,a4
+ 3d4:	0ffcf793          	andi	a5,s9,255
+ 3d8:	00875493          	srli	s1,a4,0x8
+ 3dc:	00f487b3          	add	a5,s1,a5
+ 3e0:	0ff5f593          	andi	a1,a1,255
+ 3e4:	08b12423          	sw	a1,136(sp)
+ 3e8:	0ff9f593          	andi	a1,s3,255
+ 3ec:	0087d493          	srli	s1,a5,0x8
+ 3f0:	00b485b3          	add	a1,s1,a1
+ 3f4:	0ff67613          	andi	a2,a2,255
+ 3f8:	08c12623          	sw	a2,140(sp)
+ 3fc:	0ffdf613          	andi	a2,s11,255
+ 400:	0085d493          	srli	s1,a1,0x8
+ 404:	00c48633          	add	a2,s1,a2
+ 408:	0ff6f693          	andi	a3,a3,255
+ 40c:	08d12823          	sw	a3,144(sp)
+ 410:	01412683          	lw	a3,20(sp)
+ 414:	0ff6f693          	andi	a3,a3,255
+ 418:	00865493          	srli	s1,a2,0x8
+ 41c:	00d486b3          	add	a3,s1,a3
+ 420:	0ff77713          	andi	a4,a4,255
+ 424:	08e12a23          	sw	a4,148(sp)
+ 428:	01812703          	lw	a4,24(sp)
+ 42c:	0ff77713          	andi	a4,a4,255
+ 430:	0086d493          	srli	s1,a3,0x8
+ 434:	00e48733          	add	a4,s1,a4
+ 438:	0ff7f793          	andi	a5,a5,255
+ 43c:	08f12c23          	sw	a5,152(sp)
+ 440:	01c12783          	lw	a5,28(sp)
+ 444:	0ff7f793          	andi	a5,a5,255
+ 448:	00875493          	srli	s1,a4,0x8
+ 44c:	00f487b3          	add	a5,s1,a5
+ 450:	0ff5f593          	andi	a1,a1,255
+ 454:	08b12e23          	sw	a1,156(sp)
+ 458:	02012583          	lw	a1,32(sp)
+ 45c:	0ff5f593          	andi	a1,a1,255
+ 460:	0087d493          	srli	s1,a5,0x8
+ 464:	00b485b3          	add	a1,s1,a1
+ 468:	0ff67613          	andi	a2,a2,255
+ 46c:	0ac12023          	sw	a2,160(sp)
+ 470:	02412603          	lw	a2,36(sp)
+ 474:	0ff67613          	andi	a2,a2,255
+ 478:	0085d493          	srli	s1,a1,0x8
+ 47c:	00c48633          	add	a2,s1,a2
+ 480:	0ff6f693          	andi	a3,a3,255
+ 484:	0ad12223          	sw	a3,164(sp)
+ 488:	02812683          	lw	a3,40(sp)
+ 48c:	0ff6f693          	andi	a3,a3,255
+ 490:	00865493          	srli	s1,a2,0x8
+ 494:	00d486b3          	add	a3,s1,a3
+ 498:	0ff77713          	andi	a4,a4,255
+ 49c:	0ae12423          	sw	a4,168(sp)
+ 4a0:	02c12703          	lw	a4,44(sp)
+ 4a4:	0ff77713          	andi	a4,a4,255
+ 4a8:	0086d493          	srli	s1,a3,0x8
+ 4ac:	00e48733          	add	a4,s1,a4
+ 4b0:	0ff7f793          	andi	a5,a5,255
+ 4b4:	0af12623          	sw	a5,172(sp)
+ 4b8:	03012783          	lw	a5,48(sp)
+ 4bc:	0ff7f793          	andi	a5,a5,255
+ 4c0:	00875493          	srli	s1,a4,0x8
+ 4c4:	00f487b3          	add	a5,s1,a5
+ 4c8:	0ff5f593          	andi	a1,a1,255
+ 4cc:	0ab12823          	sw	a1,176(sp)
+ 4d0:	03812583          	lw	a1,56(sp)
+ 4d4:	0035f593          	andi	a1,a1,3
+ 4d8:	0087d493          	srli	s1,a5,0x8
+ 4dc:	00b485b3          	add	a1,s1,a1
+ 4e0:	03c12c83          	lw	s9,60(sp)
+ 4e4:	0ff67613          	andi	a2,a2,255
+ 4e8:	0ac12a23          	sw	a2,180(sp)
+ 4ec:	0ff6f613          	andi	a2,a3,255
+ 4f0:	0ac12c23          	sw	a2,184(sp)
+ 4f4:	0ff77613          	andi	a2,a4,255
+ 4f8:	0ac12e23          	sw	a2,188(sp)
+ 4fc:	0ff7f613          	andi	a2,a5,255
+ 500:	0cc12023          	sw	a2,192(sp)
+ 504:	04400613          	li	a2,68
+ 508:	0cb12223          	sw	a1,196(sp)
+ 50c:	019be5b3          	or	a1,s7,s9
+ 510:	0ff57a13          	andi	s4,a0,255
+ 514:	09412223          	sw	s4,132(sp)
+ 518:	03412c03          	lw	s8,52(sp)
+ 51c:	04410493          	addi	s1,sp,68
+ 520:	00048a93          	mv	s5,s1
+ 524:	08810d13          	addi	s10,sp,136
+ 528:	00f00493          	li	s1,15
+ 52c:	04000d93          	li	s11,64
+ 530:	be059ee3          	bnez	a1,12c <crypto_onetimeauth+0x12c>
+ 534:	005a0493          	addi	s1,s4,5
+ 538:	01012983          	lw	s3,16(sp)
+ 53c:	00c12a83          	lw	s5,12(sp)
+ 540:	0080006f          	j	548 <crypto_onetimeauth+0x548>
+ 544:	00500493          	li	s1,5
+ 548:	10c10513          	addi	a0,sp,268
+ 54c:	08410a13          	addi	s4,sp,132
+ 550:	04400913          	li	s2,68
+ 554:	000a0593          	mv	a1,s4
+ 558:	00090613          	mv	a2,s2
+ 55c:	00000097          	auipc	ra,0x0
+			55c: R_RISCV_CALL	memcpy
+ 560:	000080e7          	jalr	ra # 55c <crypto_onetimeauth+0x55c>
+ 564:	0ff4f513          	andi	a0,s1,255
+ 568:	08a12223          	sw	a0,132(sp)
+ 56c:	08810813          	addi	a6,sp,136
+ 570:	000005b7          	lui	a1,0x0
+			570: R_RISCV_HI20	minusp
+ 574:	00058613          	mv	a2,a1
+			574: R_RISCV_LO12_I	minusp
+ 578:	04000593          	li	a1,64
+ 57c:	00000693          	li	a3,0
+ 580:	00d80733          	add	a4,a6,a3
+ 584:	0084d793          	srli	a5,s1,0x8
+ 588:	00072483          	lw	s1,0(a4)
+ 58c:	00f487b3          	add	a5,s1,a5
+ 590:	00c684b3          	add	s1,a3,a2
+ 594:	0044a483          	lw	s1,4(s1)
+ 598:	009784b3          	add	s1,a5,s1
+ 59c:	0ff4f793          	andi	a5,s1,255
+ 5a0:	00f72023          	sw	a5,0(a4)
+ 5a4:	00468693          	addi	a3,a3,4
+ 5a8:	fcb69ce3          	bne	a3,a1,580 <crypto_onetimeauth+0x580>
+ 5ac:	0c412603          	lw	a2,196(sp)
+ 5b0:	00765613          	srli	a2,a2,0x7
+ 5b4:	40c00633          	neg	a2,a2
+ 5b8:	10c10693          	addi	a3,sp,268
+ 5bc:	00000713          	li	a4,0
+ 5c0:	00e687b3          	add	a5,a3,a4
+ 5c4:	0007a783          	lw	a5,0(a5)
+ 5c8:	00ea04b3          	add	s1,s4,a4
+ 5cc:	0004a503          	lw	a0,0(s1)
+ 5d0:	00f547b3          	xor	a5,a0,a5
+ 5d4:	00c7f7b3          	and	a5,a5,a2
+ 5d8:	00a7c533          	xor	a0,a5,a0
+ 5dc:	00a4a023          	sw	a0,0(s1)
+ 5e0:	00470713          	addi	a4,a4,4
+ 5e4:	fd271ee3          	bne	a4,s2,5c0 <crypto_onetimeauth+0x5c0>
+ 5e8:	010ac503          	lbu	a0,16(s5)
+ 5ec:	04a12023          	sw	a0,64(sp)
+ 5f0:	011ac603          	lbu	a2,17(s5)
+ 5f4:	04c12223          	sw	a2,68(sp)
+ 5f8:	012ac603          	lbu	a2,18(s5)
+ 5fc:	04c12423          	sw	a2,72(sp)
+ 600:	013ac603          	lbu	a2,19(s5)
+ 604:	04c12623          	sw	a2,76(sp)
+ 608:	014ac603          	lbu	a2,20(s5)
+ 60c:	04c12823          	sw	a2,80(sp)
+ 610:	015ac603          	lbu	a2,21(s5)
+ 614:	04c12a23          	sw	a2,84(sp)
+ 618:	016ac603          	lbu	a2,22(s5)
+ 61c:	04c12c23          	sw	a2,88(sp)
+ 620:	017ac603          	lbu	a2,23(s5)
+ 624:	04c12e23          	sw	a2,92(sp)
+ 628:	018ac603          	lbu	a2,24(s5)
+ 62c:	06c12023          	sw	a2,96(sp)
+ 630:	019ac603          	lbu	a2,25(s5)
+ 634:	06c12223          	sw	a2,100(sp)
+ 638:	01aac603          	lbu	a2,26(s5)
+ 63c:	06c12423          	sw	a2,104(sp)
+ 640:	01bac603          	lbu	a2,27(s5)
+ 644:	06c12623          	sw	a2,108(sp)
+ 648:	01cac603          	lbu	a2,28(s5)
+ 64c:	06c12823          	sw	a2,112(sp)
+ 650:	01dac603          	lbu	a2,29(s5)
+ 654:	06c12a23          	sw	a2,116(sp)
+ 658:	01eac603          	lbu	a2,30(s5)
+ 65c:	06c12c23          	sw	a2,120(sp)
+ 660:	01fac603          	lbu	a2,31(s5)
+ 664:	06c12e23          	sw	a2,124(sp)
+ 668:	08012023          	sw	zero,128(sp)
+ 66c:	08412603          	lw	a2,132(sp)
+ 670:	00a60733          	add	a4,a2,a0
+ 674:	0ff77513          	andi	a0,a4,255
+ 678:	08a12223          	sw	a0,132(sp)
+ 67c:	04410613          	addi	a2,sp,68
+ 680:	00000693          	li	a3,0
+ 684:	00d80533          	add	a0,a6,a3
+ 688:	00875713          	srli	a4,a4,0x8
+ 68c:	00052783          	lw	a5,0(a0)
+ 690:	00e78733          	add	a4,a5,a4
+ 694:	00d607b3          	add	a5,a2,a3
+ 698:	0007a783          	lw	a5,0(a5)
+ 69c:	00f70733          	add	a4,a4,a5
+ 6a0:	0ff77793          	andi	a5,a4,255
+ 6a4:	00f52023          	sw	a5,0(a0)
+ 6a8:	00468693          	addi	a3,a3,4
+ 6ac:	fcb69ce3          	bne	a3,a1,684 <crypto_onetimeauth+0x684>
+ 6b0:	08412503          	lw	a0,132(sp)
+ 6b4:	00a98023          	sb	a0,0(s3)
+ 6b8:	08812503          	lw	a0,136(sp)
+ 6bc:	00a980a3          	sb	a0,1(s3)
+ 6c0:	08c12503          	lw	a0,140(sp)
+ 6c4:	00a98123          	sb	a0,2(s3)
+ 6c8:	09012503          	lw	a0,144(sp)
+ 6cc:	00a981a3          	sb	a0,3(s3)
+ 6d0:	09412503          	lw	a0,148(sp)
+ 6d4:	00a98223          	sb	a0,4(s3)
+ 6d8:	09812503          	lw	a0,152(sp)
+ 6dc:	00a982a3          	sb	a0,5(s3)
+ 6e0:	09c12503          	lw	a0,156(sp)
+ 6e4:	00a98323          	sb	a0,6(s3)
+ 6e8:	0a012503          	lw	a0,160(sp)
+ 6ec:	00a983a3          	sb	a0,7(s3)
+ 6f0:	0a412503          	lw	a0,164(sp)
+ 6f4:	00a98423          	sb	a0,8(s3)
+ 6f8:	0a812503          	lw	a0,168(sp)
+ 6fc:	00a984a3          	sb	a0,9(s3)
+ 700:	0ac12503          	lw	a0,172(sp)
+ 704:	00a98523          	sb	a0,10(s3)
+ 708:	0b012503          	lw	a0,176(sp)
+ 70c:	00a985a3          	sb	a0,11(s3)
+ 710:	0b412503          	lw	a0,180(sp)
+ 714:	00a98623          	sb	a0,12(s3)
+ 718:	0b812503          	lw	a0,184(sp)
+ 71c:	00a986a3          	sb	a0,13(s3)
+ 720:	0bc12503          	lw	a0,188(sp)
+ 724:	00a98723          	sb	a0,14(s3)
+ 728:	0c012503          	lw	a0,192(sp)
+ 72c:	00a987a3          	sb	a0,15(s3)
+ 730:	00000513          	li	a0,0
+ 734:	15012d83          	lw	s11,336(sp)
+ 738:	15412d03          	lw	s10,340(sp)
+ 73c:	15812c83          	lw	s9,344(sp)
+ 740:	15c12c03          	lw	s8,348(sp)
+ 744:	16012b83          	lw	s7,352(sp)
+ 748:	16412b03          	lw	s6,356(sp)
+ 74c:	16812a83          	lw	s5,360(sp)
+ 750:	16c12a03          	lw	s4,364(sp)
+ 754:	17012983          	lw	s3,368(sp)
+ 758:	17412903          	lw	s2,372(sp)
+ 75c:	17812483          	lw	s1,376(sp)
+ 760:	17c12083          	lw	ra,380(sp)
+ 764:	18010113          	addi	sp,sp,384
+ 768:	00008067          	ret
+
+0000076c <sign>:
+ 76c:	fe010113          	addi	sp,sp,-32
+ 770:	00112e23          	sw	ra,28(sp)
+ 774:	00912c23          	sw	s1,24(sp)
+ 778:	01212a23          	sw	s2,20(sp)
+ 77c:	01312823          	sw	s3,16(sp)
+ 780:	01412623          	sw	s4,12(sp)
+ 784:	01512423          	sw	s5,8(sp)
+ 788:	01612223          	sw	s6,4(sp)
+ 78c:	00000537          	lui	a0,0x0
+			78c: R_RISCV_HI20	a
+ 790:	00050913          	mv	s2,a0
+			790: R_RISCV_LO12_I	a
+ 794:	00000537          	lui	a0,0x0
+			794: R_RISCV_HI20	c
+ 798:	00050593          	mv	a1,a0
+			798: R_RISCV_LO12_I	c
+ 79c:	00000537          	lui	a0,0x0
+			79c: R_RISCV_HI20	rs
+ 7a0:	00050713          	mv	a4,a0
+			7a0: R_RISCV_LO12_I	rs
+ 7a4:	08300613          	li	a2,131
+ 7a8:	00090513          	mv	a0,s2
+ 7ac:	00000693          	li	a3,0
+ 7b0:	00000097          	auipc	ra,0x0
+ 7b4:	850080e7          	jalr	-1968(ra) # 0 <crypto_onetimeauth>
+ 7b8:	00000537          	lui	a0,0x0
+			7b8: R_RISCV_HI20	.L.str
+ 7bc:	00050b13          	mv	s6,a0
+			7bc: R_RISCV_LO12_I	.L.str
+ 7c0:	00700a13          	li	s4,7
+ 7c4:	00a00993          	li	s3,10
+ 7c8:	01000a93          	li	s5,16
+ 7cc:	00000493          	li	s1,0
+ 7d0:	01248533          	add	a0,s1,s2
+ 7d4:	00054583          	lbu	a1,0(a0) # 0 <crypto_onetimeauth>
+ 7d8:	000b0513          	mv	a0,s6
+ 7dc:	00000097          	auipc	ra,0x0
+			7dc: R_RISCV_CALL	printf
+ 7e0:	000080e7          	jalr	ra # 7dc <sign+0x70>
+ 7e4:	0074f513          	andi	a0,s1,7
+ 7e8:	01451863          	bne	a0,s4,7f8 <sign+0x8c>
+ 7ec:	00098513          	mv	a0,s3
+ 7f0:	00000097          	auipc	ra,0x0
+			7f0: R_RISCV_CALL	putchar
+ 7f4:	000080e7          	jalr	ra # 7f0 <sign+0x84>
+ 7f8:	00148493          	addi	s1,s1,1
+ 7fc:	fd549ae3          	bne	s1,s5,7d0 <sign+0x64>
+ 800:	00412b03          	lw	s6,4(sp)
+ 804:	00812a83          	lw	s5,8(sp)
+ 808:	00c12a03          	lw	s4,12(sp)
+ 80c:	01012983          	lw	s3,16(sp)
+ 810:	01412903          	lw	s2,20(sp)
+ 814:	01812483          	lw	s1,24(sp)
+ 818:	01c12083          	lw	ra,28(sp)
+ 81c:	02010113          	addi	sp,sp,32
+ 820:	00008067          	ret
+
+00000824 <main>:
+ 824:	fe010113          	addi	sp,sp,-32
+ 828:	00112e23          	sw	ra,28(sp)
+ 82c:	00912c23          	sw	s1,24(sp)
+ 830:	01212a23          	sw	s2,20(sp)
+ 834:	01312823          	sw	s3,16(sp)
+ 838:	01412623          	sw	s4,12(sp)
+ 83c:	01512423          	sw	s5,8(sp)
+ 840:	01612223          	sw	s6,4(sp)
+ 844:	01712023          	sw	s7,0(sp)
+ 848:	00000097          	auipc	ra,0x0
+			848: R_RISCV_CALL	getcycles
+ 84c:	000080e7          	jalr	ra # 848 <main+0x24>
+ 850:	00050913          	mv	s2,a0
+ 854:	00000537          	lui	a0,0x0
+			854: R_RISCV_HI20	a
+ 858:	00050993          	mv	s3,a0
+			858: R_RISCV_LO12_I	a
+ 85c:	00000537          	lui	a0,0x0
+			85c: R_RISCV_HI20	c
+ 860:	00050593          	mv	a1,a0
+			860: R_RISCV_LO12_I	c
+ 864:	00000537          	lui	a0,0x0
+			864: R_RISCV_HI20	rs
+ 868:	00050713          	mv	a4,a0
+			868: R_RISCV_LO12_I	rs
+ 86c:	08300613          	li	a2,131
+ 870:	00098513          	mv	a0,s3
+ 874:	00000693          	li	a3,0
+ 878:	fffff097          	auipc	ra,0xfffff
+ 87c:	788080e7          	jalr	1928(ra) # 0 <crypto_onetimeauth>
+ 880:	00000537          	lui	a0,0x0
+			880: R_RISCV_HI20	.L.str
+ 884:	00050b93          	mv	s7,a0
+			884: R_RISCV_LO12_I	.L.str
+ 888:	00700a93          	li	s5,7
+ 88c:	00a00a13          	li	s4,10
+ 890:	01000b13          	li	s6,16
+ 894:	00000493          	li	s1,0
+ 898:	01348533          	add	a0,s1,s3
+ 89c:	00054583          	lbu	a1,0(a0) # 0 <crypto_onetimeauth>
+ 8a0:	000b8513          	mv	a0,s7
+ 8a4:	00000097          	auipc	ra,0x0
+			8a4: R_RISCV_CALL	printf
+ 8a8:	000080e7          	jalr	ra # 8a4 <main+0x80>
+ 8ac:	0074f513          	andi	a0,s1,7
+ 8b0:	01551863          	bne	a0,s5,8c0 <main+0x9c>
+ 8b4:	000a0513          	mv	a0,s4
+ 8b8:	00000097          	auipc	ra,0x0
+			8b8: R_RISCV_CALL	putchar
+ 8bc:	000080e7          	jalr	ra # 8b8 <main+0x94>
+ 8c0:	00148493          	addi	s1,s1,1
+ 8c4:	fd649ae3          	bne	s1,s6,898 <main+0x74>
+ 8c8:	00000097          	auipc	ra,0x0
+			8c8: R_RISCV_CALL	getcycles
+ 8cc:	000080e7          	jalr	ra # 8c8 <main+0xa4>
+ 8d0:	412505b3          	sub	a1,a0,s2
+ 8d4:	00000537          	lui	a0,0x0
+			8d4: R_RISCV_HI20	.L.str.2
+ 8d8:	00050513          	mv	a0,a0
+			8d8: R_RISCV_LO12_I	.L.str.2
+ 8dc:	00000097          	auipc	ra,0x0
+			8dc: R_RISCV_CALL	printf
+ 8e0:	000080e7          	jalr	ra # 8dc <main+0xb8>
+ 8e4:	00000513          	li	a0,0
+ 8e8:	00012b83          	lw	s7,0(sp)
+ 8ec:	00412b03          	lw	s6,4(sp)
+ 8f0:	00812a83          	lw	s5,8(sp)
+ 8f4:	00c12a03          	lw	s4,12(sp)
+ 8f8:	01012983          	lw	s3,16(sp)
+ 8fc:	01412903          	lw	s2,20(sp)
+ 900:	01812483          	lw	s1,24(sp)
+ 904:	01c12083          	lw	ra,28(sp)
+ 908:	02010113          	addi	sp,sp,32
+ 90c:	00008067          	ret
