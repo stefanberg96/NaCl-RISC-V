@@ -1,10 +1,11 @@
 .text
 
 .globl securemul
+.type securemul, @function
 .align 2
 securemul:
-    li    t0, 10
-    li    t1, 50
+    mv    t0, a0
+    mv    t1, a1
     mv    a0, zero
     andi  t2, t0, 1
     sub   t2, zero, t2
@@ -57,6 +58,5 @@ securemul:
 .globl add
 .align 2
 add:
-  add a0, a0, a1;
-  add t0, t0 ,t1;
+  add a0, a0, a1
   ret

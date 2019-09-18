@@ -19,3 +19,6 @@ test: $(OBJS)
 
 objdump:
 	$(riscv-gnu-toolchain)/build-binutils-linux/binutils/objdump -d -t $(file) > $(file).objdump 
+
+clean:
+	rm $(OBJS) $(wildcard *.hex) $(wildcard *.map) $(wildcard *.elf)
