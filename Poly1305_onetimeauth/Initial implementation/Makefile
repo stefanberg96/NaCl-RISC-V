@@ -22,3 +22,6 @@ objdump:
 
 clean:
 	rm $(OBJS) $(wildcard *.hex) $(wildcard *.map) $(wildcard *.elf)
+
+qemu: $(OBJS)
+	$(riscv64-unknown-elf-gcc)/bin/riscv64-unknown-elf-gcc -march=rv32imac -mabi=ilp32 $(OBJS) -o qemu

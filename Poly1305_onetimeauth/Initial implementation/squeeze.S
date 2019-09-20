@@ -27,8 +27,6 @@ fittingloop:
     mv    t2, a1      # u>>2
     slli  t2, t2, 2   # (u>>2)*4
     add   a1, a1, t2  # (u>>2)*5   
-    mv    a0, a1
-    ret
     addi  a0, t1, -64 # store h[-1] into a0
 moduloloop:
     lw    t0, 4(a0)   # load h[j]

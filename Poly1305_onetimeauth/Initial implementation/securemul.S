@@ -1,5 +1,9 @@
 .text
 
+
+# Multiplies a0 and a1 which have to be at most 1 byte large
+# The registers used in this function are
+# a0,a1 t0-t3
 .globl securemul
 .type securemul, @function
 .align 2
@@ -55,6 +59,9 @@ securemul:
     add   a0, a0, t3 
     ret
 
+# Multiply the value in a0 with 320
+# Registers used:
+# a0, a1
 .globl mul320
 .align 2
 mul320:
