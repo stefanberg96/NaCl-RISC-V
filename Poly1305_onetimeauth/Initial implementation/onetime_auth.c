@@ -125,9 +125,7 @@ int crypto_onetimeauth(unsigned char *out, const unsigned char *in,
     in += j;
     inlen -= j; // update loop variants (inlen and increment in pointer)
     add(h, c);  // c to the state
-    printf("Still alive??\n");
     mulmodasm(h, r); // multiply state with the secret key modulo 2^130-5
-    printf("Still got here\n");
   }
 
   freeze(h); // calculate mod 2^130-5
@@ -243,7 +241,6 @@ uint64_t dobenchmark() {
   unsigned char x = 5, y = 10;
   oldcount = getcycles();
   //  crypto_onetimeauth(a, c, 131, rs);
-  //  squeezeasm(test1);
   newcount = getcycles();
   return newcount - oldcount;
 }

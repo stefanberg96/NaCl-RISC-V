@@ -4,14 +4,13 @@
 .type mulmodasm, @function
 mulmodasm:
    addi  sp, sp, -96 # space for the hr array and to temporarily store s2, s3, s4
-   sw    s2, 92(sp)
-   sw    s3, 88(sp)
-   sw    s4, 84(sp)
-   sw    s5, 80(sp)
+   sw    s2, 96(sp)
+   sw    s3, 92(sp)
+   sw    s4, 88(sp)
+   sw    s5, 84(sp) 
+   sw    ra, 80(sp)   # store the return address
    mv    s4, a0       # store h base address into s4 
    mv    s5, a1       # store r base address into s5
-   mv    t4, a0       # store h base address into t4(will be modified)
-   mv    t5, a1       # store r base address into t5(will be modified
    li    s2, 0        # set i to 0
 outer_loop:
    li    s3, 0        # set u to 0
@@ -41,7 +40,7 @@ inner_loop2:
    ble   t4, t6, inner_loop2
 
    slli  t4, s2, 2    # calculate i*4
-   add   t4, t4, sp   # address of hr[i]+76
+   sub   t4, sp, t4   # address of hr[i]+76
    sw    s2, 76(t4)   # hr[i]=u
    addi  s2, s2, 1    # increment i
    li    t1, 16       # stop value of outer_loop
@@ -53,17 +52,17 @@ inner_loop2:
 copy_loop: 
    lw    t2, 0(t1)    # load hr[i]
    sw    t2, 0(s4)    # h[i]=hr[i]
-   addi  t1, t1, -4   # increment counters
+   addi  t1, t1, 4   # increment counters
    addi  s4, s4, 4    #
    ble   s4, t6, copy_loop
 
    addi  a0, t6, -64  # base address of h
    jal   squeezeasm
 
-   lw    s2, 92(sp)   # restore saved variables
-   lw    s3, 88(sp)
-   lw    s4, 84(sp)
-   lw    s5, 80(sp)
+   lw    s2, 96(sp)   # restore saved variables
+   lw    s3, 92(sp)
+   lw    s4, 88(sp)
+   lw    s5, 84(sp)
+   lw    ra, 80(sp)
    addi  sp, sp, 96 
-   jal aliveprint
    ret
