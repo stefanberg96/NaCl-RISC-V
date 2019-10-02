@@ -11,6 +11,10 @@ void aliveprint(){
   printf("ITS ALIVE!!\n");
 }
 
+void print32bytes(uint32_t x){
+  printf("%x\n",x);
+}
+
 // add the two numbers together without reduction
 static void add(unsigned int h[17], const unsigned int c[17]) {
   unsigned int j;
@@ -63,7 +67,7 @@ static void freeze(unsigned int h[17]) {
     h[j] ^= negative & (horig[j] ^ h[j]);
 }
 
-// not sure how it works but does multiplication modulo 2^130-5 and result is
+// does multiplication modulo 2^130-5 and result is
 // placed in h
 static void mulmod(unsigned int h[17], const unsigned int r[17]) {
   unsigned int hr[17];
@@ -79,6 +83,7 @@ static void mulmod(unsigned int h[17], const unsigned int r[17]) {
       unsigned int t = securemul(h[j], r[i + 17 - j]);
       u += mul320(t);
     }
+    printf("%x\n",u);
     hr[i] = u;
   }
   for (i = 0; i < 17; ++i)
@@ -206,7 +211,7 @@ void test() {
                             0xb8, 0x6a, 0x54, 0xea, 0x92, 0x92,
                             0x49, 0x79, 0x7b, 0xee, 0x1e};
 
-  mulmod(test1, test2);
+  mulmodasm(test1, test2);
 }
 
 uint64_t dobenchmark() {
@@ -240,13 +245,13 @@ uint64_t dobenchmark() {
   uint32_t oldcount, newcount;
   unsigned char x = 5, y = 10;
   oldcount = getcycles();
-  //  crypto_onetimeauth(a, c, 131, rs);
+  crypto_onetimeauth(a, c, 131, rs);
   newcount = getcycles();
   return newcount - oldcount;
 }
 
 int main() {
-  printf("Hello helloo \n");
+  //test();
   checkCorrectness();
   uint64_t cyclesTaken;
   cyclesTaken = dobenchmark();
