@@ -6,6 +6,8 @@ extern uint32_t securemul(unsigned char a, unsigned char b);
 extern uint32_t mul320(uint32_t a);
 extern void squeezeasm(unsigned int h[17]);
 extern void mulmodasm(unsigned int h[17], unsigned int r[17]);
+extern void onetime_authloop(unsigned char *in, int inlen, unsigned int *h, unsigned int  *r, unsigned int *c);
+extern void addasm(unsigned int h[17], const unsigned int c[17]);
 
 void aliveprint(){
   printf("ITS ALIVE!!\n");
@@ -16,7 +18,7 @@ void print32bytes(uint32_t x){
 }
 
 // add the two numbers together without reduction
-static void add(unsigned int h[17], const unsigned int c[17]) {
+static void addfunc(unsigned int h[17], const unsigned int c[17]) {
   unsigned int j;
   unsigned int u;
   u = 0;
@@ -61,7 +63,7 @@ static void freeze(unsigned int h[17]) {
   unsigned int negative;
   for (j = 0; j < 17; ++j)
     horig[j] = h[j];
-  add(h, minusp);
+  addasm(h, minusp);
   negative = -(h[16] >> 7);
   for (j = 0; j < 17; ++j)
     h[j] ^= negative & (horig[j] ^ h[j]);
@@ -120,7 +122,7 @@ int crypto_onetimeauth(unsigned char *out, const unsigned char *in,
   // set the state to 0
   for (j = 0; j < 17; ++j)
     h[j] = 0;
-
+  // onetime_authloop(*in, inlen, *h, *r,*c);
   while (inlen > 0) {
     for (j = 0; j < 17; ++j)
       c[j] = 0; // set c to 0
@@ -129,30 +131,20 @@ int crypto_onetimeauth(unsigned char *out, const unsigned char *in,
     c[j] = 1;       // append the 1 byte to the chunk
     in += j;
     inlen -= j; // update loop variants (inlen and increment in pointer)
-    add(h, c);  // c to the state
+    addasm(h, c);  // c to the state
     mulmodasm(h, r); // multiply state with the secret key modulo 2^130-5
   }
-
   freeze(h); // calculate mod 2^130-5
 
   for (j = 0; j < 16; ++j) // copy S into c
     c[j] = k[j + 16];
   c[16] = 0;
-  add(h, c); // add S to the state (which is the last 16 bytes of the key)
+  addasm(h, c); // add S to the state (which is the last 16 bytes of the key)
   for (j = 0; j < 16; ++j)
     out[j] = h[j]; // output the state modulo 2^128 (the last 16 bytes)
   return 0;
 }
 
-void sign() {
-  int i;
-  //  crypto_onetimeauth(a, c, 131, rs);
-  for (i = 0; i < 16; ++i) {
-    // printf(",0x%02x", (unsigned int)a[i]);
-    if (i % 8 == 7)
-      printf("\n");
-  }
-}
 unsigned char rs[32] = {0xee, 0xa6, 0xa7, 0x25, 0x1c, 0x1e, 0x72, 0x91,
                         0x6d, 0x11, 0xc2, 0xcb, 0x21, 0x4d, 0x3c, 0x25,
                         0x25, 0x39, 0x12, 0x1d, 0x8e, 0x23, 0x4e, 0x65,
@@ -211,7 +203,13 @@ void test() {
                             0xb8, 0x6a, 0x54, 0xea, 0x92, 0x92,
                             0x49, 0x79, 0x7b, 0xee, 0x1e};
 
-  mulmodasm(test1, test2);
+  addasm(test1, test2);
+ 
+  for(int i =0;i<17;i++){
+    printf(",0x%02x", test1[i]);
+  }
+  printf("\n");
+
 }
 
 uint64_t dobenchmark() {
