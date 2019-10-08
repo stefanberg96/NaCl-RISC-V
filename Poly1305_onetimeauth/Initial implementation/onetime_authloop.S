@@ -5,18 +5,17 @@
 
 onetime_authloop:
     addi   sp, sp, -32   # create space on stack to store variables
-    sw     s2, 32(sp)    #
-    sw     s3, 28(sp)    #
-    sw     s4, 24(sp)    #
-    sw     s5, 20(sp)    #
-    sw     s6, 16(sp)    #
-    sw     ra, 12(sp)    #
+    sw     s2, 28(sp)    #
+    sw     s3, 24(sp)    #
+    sw     s4, 20(sp)    #
+    sw     s5, 16(sp)    #
+    sw     s6, 12(sp)    #
+    sw     ra,  8(sp)    #
     mv     s2, a0        # in
     mv     s3, a1        # inlen
     mv     s4, a2        # h
     mv     s5, a3        # r
     mv     s6, a4        # c
-
 outer_loop:
     sw     zero, 0(s6)    #
     sw     zero, 4(s6)    #
@@ -34,6 +33,7 @@ outer_loop:
     sw     zero, 52(s6)   #
     sw     zero, 56(s6)   #
     sw     zero, 60(s6)   #
+    sw     zero, 64(s6)   #
 
     sltiu  t1, s3, 16    # t1 = inlen < 16
     sub    t2, zero, t1  # create the mask for inlen
@@ -45,15 +45,16 @@ outer_loop:
     sub    s3, s3, t1    # already update the inlen
     slli   t1, t1, 2     # 4*min(inlen,16)
     add    t1, s6, t1    # stopping condition of the copy loop
+    mv     t3, s6
 copy_loop:
-    lw     t2, 0(s2)     # load in[j]
-    sw     t2, 0(s6)     # store c[j]
-    addi   s6, s6, 4     # update c address
-    addi   s2, s2, 4     # update in address
-    blt    s6, t1, copy_loop 
-
+    lbu    t2, 0(s2)     # load in[j]
+    sw     t2, 0(t3)     # store c[j]
+    addi   t3, t3, 4     # update c address
+    addi   s2, s2, 1     # update in address
+    blt    t3, t1, copy_loop 
+    
     li     t2, 1         # load 1 into a  reg
-    sw     t2, 0(s6)     # c[j]=1
+    sw     t2, 0(t3)     # c[j]=1
     mv     a0, s4        # prepare add call
     mv     a1, s6        #
     jal    addasm
@@ -62,11 +63,12 @@ copy_loop:
     jal    mulmodasm    
     bgtz   s3, outer_loop
 
-    lw     s2, 32(sp)    # restore the values from sp
-    lw     s3, 28(sp)    #
-    lw     s4, 24(sp)    #
-    lw     s5, 20(sp)    #
-    lw     s6, 16(sp)    #
-    lw     ra, 12(sp)    #
-    addi   sp, sp, 32    # update the sp again
-    ret 
+    
+    lw     s2, 28(sp)    # restore the values from sp
+    lw     s3, 24(sp)    #
+    lw     s4, 20(sp)    #
+    lw     s5, 16(sp)    #
+    lw     s6, 12(sp)    #
+    lw     ra,  8(sp)    #
+    addi   sp, sp, 32    # restore space on stack to store variables
+    ret

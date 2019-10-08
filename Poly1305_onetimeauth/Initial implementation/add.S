@@ -17,3 +17,4 @@ loop:
     addi  a0, a0, 4  # update to h[i+1]
     addi  a1, a1, 4  # update to c[i+1]
     ble   a0, t5, loop
+    ret

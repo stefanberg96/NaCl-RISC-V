@@ -6,15 +6,18 @@ extern uint32_t securemul(unsigned char a, unsigned char b);
 extern uint32_t mul320(uint32_t a);
 extern void squeezeasm(unsigned int h[17]);
 extern void mulmodasm(unsigned int h[17], unsigned int r[17]);
-extern void onetime_authloop(unsigned char *in, int inlen, unsigned int *h, unsigned int  *r, unsigned int *c);
+extern void onetime_authloop(const unsigned char *in, int inlen,
+                             unsigned int *h, unsigned int *r, unsigned int *c);
 extern void addasm(unsigned int h[17], const unsigned int c[17]);
 
-void aliveprint(){
+void aliveprint() {
   printf("ITS ALIVE!!\n");
+  return;
 }
 
-void print32bytes(uint32_t x){
-  printf("%x\n",x);
+void print32bytes(uint32_t x) {
+  printf("%x\n", x);
+  return;
 }
 
 // add the two numbers together without reduction
@@ -27,6 +30,7 @@ static void addfunc(unsigned int h[17], const unsigned int c[17]) {
     h[j] = u & 255;
     u >>= 8;
   }
+  return;
 }
 
 // used in mulmod
@@ -51,6 +55,7 @@ static void squeeze(unsigned int h[17]) {
   }
   u += h[16];
   h[16] = u;
+  return;
 }
 
 static const unsigned int minusp[17] = {5, 0, 0, 0, 0, 0, 0, 0,  0,
@@ -67,6 +72,7 @@ static void freeze(unsigned int h[17]) {
   negative = -(h[16] >> 7);
   for (j = 0; j < 17; ++j)
     h[j] ^= negative & (horig[j] ^ h[j]);
+  return;
 }
 
 // does multiplication modulo 2^130-5 and result is
@@ -85,12 +91,30 @@ static void mulmod(unsigned int h[17], const unsigned int r[17]) {
       unsigned int t = securemul(h[j], r[i + 17 - j]);
       u += mul320(t);
     }
-    printf("%x\n",u);
+    printf("%x\n", u);
     hr[i] = u;
   }
   for (i = 0; i < 17; ++i)
     h[i] = hr[i];
   squeezeasm(h);
+  return;
+}
+
+void authloop(unsigned char *in, unsigned long long inlen, unsigned int *h,
+              unsigned int *r, unsigned int *c) {
+  unsigned int j;
+  while (inlen > 0) {
+    for (j = 0; j < 17; ++j)
+      c[j] = 0; // set c to 0
+    for (j = 0; (j < 16) && (j < inlen); ++j)
+      c[j] = in[j]; // fill c with a chunk of 16 bytes from the in param
+    c[j] = 1;       // append the 1 byte to the chunk
+    in += j;
+    inlen -= j;      // update loop variants (inlen and increment in pointer)
+    addasm(h, c);    // c to the state
+    mulmodasm(h, r); // multiply state with the secret key modulo 2^130-5
+  }
+  return;
 }
 
 // input is in little endian
@@ -119,21 +143,12 @@ int crypto_onetimeauth(unsigned char *out, const unsigned char *in,
   r[15] = k[15] & 15;
   r[16] = 0;
 
-  // set the state to 0
   for (j = 0; j < 17; ++j)
     h[j] = 0;
-  // onetime_authloop(*in, inlen, *h, *r,*c);
-  while (inlen > 0) {
-    for (j = 0; j < 17; ++j)
-      c[j] = 0; // set c to 0
-    for (j = 0; (j < 16) && (j < inlen); ++j)
-      c[j] = in[j]; // fill c with a chunk of 16 bytes from the in param
-    c[j] = 1;       // append the 1 byte to the chunk
-    in += j;
-    inlen -= j; // update loop variants (inlen and increment in pointer)
-    addasm(h, c);  // c to the state
-    mulmodasm(h, r); // multiply state with the secret key modulo 2^130-5
-  }
+  onetime_authloop(in, inlen, h, r, c);
+  // authloop(in, inlen, h, r, c);
+
+  // set the state to 0
   freeze(h); // calculate mod 2^130-5
 
   for (j = 0; j < 16; ++j) // copy S into c
@@ -142,6 +157,7 @@ int crypto_onetimeauth(unsigned char *out, const unsigned char *in,
   addasm(h, c); // add S to the state (which is the last 16 bytes of the key)
   for (j = 0; j < 16; ++j)
     out[j] = h[j]; // output the state modulo 2^128 (the last 16 bytes)
+
   return 0;
 }
 
@@ -204,12 +220,11 @@ void test() {
                             0x49, 0x79, 0x7b, 0xee, 0x1e};
 
   addasm(test1, test2);
- 
-  for(int i =0;i<17;i++){
+
+  for (int i = 0; i < 17; i++) {
     printf(",0x%02x", test1[i]);
   }
   printf("\n");
-
 }
 
 uint64_t dobenchmark() {
@@ -249,7 +264,7 @@ uint64_t dobenchmark() {
 }
 
 int main() {
-  //test();
+  // test();
   checkCorrectness();
   uint64_t cyclesTaken;
   cyclesTaken = dobenchmark();

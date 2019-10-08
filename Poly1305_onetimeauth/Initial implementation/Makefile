@@ -13,12 +13,12 @@ test: $(OBJS)
 	$(riscv64-unknown-elf-gcc)/bin/riscv64-unknown-elf-objcopy -O ihex program.elf program.hex
 
 %.o: %.c
-	clang -O0 -c $< --target=riscv32 -march=rv32ia
+	clang -Os -c $< --target=riscv32 -march=rv32ia
 %.o: %.S
 	clang -O0 -c $< --target=riscv32 -march=rv32ia
 
 objdump:
-	$(riscv-gnu-toolchain)/build-binutils-linux/binutils/objdump -d -t $(file) > $(file).objdump 
+	$(riscv-gnu-toolchain)/build-binutils-linux/binutils/objdump -dS $(file) > $(file).objdump 
 
 clean:
 	rm $(OBJS) $(wildcard *.hex) $(wildcard *.map) $(wildcard *.elf)
