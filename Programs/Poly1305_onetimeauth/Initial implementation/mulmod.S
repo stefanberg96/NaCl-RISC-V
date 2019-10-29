@@ -27,9 +27,6 @@ inner_loop1:
    addi  t5, t5, -4   # 
    ble   t4, t6, inner_loop1
 
-   #mv    a0, s3
-   #jal   print32bytes # debugging
-
    addi  t6, s4, 64   # update stopping condition to inner loop 2
    addi  t5, t5, 68   # update address from r[i-j] to r[i-j+17] 
 inner_loop2:   

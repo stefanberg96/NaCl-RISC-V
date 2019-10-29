@@ -13,7 +13,7 @@ test: $(OBJS)
 	$(riscv64-unknown-elf-gcc)/bin/riscv64-unknown-elf-objcopy -O ihex program.elf program.hex
 
 %.o: %.c
-	clang -O0 -c $< --target=riscv32
+	clang -O0 -I$(freedom-e-sdk)/bsp/sifive-hifive1-revb/install/include -c $< --target=riscv32
 %.o: %.S
 	clang -O0 -c $< --target=riscv32
 

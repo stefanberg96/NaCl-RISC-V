@@ -5,11 +5,11 @@ extern uint32_t getcycles();
 extern uint32_t securemul(unsigned char a, unsigned char b);
 extern uint32_t add();
 extern uint32_t mul320(unsigned char a);
-
+   unsigned char a = 55;
+   unsigned char b = 2;
 uint32_t dobenchmark(){
 
-   unsigned char a = 11;
-   unsigned char b = 50;
+
    uint32_t result;
    uint32_t oldcount, newcount;
 
@@ -24,5 +24,6 @@ int main() {
   x = dobenchmark();
   x = dobenchmark();
   printf("This took %u cycles\n",x);
+  printf("%d\n",securemul(a,b));
   return 0;
 }
