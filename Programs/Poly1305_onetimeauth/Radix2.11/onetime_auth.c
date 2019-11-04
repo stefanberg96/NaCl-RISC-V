@@ -11,6 +11,23 @@ extern void onetime_authloop(const unsigned char *in, int inlen,
 extern void addasm(unsigned int h[17], const unsigned int c[17]);
 extern int getsp();
 
+
+void printarray(unsigned int* in , int inlen){
+
+  for(int i =0;i < inlen ; i ++){
+    printf("%x,",in[i]);
+  }
+  printf("\n");
+}
+
+void printchararray(unsigned char* in , int inlen){
+
+  for(int i =0;i < inlen ; i ++){
+    printf("%x,",in[i]);
+  }
+  printf("\n");
+}
+
 // add the two numbers together without reduction
 static void add(unsigned int h[17], const unsigned int c[17]) {
   unsigned int j;
@@ -23,6 +40,28 @@ static void add(unsigned int h[17], const unsigned int c[17]) {
   }
 }
 
+static void squeeze216(unsigned int h[9]) {
+  unsigned int j;
+  int64_t  u;
+  u = 0;
+  for(j =0;j<8;j++){
+    u+=h[j];
+    h[j] = u &0xFFFF;
+    u>>=16;
+  }
+  u += h[8];
+  h[8] = u & 3;
+
+  u = 5 * (u >> 2);
+  for (j = 0; j < 8; ++j) {
+    u += h[j];
+    h[j] = u & 0xFFFF;
+    u >>= 16;
+  }
+  u += h[8];
+  h[8] = u;
+}
+
 static void squeeze(unsigned int h[17]) {
   unsigned int j;
   unsigned int u;
@@ -32,6 +71,7 @@ static void squeeze(unsigned int h[17]) {
     h[j] = u & 255;
     u >>= 8;
   }
+
   u += h[16];
   h[16] = u & 3;
   u = 5 * (u >> 2);
@@ -60,6 +100,29 @@ static void freeze(unsigned int h[17]) {
     h[j] ^= negative & (horig[j] ^ h[j]);
 }
 
+static void mulmod216(unsigned int h[9], const unsigned int r[9]) {
+  unsigned int hr[9];
+  unsigned int i;
+  unsigned int j;
+  int64_t u = 0 ;
+
+  for (i = 0; i < 9; ++i) {
+    for (j = 0; j <= i; ++j)
+      u += h[j] * r[i - j];
+    for (j = i + 1; j < 9; ++j){
+      uint64_t tmp = h[j]*r[i+9-j];
+      tmp *= 81920;
+      u += tmp;//81920 * h[j] * r[i + 9 - j];
+    }
+    hr[i] = u & 0xFFFF;
+    u >>= 16;
+  }
+  hr[8] += u<<16;
+  for (i = 0; i < 9; ++i)
+    h[i] = hr[i];
+  squeeze216(h);
+}
+
 static void mulmod(unsigned int h[17], const unsigned int r[17]) {
   unsigned int hr[17];
   unsigned int i;
@@ -78,6 +141,20 @@ static void mulmod(unsigned int h[17], const unsigned int r[17]) {
     h[i] = hr[i];
   squeeze(h);
 }
+
+static void toradix216int(unsigned int *out, const unsigned int *in, int inlen) {
+  int i;
+  for (i = 0; 2 * i < inlen; i++) {
+    out[i] = in[2 * i];
+    out[i] += in[2 * i + 1] << 8;
+  }
+
+  if (inlen & 1){
+    out[i] = in[2*i];
+  }
+  return;
+}
+
 
 static void toradix216(unsigned int *out, const unsigned char *in, int inlen) {
   int i;
@@ -148,7 +225,7 @@ int crypto_onetimeauth(unsigned char *out, const unsigned char *in,
     mulmod(h, r216);  // multiply state with the secret key modulo 2^130-5
   }
 
-  // go back from radix 2^15 to 2^8
+  // go back from radix 2^16 to 2^8
   // h
 
   freeze(h); // calculate mod 2^130-5
@@ -170,6 +247,12 @@ typedef struct params {
 } Params;
 
 void copy(unsigned char* out, const unsigned char* in, int inlen){
+  for(int i =0; i< inlen; i++){
+    out[i]=in[i];
+  }
+}
+
+void copyint(unsigned int* out, const unsigned char* in, int inlen){
   for(int i =0; i< inlen; i++){
     out[i]=in[i];
   }
@@ -216,23 +299,34 @@ void dobenchmark(uint64_t *timings, Params *testCases, int testCasesCount) {
 int main() {
   Params testCases[1];
   createTestCases(&testCases[0]);
+  unsigned int test[9]={0xa6ee, 0x25a7, 0x1e1c, 0x9172, 0x116d, 0xcbc2, 0x4d21, 0x0, 0x0};
+ //{0xa6ee, 0x25a7, 0x1e1c, 0x9172, 0x116d, 0xcbc2, 0x4d21, 0x253c, 0x1};
+  unsigned int test2[9] = { 0x253c,0x3925,0x1d12,0x238e,0x654e,0x652d,0xa41f,0x0,0x0};
+//{0x253c,0x3925,0x1d12,0x238e,0x654e,0x652d,0xa41f,0xcfc8,0x1};
+  
+  unsigned int test3[17];//= { 0x35, 0x1f,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+  unsigned int test4[17];// = {0xa9, 0x26, 0, 0,0 ,0 ,0,0,0,0,0,0,0,0,0,0,0};
+  copyint(&test3[0], &testCases[0].key[0], 16);
+  test3[16]=0;
+  test3[15]=0;
+  test3[14]=0;
+  copyint(&test4[0], &testCases[0].key[14], 16);
+  test4[16]=0;
+  test4[15]=0;
+  test4[14]=0;
+  
+  printf("Hello\n");
 
-  unsigned int testRadix216[16];
-  toradix216(&testRadix216[0], &testCases[0].key[0], 32);
+  printarray(&test3[0],17);
+  printarray(&test4[0],17);
+  mulmod(test3, test4);
+  mulmod216(test, test2);
 
-  for(int i =0; i < 32; i++){
-    printf("%x,",testCases[0].key[i]);
-  }
-  printf("\n");
-
-  for(int i = 0; i < 16;i++){
-     printf("%x,", testRadix216[i]);
-  }
-  printf("\n");
-
+  printarray(&test[0], 9); 
+  printarray(&test3[0], 17);
   uint64_t timing[5];
 
-  dobenchmark(&timing[0], &testCases[0], 1);
+/*  dobenchmark(&timing[0], &testCases[0], 1);
   dobenchmark(&timing[1], &testCases[0], 1);
   dobenchmark(&timing[2], &testCases[0], 1);
   dobenchmark(&timing[3], &testCases[0], 1);
@@ -240,6 +334,6 @@ int main() {
 
   for (int i = 0; i < 5; i++) {
     printf("This took %llu cycles\n", timing[i]);
-  }
+  }*/
   return 0;
 }
