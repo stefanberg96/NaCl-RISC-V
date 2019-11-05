@@ -20,7 +20,7 @@ hex: $(OBJS)
 	clang -O0 -c $< --target=riscv32 -march=rv32ima
 
 objdump:
-	$(riscv-gnu-toolchain)/build-binutils-linux/binutils/objdump -dS $(file) > $(file).objdump 
+	$(riscv-gnu-toolchain)/build-binutils-linux/binutils/objdump -D $(file) > $(file).objdump 
 
 clean:
 	rm $(OBJS) $(wildcard *.hex) $(wildcard *.map) $(wildcard *.elf)
