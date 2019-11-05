@@ -6,7 +6,6 @@
 # a0,a1 t0-t3
 .globl securemul
 .type securemul, @function
-.align 2
 securemul:
     mv    t0, a0
     mv    t1, a1

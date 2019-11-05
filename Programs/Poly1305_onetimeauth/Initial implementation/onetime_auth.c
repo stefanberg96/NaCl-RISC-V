@@ -1,26 +1,11 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <string.h>
-#define FIELD_SIZEOF(t, f) (sizeof(((t *)0)->f))
+
 extern uint32_t getcycles();
-extern uint32_t securemul(unsigned char a, unsigned char b);
 extern void onetime_authloop(const unsigned char *in, int inlen,
                              unsigned int *h, unsigned int *r, unsigned int *c);
 extern void addasm(unsigned int h[17], const unsigned int c[17]);
-extern int getsp();
-
-// add the two numbers together without reduction
-static void addfunc(unsigned int h[17], const unsigned int c[17]) {
-  unsigned int j;
-  unsigned int u;
-  u = 0;
-  for (j = 0; j < 17; ++j) {
-    u += h[j] + c[j];
-    h[j] = u & 255;
-    u >>= 8;
-  }
-  return;
-}
 
 static const unsigned int minusp[17] = {5, 0, 0, 0, 0, 0, 0, 0,  0,
                                         0, 0, 0, 0, 0, 0, 0, 252};
@@ -82,14 +67,7 @@ int crypto_onetimeauth(unsigned char *out, const unsigned char *in,
   return 0;
 }
 
-typedef struct params {
-  unsigned char output[16];
-  unsigned char message[131];
-  int messageLen;
-  unsigned char key[32];
-} Params;
-
-void createTestCases(Params *testCases) {
+void dobenchmark(uint64_t *timings) {
   unsigned char rs[32] = {0xee, 0xa6, 0xa7, 0x25, 0x1c, 0x1e, 0x72, 0x91,
                           0x6d, 0x11, 0xc2, 0xcb, 0x21, 0x4d, 0x3c, 0x25,
                           0x25, 0x39, 0x12, 0x1d, 0x8e, 0x23, 0x4e, 0x65,
@@ -107,54 +85,23 @@ void createTestCases(Params *testCases) {
       0x99, 0x83, 0x2b, 0x61, 0xca, 0x01, 0xb6, 0xde, 0x56, 0x24, 0x4a, 0x9e,
       0x88, 0xd5, 0xf9, 0xb3, 0x79, 0x73, 0xf6, 0x22, 0xa4, 0x3d, 0x14, 0xa6,
       0x59, 0x9b, 0x1f, 0x65, 0x4c, 0xb4, 0x5a, 0x74, 0xe3, 0x55, 0xa5};
-
-   unsigned int sp =getsp();  
-   printf("%x\n", sp);
-
-  testCases[0].messageLen = 131;
-  memcpy(testCases[0].message, c, FIELD_SIZEOF(Params, message));
-  memcpy(testCases[0].key, rs, FIELD_SIZEOF(Params, key));
-
-  testCases[1].messageLen = 131;
-  memcpy(testCases[1].message, c, FIELD_SIZEOF(Params, message));
-  //  testCases[1].message[115] = 0x00;
-  memcpy(testCases[1].key, rs, FIELD_SIZEOF(Params, key));
-  
-/*
-  testCases[2].messageLen = 131;
-  memcpy(testCases[2].message, c, FIELD_SIZEOF(Params, message));
-  memcpy(testCases[2].key, rs, FIELD_SIZEOF(Params, key));**/
-}
-
-void dobenchmark(uint64_t *timings, Params *testCases, int testCasesCount) {
-
-  unsigned int sp =getsp();  
-  printf("%x\n", sp);
+  unsigned char a[16];
 
   uint32_t oldcount, newcount;
-  for (int i = 0; i < testCasesCount; i++) {
-    Params testCase = testCases[i];
-    oldcount = getcycles();
-    crypto_onetimeauth(&testCase.output[0], &testCase.message[0],
-                       testCase.messageLen, &testCase.key[0]);
-    newcount = getcycles();
-    timings[i] = newcount - oldcount;
-  }
-  return;
+  unsigned char x = 5, y = 10;
+  oldcount = getcycles();
+  crypto_onetimeauth(a, c, 131, rs);
+  newcount = getcycles();
+  timings[0] =  newcount - oldcount;
 }
 
 int main() {
-  unsigned int sp =getsp();  
-  printf("%x\n", sp);
-  Params testCases[1];
+  uint64_t timing[3];
 
-  uint64_t timing[1];
-  createTestCases(&testCases[0]);
-
-  dobenchmark(&timing[0], &testCases[0], 1);
-  dobenchmark(&timing[0], &testCases[0], 1);
-  dobenchmark(&timing[0], &testCases[0], 1);
-  for (int i = 0; i < 1; i++) {
+  dobenchmark(&timing[0]);
+  dobenchmark(&timing[1]);
+  dobenchmark(&timing[2]);
+  for (int i = 0; i < 3; i++) {
     printf("This took %llu cycles\n", timing[i]);
   }
   return 0;
