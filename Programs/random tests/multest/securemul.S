@@ -17,6 +17,7 @@ securemul:
     sub   t2, zero, t2
     and   t3, t1, t2
     add   a0, a0, t3 
+    ret
     srli  t0, t0, 1
     slli  t1, t1, 1 
     andi  t2, t0, 1
