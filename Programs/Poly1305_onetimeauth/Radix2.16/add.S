@@ -21,8 +21,8 @@ loop:
 .type add216asm , @function
 add216asm:
     li    t3, 0      # u = 0
-    li    t4, 0xFFFF    # load constant
-    add   t5, a0, 24 # stopping condition h[16]
+    li    t4, 0xFFFF # load constant
+    add   t5, a0, 32 # stopping condition h[8]
 loop216:
     lw    t1, 0(a0)  # load h[0]
     lw    t2, 0(a1)  # load c[0]

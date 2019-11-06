@@ -4,32 +4,9 @@ extern void onetime_authloop(const unsigned char *in, int inlen,
                              unsigned int *h, unsigned int *r, unsigned int *c);
 extern void addasm(unsigned int h[17], const unsigned int c[17]);
 extern void add216asm(unsigned int h[9], const unsigned int c[9]);
+extern void toradix28asm(unsigned int h[17]);
 extern int getsp();
 extern void squeeze216asm(unsigned int h[9]);
-
-// add the two numbers together without reduction
-static void add(unsigned int h[17], const unsigned int c[17]) {
-  unsigned int j;
-  unsigned int u;
-  u = 0;
-  for (j = 0; j < 17; ++j) {
-    u += h[j] + c[j];
-    h[j] = u & 255;
-    u >>= 8;
-  }
-}
-
-// add the two numbers together without reduction
-static void add216(unsigned int h[9], const unsigned int c[9]) {
-  unsigned int j;
-  unsigned int u;
-  u = 0;
-  for (j = 0; j < 17; ++j) {
-    u += h[j] + c[j];
-    h[j] = u & 0xFFFF;
-    u >>= 16;
-  }
-}
 
 static const unsigned int minusp[17] = {5, 0, 0, 0, 0, 0, 0, 0,  0,
                                         0, 0, 0, 0, 0, 0, 0, 252};
@@ -41,7 +18,7 @@ static void freeze(unsigned int h[17]) {
   unsigned int negative;
   for (j = 0; j < 17; ++j)
     horig[j] = h[j];
-  add(h, minusp);
+  addasm(h, minusp);
   negative = -(h[16] >> 7);
   for (j = 0; j < 17; ++j)
     h[j] ^= negative & (horig[j] ^ h[j]);
@@ -132,20 +109,20 @@ int crypto_onetimeauth(unsigned char *out, const unsigned char *in,
       c[j] = 1;
     }
     in += 2 * j;
-    add216(h, c); // c to the state
+    add216asm(h, c); // c to the state
     mulmod216(h, r); // multiply state with the secret key modulo 2^130-5
   }
 
   // go back from radix 2^16 to 2^8
   // h
-  toradix28(&h[0]);
+  toradix28asm(&h[0]);
 
   freeze(h); // calculate mod 2^130-5
 
   for (j = 0; j < 16; ++j)
     c[j] = k[j + 16];
   c[16] = 0;
-  add(h, c); // add S to the state (which is the last 16 bytes of the key)
+  addasm(h, c); // add S to the state (which is the last 16 bytes of the key)
   for (j = 0; j < 16; ++j)
     out[j] = h[j]; // output the state modulo 2^128 (the last 16 bytes)
   return 0;
