@@ -1,15 +1,12 @@
 #include "onetime_auth.h"
 
-extern void onetime_authloop(const unsigned char *in, int inlen,
-                             unsigned int *h, unsigned int *r, unsigned int *c);
-extern void addasm(unsigned int h[17], const unsigned int c[17]);
-extern void add216asm(unsigned int h[9], const unsigned int c[9]);
-extern void toradix28asm(unsigned int h[17]);
-extern int getsp();
-extern void squeeze216asm(unsigned int h[9]);
-
 static const unsigned int minusp[17] = {5, 0, 0, 0, 0, 0, 0, 0,  0,
                                         0, 0, 0, 0, 0, 0, 0, 252};
+
+void printhello(){
+  printf("Hello\n");
+}
+
 
 // reduce the number from 2^133 to 2^130-5
 static void freeze(unsigned int h[17]) {
@@ -24,52 +21,31 @@ static void freeze(unsigned int h[17]) {
     h[j] ^= negative & (horig[j] ^ h[j]);
 }
 
-static void mulmod216(unsigned int h[9], const unsigned int r[9]) {
-  unsigned int hr[9];
-  unsigned int i;
+void crypto_onetimeauthloop(const unsigned char *in, int inlen, unsigned int *h,
+                            unsigned int *r, unsigned int *c) {
   unsigned int j;
-  int64_t u = 0;
-
-  for (i = 0; i < 9; ++i) {
-    for (j = 0; j <= i; ++j)
-      u += h[j] * r[i - j];
-    for (j = i + 1; j < 9; ++j) {
-      uint64_t tmp = h[j] * r[i + 9 - j];
-      tmp *= 81920;
-      u += tmp; // 81920 * h[j] * r[i + 9 - j];
+  // these computations are all in radix 2.16
+  while (inlen > 0) {
+    for (j = 0; j < 9; ++j)
+      c[j] = 0; // set c to 0
+    for (j = 0; (j < 8) && (inlen >= 2); ++j, inlen -= 2) {
+      c[j] = in[2 * j]; // fill c with a chunk of 16 bytes from the in param
+      c[j] += in[2 * j + 1] << 8;
     }
-    hr[i] = u & 0xFFFF;
-    u >>= 16;
-  }
-  hr[8] += u << 16;
-  for (i = 0; i < 9; ++i)
-    h[i] = hr[i];
-  squeeze216asm(h);
-}
 
-static void toradix216int(unsigned int *out, const unsigned int *in,
-                          int inlen) {
-  int i = 0;
-  while (inlen >= 2) {
-    out[i] = in[2 * i];
-    out[i] += in[2 * i + 1] << 8;
-    inlen -= 2;
-    i++;
-  }
-
-  if (inlen == 1)
-    out[i] = in[2 * i];
-  return;
-}
-
-static void toradix28(unsigned int *in) {
-
-  in[16] = in[8];
-  for (int i = 7; i >= 0; i--) {
-    in[i * 2 + 1] = in[i] >> 8;
-    in[i * 2] = in[i] & 0xFF;
+    if (inlen == 1 && j != 9) {
+      c[j] = in[2 * j];
+      c[j] += 1 << 8;
+      inlen--;
+    } else {
+      c[j] = 1;
+    }
+    in += 2 * j;
+    add216asm(h, c); // c to the state
+    mulmod216asm(h, r); // multiply state with the secret key modulo 2^130-5
   }
 }
+
 
 // input is in little endian
 int crypto_onetimeauth(unsigned char *out, const unsigned char *in,
@@ -92,27 +68,8 @@ int crypto_onetimeauth(unsigned char *out, const unsigned char *in,
   // set the state to 0
   for (j = 0; j < 17; ++j)
     h[j] = 0;
-  //these computations are all in radix 2.16
-  while (inlen > 0) {
-    for (j = 0; j < 9; ++j)
-      c[j] = 0; // set c to 0
-    for (j = 0; (j < 8) && (inlen > 2); ++j, inlen -= 2) {
-      c[j] = in[2 * j]; // fill c with a chunk of 16 bytes from the in param
-      c[j] += in[2 * j + 1] << 8;
-    }
-
-    if (inlen == 1 && j != 8) {
-      c[j] = in[2 * j];
-      c[j] += 1 << 8;
-      inlen--;
-    } else {
-      c[j] = 1;
-    }
-    in += 2 * j;
-    add216asm(h, c); // c to the state
-    mulmod216(h, r); // multiply state with the secret key modulo 2^130-5
-  }
-
+  
+  crypto_onetimeauthloop(in,inlen, h, r, c);
   // go back from radix 2^16 to 2^8
   // h
   toradix28asm(&h[0]);

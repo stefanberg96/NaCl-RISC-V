@@ -15,9 +15,3 @@ getcycles:
 getsp:
     mv a0, sp
     ret
-
-.globl setsp
-.align 2
-setsp:
-    li sp, 0x80002FFF
-    ret
