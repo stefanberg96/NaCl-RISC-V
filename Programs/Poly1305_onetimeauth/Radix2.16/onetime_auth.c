@@ -1,12 +1,22 @@
 #include "onetime_auth.h"
 
-static const unsigned int minusp[17] = {5, 0, 0, 0, 0, 0, 0, 0,  0,
-                                        0, 0, 0, 0, 0, 0, 0, 252};
-
 void printhello(){
   printf("Hello\n");
 }
 
+void printbyte(unsigned int x){
+  printf("x:%x\n",x);
+}
+
+void printarray(unsigned int *x, int inlen){
+   for(int i=0;i<inlen;i++){
+      printf("%x, ", x[i]);
+   }
+   printf("\n");
+}
+
+static const unsigned int minusp[17] = {5, 0, 0, 0, 0, 0, 0, 0,  0,
+                                        0, 0, 0, 0, 0, 0, 0, 252};
 
 // reduce the number from 2^133 to 2^130-5
 static void freeze(unsigned int h[17]) {
@@ -33,7 +43,7 @@ void crypto_onetimeauthloop(const unsigned char *in, int inlen, unsigned int *h,
       c[j] += in[2 * j + 1] << 8;
     }
 
-    if (inlen == 1 && j != 9) {
+    if (inlen == 1 ) {
       c[j] = in[2 * j];
       c[j] += 1 << 8;
       inlen--;
@@ -69,7 +79,7 @@ int crypto_onetimeauth(unsigned char *out, const unsigned char *in,
   for (j = 0; j < 17; ++j)
     h[j] = 0;
   
-  crypto_onetimeauthloop(in,inlen, h, r, c);
+  onetime_authloopasm(in,inlen, h, r, c);
   // go back from radix 2^16 to 2^8
   // h
   toradix28asm(&h[0]);

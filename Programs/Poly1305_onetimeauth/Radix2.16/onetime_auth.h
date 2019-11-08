@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdint.h>
 
-extern void onetime_authloop(const unsigned char *in, int inlen,
+extern void onetime_authloopasm(const unsigned char *in, int inlen,
                              unsigned int *h, unsigned int *r, unsigned int *c);
 extern void addasm(unsigned int h[17], const unsigned int c[17]);
 extern void add216asm(unsigned int h[9], const unsigned int c[9]);
