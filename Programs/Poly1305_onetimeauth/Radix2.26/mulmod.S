@@ -1,92 +1,96 @@
 .text
 
-.globl mulmod216asm
-.type mulmod216asm, @function
-mulmod216asm:
-   addi  sp, sp, -96 # space for the hr array and to temporarily store s2, s3, s4
-   sw    s2, 96(sp)
-   sw    s3, 92(sp)
-   sw    s4, 88(sp)
-   sw    s5, 84(sp) 
-   sw    s6, 80(sp)
-   sw    s7, 76(sp)
-   sw    ra, 72(sp)   # store the return address
-   mv    s4, a0       # store h base address into s4 
-   mv    s5, a1       # store r base address into s5
-   li    s2, 0        # set i to 0
-   li    s6, 0        # u low
-   li    s7, 0        # u high
-   li    s3, 81920    # multiplication constant
-   li    t3, 0xffff   # get lowest 16 bits constant
-outer_loop_216:
-   slli  t1, s2, 2    # stopping condition of inner loop 1
-   add   t6, t1, s4   # add the stopping condition to the base address of h
-   add   t5, s5, t1   # store address of ith element of r
-   mv    t4, s4       # start from the base address of h
-inner_loop1_216:
-   lw    a0, 0(t4)    # load value of h[i] into a0
-   lw    a1, 0(t5)    # load value of r[i-j] into a1 
-   mul   a0, a0, a1   
-   add   s6, s6, a0   # u+= h[i]*r[i-j] 
-   sltu  t2, s6, a0   # t2 = s6<a0
-   add   s7, s7, t2
-   addi  t4, t4, 4    # increment counter j
-   addi  t5, t5, -4   # 
-   ble   t4, t6, inner_loop1_216
+.globl mulmod226asm
+.type mulmod226asm, @function
+mulmod226asm:
+    addi   sp, sp, -64   # space for hr array and pushes
+    sw     s1, 60(sp)    #
+    sw     s2, 56(sp)    #
+    sw     s3, 52(sp)    #
+    sw     s4, 48(sp)    #
+    sw     s5, 44(sp)    #
+    sw     s6, 40(sp)    #
+    sw     s7, 36(sp)    #
+    sw     ra, 32(sp)    #
+    mv     s1, a0        # store address of h
+    mv     s2, a1        # store address of r
+    li     s3, 0         # i = 0
+    li     s4, 0         # u_low
+    li     s5, 0         # u_high
+    li     s6, 5         # multiplication constant
+    li     s7, 0x3FFFFFF # get lowest 26 bits
+outer_loop:
+    slli   t1, s3, 2     # stopping condition
+    add    t6, t1, s1    # h[i]
+    add    t5, s2, t1    # r[i]
+    mv     t4, s1
+inner_loop:
+    lw     a0, 0(t4)     # h[i]
+    lw     a1, 0(t5)     # r[i]
+    mulhu  t1, a0, a1    # high r[i-j]*h[j]
+    mul    t2, a0, a1    # low r[i-j]*h[j]
+    add    s4, s4, t2    # u+= low r[i-j]*h[j]
+    sltu   t3, s4, t2    # handle carry
+    add    t1, t1, t3    #
+    add    s5, s5, t1    # u+= high r[i-j]*h[j] and carry
+    addi   t4, t4, 4     # update loop variables
+    addi   t5, t5, -4    #
+    ble    t4, t6, inner_loop
 
-   addi  t6, s4, 32   # update stopping condition to inner loop 2
-   bgt   t4, t6, postloop # incase innerloop 1 reached the went to 9 it shoudl skip loop2
-   addi  t5, t5, 36   # update address from r[i-j] to r[i-j+9] 
-inner_loop2_216:   
-   lw    a0, 0(t4)    # load h[i]
-   lw    a1, 0(t5)    # load r[i-j+9]
-   mul   a0, a0, a1   # h[i]*r[i-j+9] 
-   mulhu a1, a0, s3   # high part of (h[u]*r[i-j+9])*81920 
-   add   s7, s7, a1   #
-   mul   a1, a0, s3   # low part of the multiplication
-   add   s6, s6, a1   # add low part to u low
-   sltu  a1, s6, a1   # handle carry
-   add   s7, s7, a1   #
-   addi  t4, t4, 4    # increment counter j
-   addi  t5, t5, -4   #
-   ble   t4, t6, inner_loop2_216
+    addi   t6, s1, 16    # stopping condition
+    bgt    t4, t6, postloop
+
+    addi   t5, t5, 20    # r[i-j+5]
+inner_loop2:
+    lw     a0, 0(t4)     # h[i]
+    lw     a1, 0(t5)     # r[i-j+5]
+    mulhu  t1, a0, a1    # high r[i-j+5]*h[j]
+    mul    t2, a0, a1    # low r[i-j+5]*h[j]
+    mul    t1, t1, s6    # high * 5
+    add    s5, s5, t1    # u+= high *5
+    mulhu  t1, t2, s6    # high of 5* low
+    mul    t2, t2, s6    # 5*low
+    add    s4, s4, t2    # u += 5*low
+    sltu   t2, s4, t2    # handle carry
+    add    t1, t1, t2    #
+    add    s5, s5, t1    # u+= high of 5*low
+    addi   t4, t4, 4     # update loop variables
+    addi   t5, t5, -4    #
+    ble    t4, t6, inner_loop2
 
 postloop:
-   slli  t4, s2, 2    # calculate i*4
-   sub   t4, sp, t4   # address of hr[i]-68
-   and   t5, s6, t3   #
-   sw    t5, 68(t4)   # hr[i]=u low & 0xFFFF
-   srli  s6, s6, 16   # ulow = ulow >> 16
-   slli  t5, s7, 16   # (u_high &0xFFFF << 16)
-   or    s6, s6, t5   #
-   srli  s7, s7, 16   #  u high = uhigh >> 16 
-   addi  s2, s2, 1    # increment i
-   li    t1, 8        # stop value of outer_loop
-   ble   s2, t1, outer_loop_216
-   
-   lw    t5, 68(t4)
-   slli  s6, s6, 16
-   add   t5, t5, s6
-   sw    t5, 68(t4)
-   #copy hr into h
-   addi  t1, sp, 68   # address of hr[0]
-   addi  t6, s4, 32   # stopping condition of copy_loop
-copy_loop_216: 
-   lw    t2, 0(t1)    # load hr[i]
-   sw    t2, 0(s4)    # h[i]=hr[i]   
-   addi  t1, t1, -4   # increment counters
-   addi  s4, s4, 4    #
-   ble   s4, t6, copy_loop_216
- 
-   addi  a0, t6, -32  # base address of h
-   jal   squeeze216asm
+    slli  t5, s3, 2      # i*4
+    sub   t5, sp, t5     # hr[i]-28
+    and   t4, s4, s7     # u_low & 0x3FFFFFF
+    sw    t4, 28(t5)     # hr[i] = u_low & 0x3FFFFFF
+    srli  s4, s4, 26     # u >>26
+    slli  t5, s5, 6      # 
+    or    s4, s4, t5     #
+    srli  s5, s5, 26     #
+    addi  s3, s3, 1      #
+    blt   s3, s6, outer_loop
 
-   lw    s2, 96(sp)   # restore saved variables
-   lw    s3, 92(sp)
-   lw    s4, 88(sp)
-   lw    s5, 84(sp)
-   lw    s6, 80(sp)
-   lw    s7, 76(sp)
-   lw    ra, 72(sp)
-   addi  sp, sp, 96 
-   ret
+    sw    s4, 20(s1)     # h[5]=u
+    lw    a0, 28(sp)     #
+    sw    a0, 0(s1)      # h[i]=hr[i]
+    lw    a0, 24(sp)     #              
+    sw    a0, 4(s1)      # h[i]=hr[i]
+    lw    a0, 20(sp)     #
+    sw    a0, 8(s1)      # h[i]=hr[i]
+    lw    a0, 16(sp)     #              
+    sw    a0, 12(s1)     # h[i]=hr[i]
+    lw    a0, 12(sp)     #
+    sw    a0, 16(s1)     # h[i]=hr[i]
+    mv    a0, s1
+    jal   squeeze226asm
+
+    lw    s1, 60(sp)     # restore pushed values
+    lw    s2, 56(sp)     #
+    lw    s3, 52(sp)     #
+    lw    s4, 48(sp)     #
+    lw    s5, 44(sp)     #
+    lw    s6, 40(sp)     #
+    lw    s7, 36(sp)     #
+    lw    ra, 32(sp)     #
+    addi  sp, sp, 64     #
+    ret

@@ -1,5 +1,10 @@
 #include "onetime_auth.h"
 
+
+void printhello(){
+  printf("Hello\n");
+}
+
 // add the two numbers together without reduction
 static void add(unsigned int h[17], const unsigned int c[17]) {
     unsigned int j;
@@ -12,28 +17,16 @@ static void add(unsigned int h[17], const unsigned int c[17]) {
     }
 }
 
-// used in mulmod
-static void squeeze226(unsigned int h[6]) {
-    unsigned int j;
-    unsigned int c[5];
-    c[0] = h[5] * 5;
-    c[1]=0;c[2]=0;c[3]=0;c[4]=0;
-    add226asm(h,c);
-    c[0]=(h[4]>>26) *5;
-    add226asm(h,c);
-}
-
 static const unsigned int minusp[17] = {5, 0, 0, 0, 0, 0, 0, 0, 0,
                                         0, 0, 0, 0, 0, 0, 0, 252};
 
-// reduce the number from 2^133 to 2^130-5
 static void freeze(unsigned int h[17]) {
     unsigned int horig[17];
     unsigned int j;
     unsigned int negative;
     for (j = 0; j < 17; ++j)
         horig[j] = h[j];
-    add(h, minusp);
+    addasm(h, minusp);
     negative = -(h[16] >> 7);
     for (j = 0; j < 17; ++j)
         h[j] ^= negative & (horig[j] ^ h[j]);
@@ -62,7 +55,7 @@ static void mulmod226(unsigned int h[6], const unsigned int r[5]) {
     hr[5] = u;
     for (i = 0; i < 6; ++i)
         h[i] = hr[i];
-    squeeze226asm(h);
+    //squeeze226asm(h);
 }
 
 void toradix28(unsigned int h[17]) {
@@ -114,7 +107,7 @@ void onetime_authloop(const unsigned char *in, int inlen, unsigned int *h,
         in += 16;
         inlen -= j;      // update loop variants (inlen and increment in pointer)
         add226asm(h, c);    // c to the state
-        mulmod226(h, r); // multiply state with the secret key modulo 2^130-5
+        mulmod226asm(h, r); // multiply state with the secret key modulo 2^130-5
     }
 }
 
@@ -149,7 +142,7 @@ int crypto_onetimeauth(unsigned char *out, const unsigned char *in,
     for (j = 0; j < 16; ++j)
         c[j] = k[j + 16];
     c[16] = 0;
-    add(h, c); // add S to the state (which is the last 16 bytes of the key)
+    addasm(h, c); // add S to the state (which is the last 16 bytes of the key)
     for (j = 0; j < 16; ++j)
         out[j] = h[j]; // output the state modulo 2^128 (the last 16 bytes)
     return 0;

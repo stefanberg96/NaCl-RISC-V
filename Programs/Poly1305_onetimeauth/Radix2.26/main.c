@@ -79,7 +79,16 @@ void checkCorrectness() {
   }
 }
 
+void printarray(unsigned int * in, int inlen){
+
+    for(int i =0;i< inlen;i++){
+        printf("%x, ", in[i]);
+    }
+    printf("\n");
+}
+
 int main() {
+
   checkCorrectness();
   uint64_t timing[5];
   dobenchmark(&timing[0]);
