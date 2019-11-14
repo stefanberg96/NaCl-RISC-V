@@ -1,7 +1,5 @@
-#include <stdint.h>
-#include <stdio.h>
+#include "onetime_auth.h"
 
-extern uint64_t getcycles();
 // add the two numbers together without reduction
 static void add(unsigned int h[17], const unsigned int c[17]) {
     unsigned int j;
@@ -14,41 +12,15 @@ static void add(unsigned int h[17], const unsigned int c[17]) {
     }
 }
 
-static void add226(unsigned int h[5], const unsigned int c[5]) {
-
-    unsigned int j;
-    unsigned int u;
-    u = 0;
-    for (j = 0; j < 5; ++j) {
-        u += h[j] + c[j];
-        h[j] = u & 0x3FFFFFF;
-        u >>= 26;
-    }
-    h[4]+= u<<26;
-}
-
 // used in mulmod
 static void squeeze226(unsigned int h[6]) {
     unsigned int j;
-    uint64_t u;
-    u = h[5] * 5;
-    for (j = 0; j < 4; ++j) {
-        u += h[j];
-        h[j] = u & 0x3FFFFFF;
-        u >>= 26;
-    }
-    u += h[4];
-    h[4] = u & 0x3FFFFFF;
-    u >>= 26;
-    u*=5;
-    for (j = 0; j < 4; ++j) {
-        u += h[j];
-        h[j] = u & 0x3FFFFFF;
-        u >>= 26;
-    }
-    u+=h[4];
-    h[4]=u;
-
+    unsigned int c[5];
+    c[0] = h[5] * 5;
+    c[1]=0;c[2]=0;c[3]=0;c[4]=0;
+    add226asm(h,c);
+    c[0]=(h[4]>>26) *5;
+    add226asm(h,c);
 }
 
 static const unsigned int minusp[17] = {5, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -90,7 +62,7 @@ static void mulmod226(unsigned int h[6], const unsigned int r[5]) {
     hr[5] = u;
     for (i = 0; i < 6; ++i)
         h[i] = hr[i];
-    squeeze226(h);
+    squeeze226asm(h);
 }
 
 void toradix28(unsigned int h[17]) {
