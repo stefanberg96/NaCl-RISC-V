@@ -17,7 +17,7 @@ main.o: main.c
 	clang -O3 -c $< --target=riscv32 -march=rv32ima
 
 %.o: %.c
-	clang -O0 -c $< --target=riscv32 -march=rv32ima
+	clang -O1 -c $< --target=riscv32 -march=rv32ima
 %.o: %.S
 	clang -O0 -c $< --target=riscv32 -march=rv32ima
 
