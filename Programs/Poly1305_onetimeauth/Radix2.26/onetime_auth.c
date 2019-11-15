@@ -1,19 +1,5 @@
 #include "onetime_auth.h"
 
-void printhello() { printf("Hello\n"); }
-
-// add the two numbers together without reduction
-static void add(unsigned int h[17], const unsigned int c[17]) {
-  unsigned int j;
-  unsigned int u;
-  u = 0;
-  for (j = 0; j < 17; ++j) {
-    u += h[j] + c[j];
-    h[j] = u & 255;
-    u >>= 8;
-  }
-}
-
 static const unsigned int minusp[17] = {5, 0, 0, 0, 0, 0, 0, 0,  0,
                                         0, 0, 0, 0, 0, 0, 0, 252};
 
@@ -27,32 +13,6 @@ static void freeze(unsigned int h[17]) {
   negative = -(h[16] >> 7);
   for (j = 0; j < 17; ++j)
     h[j] ^= negative & (horig[j] ^ h[j]);
-}
-
-static void mulmod226(unsigned int h[6], const unsigned int r[5]) {
-  unsigned int hr[6];
-  unsigned int i;
-  unsigned int j;
-  uint64_t u = 0;
-
-  for (i = 0; i < 5; ++i) {
-    for (j = 0; j <= i; ++j) {
-      uint64_t tmp = (uint64_t)h[j] * r[i - j];
-      u += tmp;
-    }
-    for (j = i + 1; j < 5; ++j) {
-      uint64_t tmp = (uint64_t)h[j] * r[i + 5 - j];
-      tmp *= 5;
-      u += tmp;
-    }
-
-    hr[i] = u & 0x3FFFFFF;
-    u >>= 26;
-  }
-  hr[5] = u;
-  for (i = 0; i < 6; ++i)
-    h[i] = hr[i];
-  // squeeze226asm(h);
 }
 
 void toradix28(unsigned int h[17]) {
@@ -75,33 +35,36 @@ void toradix28(unsigned int h[17]) {
   h[0] = h[0] & 0xFF;
 }
 
-void printarraychar(unsigned char *in, int inlen){
-
-  for(int i =0;i<inlen;i++){
-     printf("%x, ",in[i]);
-  }
-  printf("\n");
-}
-
-void onetime_authloop(const unsigned char *in, int inlen, unsigned int *h,
-                      unsigned int *r, unsigned int *c) {
+// input is in little endian
+int crypto_onetimeauth(unsigned char *out, const unsigned char *in,
+                       unsigned long long inlen, const unsigned char *k) {
   unsigned int j;
+  unsigned int r[5];
+  unsigned int h[17];
+  unsigned int c[17];
 
-  while (inlen > 16) {
+  // create R from the first 16 bytes of the key
+  r[0] = k[0] + (k[1] << 8) + (k[2] << 16) + ((k[3] & 3) << 24);
+  r[1] = ((k[3] >> 2) & 3) + ((k[4] & 252) << 6) + (k[5] << 14) +
+         ((k[6] & 15) << 22);
+  r[2] = (k[6] >> 4) + ((k[7] & 15) << 4) + ((k[8] & 252) << 12) +
+         ((k[9] & 63) << 20);
+  r[3] =
+      (k[9] >> 6) + (k[10] << 2) + ((k[11] & 15) << 10) + ((k[12] & 252) << 18);
+  r[4] = k[13] + (k[14] << 8) + ((k[15] & 15) << 16);
 
-    c[0] = in[0] + (in[1] << 8) + (in[2] << 16) + ((in[3] & 3) << 24);
-    c[1] = (in[3] >> 2) + (in[4] << 6) + (in[5] << 14) + ((in[6] & 15) << 22);
-    c[2] = (in[6] >> 4) + (in[7] << 4) + (in[8] << 12) + ((in[9] & 63) << 20);
-    c[3] = (in[9] >> 6) + (in[10] << 2) + (in[11] << 10) + (in[12] << 18);
-    c[4]=0;
-    c[4] = in[13] + (in[14] << 8) + (in[15] << 16) + (1 << 24);
-
-    add226asm(h, c);
-    mulmod226asm(h, r);
-    inlen -=16;
-    in += 16;
-  }
-
+  // set the state to 0
+  for (j = 0; j < 17; ++j)
+    h[j] = 0;
+  
+  // do the bulk of the authloop
+  int newinlen = onetimeauth_loop(in, inlen, h, r, c);
+  
+  // calculate how much work is left (always less than 16 bytes)
+  in += inlen-newinlen;
+  inlen = newinlen;
+ 
+  // do the remaining work
   for (j = 0; j < 5; ++j)
     c[j] = 0; // set c to 0
   int index = 0;
@@ -126,31 +89,6 @@ void onetime_authloop(const unsigned char *in, int inlen, unsigned int *h,
 
   add226asm(h, c);    // c to the state
   mulmod226asm(h, r); // multiply state with the secret key modulo 2^130-5
-}
-
-// input is in little endian
-int crypto_onetimeauth(unsigned char *out, const unsigned char *in,
-                       unsigned long long inlen, const unsigned char *k) {
-  unsigned int j;
-  unsigned int r[5];
-  unsigned int h[17];
-  unsigned int c[17];
-
-  // create R from the first 16 bytes of the key
-  r[0] = k[0] + (k[1] << 8) + (k[2] << 16) + ((k[3] & 3) << 24);
-  r[1] = ((k[3] >> 2) & 3) + ((k[4] & 252) << 6) + (k[5] << 14) +
-         ((k[6] & 15) << 22);
-  r[2] = (k[6] >> 4) + ((k[7] & 15) << 4) + ((k[8] & 252) << 12) +
-         ((k[9] & 63) << 20);
-  r[3] =
-      (k[9] >> 6) + (k[10] << 2) + ((k[11] & 15) << 10) + ((k[12] & 252) << 18);
-  r[4] = k[13] + (k[14] << 8) + ((k[15] & 15) << 16);
-
-  // set the state to 0
-  for (j = 0; j < 17; ++j)
-    h[j] = 0;
-
-  onetime_authloop(in, inlen, h, r, c);
 
   // go back to radix 2.8
   toradix28(h);

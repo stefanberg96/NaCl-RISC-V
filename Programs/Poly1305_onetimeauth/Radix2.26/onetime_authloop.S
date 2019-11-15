@@ -1,73 +1,72 @@
 .text
 
-.globl onetime_authloopasm
-.type onetime_authloopasm, @function
+.globl onetimeauth_loop
+.type onetimeauth_loop, @function
+onetimeauth_loop:
+    addi   sp, sp, -32   # create space on stack
+    sw     s0, 28(sp)    #
+    sw     s1, 24(sp)    #
+    sw     s2, 20(sp)    #
+    sw     s3, 16(sp)    #
+    sw     s4, 12(sp)    #
+    sw     s5,  8(sp)    #
+    sw     s6,  4(sp)    #
+    sw     ra,  0(sp)    #
+    li     t1, 0xfffffffc# make sure in is aligned correctly
+    and    a0, a0, t1    #
+    mv     s0, a0        # in 
+    mv     s1, a1        # inlen
+    mv     s2, a2        # h
+    mv     s3, a3        # r
+    mv     s4, a4        # c
+    li     s5, 0x3FFFFFF #
+    li     s6, 16        # loop value
 
-onetime_authloopasm:
-    addi   sp, sp, -32    # create space on stack to store variables
-    sw     s2, 28(sp)     #
-    sw     s3, 24(sp)     #
-    sw     s4, 20(sp)     #
-    sw     s5, 16(sp)     #
-    sw     s6, 12(sp)     #
-    sw     ra,  8(sp)     #
-    mv     s2, a0         # in
-    mv     s3, a1         # inlen
-    mv     s4, a2         # h
-    mv     s5, a3         # r
-    mv     s6, a4         # c
+loop:
+    lw     t2, 0(s0)     # load 32 bytes from in[0]
+    and    t3, t2, s5    # get first 26 bits
+    sw     t3, 0(s4)     # c[0] = in[0..3] & 0x3FFFFFF
+    srli   t2, t2, 26    # in[3] >> 2
+    lw     t3, 4(s0)     # in[4..7]
+    slli   t4, t3, 6     # in[4..7] << 6
+    or     t2, t2, t4    # in[3] >> 2 + in[4..7]<<6
+    and    t2, t2, s5    # get first 26 bits
+    sw     t2, 4(s4)     # store value
+    srli   t2, t3, 20    # in[4..7]>>20
+    lw     t3, 8(s0)     # in[8..11]
+    slli   t4, t3, 12    # in[8..11]<<12
+    or     t2, t2, t4    # in[4..7]>>20 + in[8..11]<<12
+    and    t2, t2, s5    #
+    sw     t2, 8(s4)     # 
+    srli   t2, t3, 14    # in[8..11]>>14
+    lw     t3, 12(s0)    # in[12..15]
+    slli   t4, t3, 18    # in[12..15]<<8
+    or     t2, t2, t4    # in[8..11]>>14 + in[12..15]<<8
+    and    t2, t2, s5    #
+    sw     t2, 12(s4)    #
+    srli   t2, t3, 8     # in[13..15]
+    li     t3, 0x1000000 # 1<<24
+    or     t2, t2, t3    #
+    sw     t2, 16(s4)    # 
 
-outer_loop:
-    sw     zero, 0(s6)    #
-    sw     zero, 4(s6)    #
-    sw     zero, 8(s6)    #
-    sw     zero, 12(s6)   #
-    sw     zero, 16(s6)   #
-    sw     zero, 20(s6)   #
-    sw     zero, 24(s6)   #
-    sw     zero, 28(s6)   #
-    sw     zero, 32(s6)   #
-
-    addi   t1, s6, 32     # stopping condition of the copy loop
-    mv     t3, s6         # changable addres of c
-    li     t4, 1          # for the branching in copy loop
-copy_loop:
-    ble    s3, t4, append # if inlen < 2 goto append the 1 byte 
-    lbu    t2, 0(s2)      # load in[j]
-    lbu    t5, 1(s2)      # load in[j+1] << 8
-    slli   t5, t5, 8      #
-    or     t2, t2, t5     # in[j] + in[j+1] << 8
-    sw     t2, 0(t3)      # store c[j]
-    addi   t3, t3, 4      # update c address
-    addi   s2, s2, 2      # update in address
-    addi   s3, s3, -2     # update the inlen
-    blt    t3, t1, copy_loop 
-    j      eveninlen      # set last byte to 1
+    mv     a0, s2        #
+    mv     a1, s4        #
+    jal    add226asm     #
+    mv     a0, s2        #
+    mv     a1, s3        #
+    jal    mulmod226asm
+    addi   s1, s1, -16   # update loop variables
+    addi   s0, s0, 16    #
+    bgt    s1, s6, loop
     
-append:
-    beqz   s3, eveninlen# if inlen==0 only append a 1
-uneveninlen:
-    lbu    t2, 0(s2)      # load in[j]
-    addi   t2, t2, 0x100  # append the 1 byte 
-    sw     t2, 0(t3)      # c[j] = in[2*j]+1<<8
-    addi   s3, s3, -1     # decrease the inlen to be 0
-    j      rest
-eveninlen:
-    sw     t4, 0(t3)      # append the 1 byte c[j]
-
-rest:
-    mv     a0, s4         # prepare add call
-    mv     a1, s6         #
-    jal    add216asm
-    mv     a0, s4         # prepare mulmodasm call
-    mv     a1, s5         #
-    jal    mulmod216asm    
-    bgtz   s3, outer_loop
-    lw     s2, 28(sp)     # restore the values from sp
-    lw     s3, 24(sp)     #
-    lw     s4, 20(sp)     #
-    lw     s5, 16(sp)     #
-    lw     s6, 12(sp)     #
-    lw     ra,  8(sp)     #
-    addi   sp, sp, 32     # restore space on stack to store variables
+    mv     a0, s1        # return inlen
+    lw     s0, 28(sp)    # restore values
+    lw     s1, 24(sp)    #
+    lw     s2, 20(sp)    #
+    lw     s3, 16(sp)    #
+    lw     s4, 12(sp)    #
+    lw     s5,  8(sp)    #
+    lw     s6,  4(sp)    #
+    lw     ra,  0(sp)    #
+    addi   sp, sp, 32    
     ret
