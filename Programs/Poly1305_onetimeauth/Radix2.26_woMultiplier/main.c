@@ -2,7 +2,7 @@
 
 extern uint32_t getcycles();
 
-void dobenchmark(uint64_t *timings) {
+void dobenchmark(uint32_t *timings) {
   static unsigned char rs[32] = {0xee, 0xa6, 0xa7, 0x25, 0x1c, 0x1e, 0x72, 0x91,
                           0x6d, 0x11, 0xc2, 0xcb, 0x21, 0x4d, 0x3c, 0x25,
                           0x25, 0x39, 0x12, 0x1d, 0x8e, 0x23, 0x4e, 0x65,
@@ -88,18 +88,16 @@ void printarray(unsigned int * in, int inlen){
 }
 
 int main() {
-  unsigned int x=0x3FFFFFF;
-  unsigned int y=0x3FFFFFF;
-  printf("%llx\n",securemul226(x,y));
+  uint32_t timing[5];
+
   checkCorrectness();
-  uint64_t timing[5];
   dobenchmark(&timing[0]);
   dobenchmark(&timing[1]);
   dobenchmark(&timing[2]);
   dobenchmark(&timing[3]);
   dobenchmark(&timing[4]);
   for (int i = 0; i < 5; i++) {
-    printf("This took %llu cycles\n", timing[i]);
+    printf("This took %u cycles\n", timing[i]);
   }
   return 0;
 }

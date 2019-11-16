@@ -74,3 +74,17 @@ loop:
    mv      a0, a3        # return result
    mv      a1, a4        #
    ret
+
+
+.globl testasm
+.type testasm, @function
+testasm:
+  mv    t5, ra
+  li    a0, 0x3FFFFFF
+  li    a1, 0x3FFFFFF
+  csrr  t4, mcycle
+  jal securemul226
+  csrr t2, mcycle
+  sub  a0, t2, t4
+  mv   ra, t5
+  ret
