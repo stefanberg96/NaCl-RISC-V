@@ -17,9 +17,9 @@ main.o: main.c
 	clang -O3 -c $< --target=riscv32 -march=rv32ima
 
 %.o: %.c
-	clang -O1 -c $< --target=riscv32 -march=rv32ima
+	clang -O1 -c $< --target=riscv32 -march=rv32ia
 %.o: %.S
-	clang -O0 -c $< --target=riscv32 -march=rv32ima
+	clang -O0 -c $< --target=riscv32 -march=rv32ia
 
 objdump:
 	$(riscv-gnu-toolchain)/build-binutils-newlib/binutils/objdump -D $(file) > $(file).objdump 

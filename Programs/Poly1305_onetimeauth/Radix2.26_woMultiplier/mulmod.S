@@ -26,13 +26,12 @@ outer_loop:
     mv     t4, s1
 inner_loop:
     lw     a0, 0(t4)     # h[i]
-    lw     a1, 0(t5)     # r[i]
-    mulhu  t1, a0, a1    # high r[i-j]*h[j]
-    mul    t2, a0, a1    # low r[i-j]*h[j]
-    add    s4, s4, t2    # u+= low r[i-j]*h[j]
-    sltu   t3, s4, t2    # handle carry
-    add    t1, t1, t3    #
-    add    s5, s5, t1    # u+= high r[i-j]*h[j] and carry
+    lw     a1, 0(t5)     # r[i-j]
+    jal    securemul226  
+    add    s5, s5, a1    # u+= r[i-j] *h[j]
+    add    s4, s4, a0    #
+    sltu   a0, s4, a0    # handle carry
+    add    s5, s5, a0    #
     addi   t4, t4, 4     # update loop variables
     addi   t5, t5, -4    #
     ble    t4, t6, inner_loop
@@ -44,16 +43,20 @@ inner_loop:
 inner_loop2:
     lw     a0, 0(t4)     # h[i]
     lw     a1, 0(t5)     # r[i-j+5]
-    mulhu  t1, a0, a1    # high r[i-j+5]*h[j]
-    mul    t2, a0, a1    # low r[i-j+5]*h[j]
-    mul    t1, t1, s6    # high * 5
-    add    s5, s5, t1    # u+= high *5
-    mulhu  t1, t2, s6    # high of 5* low
-    mul    t2, t2, s6    # 5*low
-    add    s4, s4, t2    # u += 5*low
-    sltu   t2, s4, t2    # handle carry
-    add    t1, t1, t2    #
-    add    s5, s5, t1    # u+= high of 5*low
+    jal    securemul226  
+    slli   t1, a1, 2     #
+    add    a1, a1, t1    # high *5
+    srli   t1, a0, 30    # low *5
+    add    a1, a1, t1    # 
+    slli   t1, a0, 2     #
+    add    a0, a0, t1    #
+    sltu   t1, a0, t1    # handle carry
+    add    a1, a1, t1    # 
+    add    s5, s5, a1    # u+=high * 5
+    add    s4, s4, a0    # u+=low * 5
+    sltu   a0, s4, a0    # handle carry
+    add    s5, s5, a0    #
+
     addi   t4, t4, 4     # update loop variables
     addi   t5, t5, -4    #
     ble    t4, t6, inner_loop2
