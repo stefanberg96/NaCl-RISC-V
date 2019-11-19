@@ -43,6 +43,7 @@ int crypto_onetimeauth(unsigned char *out, const unsigned char *in,
   unsigned int h[17];
   unsigned int c[17];
 
+
   // create R from the first 16 bytes of the key
   r[0] = k[0] + (k[1] << 8) + (k[2] << 16) + ((k[3] & 3) << 24);
   r[1] = ((k[3] >> 2) & 3) + ((k[4] & 252) << 6) + (k[5] << 14) +

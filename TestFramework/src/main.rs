@@ -1,65 +1,69 @@
-use crate::test_results_reader::poly1305::Poly1305Reader;
-use std::process::Stdio;
+use std::process::{Stdio, Child};
 use std::process::Command;
-use std::path::Path;
-use rand::Rng;
-use std::fs::{File, OpenOptions, remove_file};
-use std::io::{Write};
+use std::path::{Path, PathBuf};
+use std::fs::{OpenOptions, remove_file};
+use std::io::{Write, Error};
 use std::{env, thread};
 use std::sync::mpsc;
 use std::sync::mpsc::Receiver;
 use std::time::Duration;
-use std::env::var;
+use crate::poly1305::poly1305_reader::Poly1305Reader;
+use crate::poly1305::poly1305_generator;
+use crate::poly1305::poly1305_generator::TestcasePoly1305;
+use std::thread::sleep;
+use std::any::Any;
 
 
-mod test_results_reader;
-mod testcase_generators;
+mod poly1305;
 
 fn main() {
-    // way too much code to get a path -.-'
-    let dir_buf_path = env::current_dir().expect("Couldn't get current directory");
-    let path_str = dir_buf_path.to_str().expect("can not unwrap path");
-    let filename = Path::new("benchmark.c");
-    let path = Path::new("./benchmark.c");
+    let path = get_benchmark_path();
 
     //create a thread that reuploads the program in case it hangs
     let (tx, rx) = mpsc::channel();
     thread::spawn(move || {
-        heartbeat(rx, path);
+        heartbeat(rx);
     });
 
     // kick off the reaction
-    let initial_variables = generate_testcase(path);
-    tx.send(initial_variables);
-    run_make();
-
+    let initial_variables = generate_testcasefile();
+    tx.send(initial_variables).expect("Send failed");
+    let mut child = run_make();
+    println!("Created child id:{}", child.id());
     // main loop that runs the tests
     let reader = Poly1305Reader::new();
     for val in reader {
-        println!("{:?}", val);
-        let variables = generate_testcase(path);
-        tx.send(variables);
-        run_make();
+        if child.try_wait().expect("Somethign happened") == None {
+            println!("Killed child id: {}", child.id());
+            child.kill().expect("Killing the process to prevent the second reset failed");
+            sleep(Duration::from_millis(100));
+        }
+        let testcase = generate_testcasefile();
+
+        tx.send(testcase).expect("Send failed");
+        child = run_make();
+        println!("Created child id:{}", child.id());
+        //TODO handle result
+        println!("{}", val);
     }
 }
 
-fn generate_testcase(path: & Path) -> Vec<String> {
-
-    remove_file(path).expect("Can not remove benchmark.c");
+fn generate_testcasefile() -> TestcasePoly1305 {
+    remove_file(get_benchmark_path()).expect("Can not remove benchmark.c");
 
     let mut file = OpenOptions::new()
         .create(true)
         .write(true)
         .read(true)
-        .open(path).expect("Couldn't create benchmark.c file");
+        .open(get_benchmark_path()).expect("Couldn't create benchmark.c file");
     //print header stuff
     writeln!(file, "#include \"benchmark.h\"
 
-    void dobenchmark(uint64_t *timings, unsigned char a[16]) {{");
-    let variables = testcase_generators::poly1305::generate_testcase();
+    void dobenchmark(uint64_t *timings, unsigned char a[16]) {{").expect("write failed");
+    let testcase = poly1305_generator::generate_testcase();
 
-    for var in &variables{
-        writeln!( file, "{}", var);
+    for var in &testcase.variables {
+        writeln!(file, "{}", var).expect("write failed");
     }
 
     //print rest of the code
@@ -70,34 +74,78 @@ fn generate_testcase(path: & Path) -> Vec<String> {
         crypto_onetimeauth(a, c, 131, rs);
         newcount = getcycles();
         timings[0] = newcount - oldcount;
-    }}");
+    }}").expect("write failed");
+    file.flush().expect("Couldn't flush benchmark file");
 
-    variables
+    testcase
 }
 
-fn run_make() {
+
+fn run_make() -> Child {
+    let dir_path = env::current_dir().expect("Couldn't get current path");
+    let _ = Command::new("rm")
+        .arg("benchmark.o")
+        .current_dir(dir_path.as_path())
+        .spawn().expect("Couldn't rm benchmark.o")
+        .wait();
     //Run make in the program remove current dir to run in the dir from which it is called
-    Command::new("make")
-        .current_dir("/home/stefan/Documents/Graduation/RISC-V-toolchain/riscv/Programs/Poly1305_onetimeauth/Radix2.26")
+    //has a custom command since it needs to reset again after 7 seconds of not getting a result
+    let mut command = Command::new("make");
+    command
+        .current_dir(dir_path.as_path())
         .stdout(Stdio::null())
         .stderr(Stdio::null())
-        .spawn().expect("Could not run make");
+        .arg("upload")
+        .spawn().expect("Could not run make upload_testcase")
 }
 
-fn heartbeat(rx: Receiver<Vec<String>>, path:&Path){
-    let timeout = Duration::from_secs(30);
-    let mut last_input = vec![String::new()];
-    loop{
-        let r= rx.recv_timeout(timeout);
+fn heartbeat(result_receiver: Receiver<TestcasePoly1305>) {
+    let timeout = Duration::from_secs(17);
+    let mut last_input = TestcasePoly1305 { variables: vec![], expected_result: [0; 16] };
+    let mut consecutive_fails = 0;
+    loop {
+        //TODO get message from make on success with timeout, so that make upload can be run again
+        //restart the loop from the top then
+
+        //start the timeout for the reset text from the reader
+
+
+        //start timeout receive from the reader on the output
+        let r = result_receiver.recv_timeout(timeout);
         match r {
-            Ok(val) => last_input = val,
-            Err(_)=>{
+            Ok(val) =>{
+                last_input = val;
+                consecutive_fails = 0;
+            }
+            Err(_) => {
                 println!("Timedout");
-               // println!("{:?}", last_input);
-                last_input = generate_testcase(path);
-                run_make();
-                //TODO log last input
+                if consecutive_fails >= 2 {
+                    last_input = generate_testcasefile();
+                    run_make();
+                    //TODO log last input
+                    consecutive_fails = 0;
+                }else{
+                    run_reset();
+                }
+                consecutive_fails+=1;
             }
         }
+
     }
+}
+
+fn run_reset(){
+    let dir_path = env::current_dir().expect("Couldn't get current path");
+    let _ = Command::new("make")
+        .arg("reset")
+        .current_dir(dir_path.as_path())
+        .stdout(Stdio::null())
+        .spawn().expect("Couldn't run reset");
+}
+
+
+fn get_benchmark_path() -> PathBuf {
+    let buf_path = env::current_dir().expect("Failed to get current path");
+    let current_path = buf_path.as_path();
+    current_path.join(Path::new("benchmark.c"))
 }

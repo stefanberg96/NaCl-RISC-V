@@ -6,9 +6,14 @@ SRCS=$(wildcard *.c)
 ASM=$(wildcard *.S)
 
 OBJS=$(SRCS:.c=.o) $(ASM:.S=.o)
-
+hex="./program.hex"
 upload: hex
-	timeout 10s $(freedom-e-sdk)/scripts/upload --hex ./program.hex --jlink JLinkExe
+	$(freedom-e-sdk)/scripts/upload --hex program.hex --jlink JLinkExe
+
+upload_testcase: hex
+	$(freedom-e-sdk)/scripts/upload --hex program.hex --jlink JLinkExe --sleep 7000
+reset:
+	echo -e "\nr\nexit" | JLinkExe -device FE310 -if JTAG -speed 4000 -jtagconf -1,-1 -autoconnect 1
 
 hex: $(OBJS)
 	$(riscv64-unknown-elf-gcc)/bin/riscv64-unknown-elf-gcc  -march=rv32imac -mabi=ilp32 -mcmodel=medlow -ffunction-sections -fdata-sections -I$(freedom-e-sdk)/bsp/sifive-hifive1-revb/install/include -Os -g  -Wl,--gc-sections -Wl,-Map,program.map -nostartfiles -nostdlib -L$(freedom-e-sdk)/bsp/sifive-hifive1-revb/install/lib/debug/ -T$(freedom-e-sdk)/bsp/sifive-hifive1-revb/metal.default.lds $(OBJS) -Wl,--start-group -lc -lgcc -lmetal -lmetal-gloss -Wl,--end-group -Wl,--print-memory-usage -o program.elf

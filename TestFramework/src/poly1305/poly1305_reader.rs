@@ -3,11 +3,25 @@ use std::fs::File;
 use std::path::Path;
 use std::error::Error;
 use regex::Regex;
+use core::fmt;
+use std::fmt::Formatter;
 
-#[derive(Debug)]
+
 pub struct Poly1305Result {
-    result: [u8; 16],
-    cycle_count: i64,
+    pub result: [u8; 16],
+    pub cycle_count: i64,
+}
+
+
+impl fmt::Display for Poly1305Result {
+    fn fmt(&self, f: &mut Formatter) -> fmt::Result {
+        writeln!(f, "Cycle count:{}", self.cycle_count).expect("write failed");
+        for i in 0..15 {
+            write!(f, "0x{:02x}, ", self.result[i]).expect("write failed");
+        }
+        writeln!(f, "0x{:02x}", self.result[15]).expect("write failed");
+        Ok(())
+    }
 }
 
 pub struct Poly1305Reader {
@@ -34,10 +48,10 @@ impl Iterator for Poly1305Reader {
         match self.finished {
             true => None,
             false => {
-                let mut result = Poly1305Result{result: [0;16], cycle_count:0};
+                let mut result = Poly1305Result { result: [0; 16], cycle_count: 0 };
                 for line in self.reader.by_ref().lines() {
                     let line = line.unwrap_or_default();
-                    println!("{}",line);
+                    //println!("{}", line);
                     let cycle_regex = Regex::new("This took ([0-9]+) cycles").expect("Cycle regex is invalid");
                     let output_regex = Regex::new("([a-f0-9]{32})").expect("Output regex is invalid");
                     if cycle_regex.is_match(line.as_str()) {
@@ -46,7 +60,7 @@ impl Iterator for Poly1305Reader {
                     } else if output_regex.is_match(line.as_str()) {
                         let bytes = hex::decode(line.as_str()).expect("Failed to decode output result from hex to bytes");
                         for i in 0..16 {
-                            result.result[15 - i] = bytes[i];
+                            result.result[i] = bytes[i];
                         }
                         return Some(result);
                     }
