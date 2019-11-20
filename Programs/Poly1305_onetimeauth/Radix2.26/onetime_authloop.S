@@ -21,7 +21,7 @@ onetimeauth_loop:
     mv     s4, a4        # c
     li     s5, 0x3FFFFFF #
     li     s6, 16        # loop value
-
+    blt    s1, s6, end_loop
 loop:
     lw     t2, 0(s0)     # load 32 bytes from in[0]
     and    t3, t2, s5    # get first 26 bits
@@ -59,6 +59,7 @@ loop:
     addi   s0, s0, 16    #
     bgt    s1, s6, loop
     
+end_loop:
     mv     a0, s1        # return inlen
     lw     s0, 28(sp)    # restore values
     lw     s1, 24(sp)    #

@@ -9,13 +9,14 @@ use log::{info};
 #[derive(Debug)]
 pub struct TestcasePoly1305{
     pub variables: Vec<String>,
+    pub messagelen: usize,
     pub expected_result: [u8;16],
 }
 
 pub fn generate_testcase() -> TestcasePoly1305{
     let mut rng = rand::thread_rng();
 
-    let messagelen: usize = 131;//rng.gen_range(80, 200);
+    let messagelen: usize = rng.gen_range(1, 256);
     let mut message: [u8; 256] = [0; 256];
     rng.fill(&mut message);
 
@@ -44,9 +45,9 @@ pub fn generate_testcase() -> TestcasePoly1305{
 
     let message_slice = &message[0..messagelen];
 
-    let result = onetimeauth::authenticate(&message_slice, &poly1305_key).0;
-    generate_testcasefile(variables.clone());
-    TestcasePoly1305 {variables, expected_result: result}
+    let expected_result = onetimeauth::authenticate(&message_slice, &poly1305_key).0;
+    generate_testcasefile(variables.clone(), messagelen);
+    TestcasePoly1305 {variables,  expected_result, messagelen}
 
 }
 
@@ -56,7 +57,7 @@ fn get_benchmark_path() -> PathBuf {
     current_path.join(Path::new("benchmark.c"))
 }
 
-fn generate_testcasefile(variables: Vec<String>){
+fn generate_testcasefile(variables: Vec<String>, inlen: usize){
     remove_file(get_benchmark_path()).expect("Can not remove benchmark.c");
 
     let mut file = OpenOptions::new()
@@ -78,10 +79,10 @@ fn generate_testcasefile(variables: Vec<String>){
         uint32_t oldcount, newcount;
         unsigned char x = 5, y = 10;
         oldcount = getcycles();
-        crypto_onetimeauth(a, c, 131, rs);
+        crypto_onetimeauth(a, c, {}, rs);
         newcount = getcycles();
         timings[0] = newcount - oldcount;
-    }}").expect("write failed");
+    }}", inlen).expect("write failed");
     file.flush().expect("Couldn't flush benchmark file");
     info!("written benchmark.c");
 

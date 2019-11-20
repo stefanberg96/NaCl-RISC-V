@@ -35,7 +35,7 @@ fn main() -> Result<(), SimpleError> {
             match rx.recv_timeout(Duration::from_secs(10)) {
                 Ok(result) => {
                     if testcase.expected_result == result.result {
-                        info!("Result was correct and took {} cycles", result.cycle_count);
+                        info!("Result was correct and took {} cycles for a message of size {}", result.cycle_count, testcase.messagelen);
                     } else {
                         error!("Result was not correct!\n {:?} \n{}", testcase, result);
                     }
