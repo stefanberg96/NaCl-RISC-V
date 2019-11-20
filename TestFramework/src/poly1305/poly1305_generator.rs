@@ -13,10 +13,9 @@ pub struct TestcasePoly1305{
     pub expected_result: [u8;16],
 }
 
-pub fn generate_testcase() -> TestcasePoly1305{
+pub fn generate_testcase(messagelen : usize) -> TestcasePoly1305{
     let mut rng = rand::thread_rng();
 
-    let messagelen: usize = rng.gen_range(1, 256);
     let mut message: [u8; 256] = [0; 256];
     rng.fill(&mut message);
 

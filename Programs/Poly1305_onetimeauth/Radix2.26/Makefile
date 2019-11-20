@@ -13,8 +13,6 @@ upload: hex
 upload_only:
 	echo -e "\nloadfile program.hex\nexit" | timeout 15 JLinkExe -device FE310 -if JTAG -speed 4000 -jtagconf -1,-1 -autoconnect 1
 
-upload_testcase: hex
-	$(freedom-e-sdk)/scripts/upload --hex program.hex --jlink JLinkExe --sleep 7000
 reset:
 	echo -e "\nr\nexit" | timeout 10 JLinkExe -device FE310 -if JTAG -speed 4000 -jtagconf -1,-1 -autoconnect 1
 
@@ -25,9 +23,9 @@ main.o: main.c
 	clang -O3 -c $< --target=riscv32 -march=rv32ima
 
 %.o: %.c
-	clang -O1 -c $< --target=riscv32 -march=rv32ima
+	clang -O1 -c $< --target=riscv32 -march=rv32ia
 %.o: %.S
-	clang -O0 -c $< --target=riscv32 -march=rv32ima
+	clang -O0 -c $< --target=riscv32 -march=rv32ia
 
 objdump:
 	$(riscv-gnu-toolchain)/build-binutils-newlib/binutils/objdump -D $(file) > $(file).objdump 

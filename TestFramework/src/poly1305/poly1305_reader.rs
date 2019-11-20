@@ -9,7 +9,7 @@ use std::fmt::Formatter;
 
 pub struct Poly1305Result {
     pub result: [u8; 16],
-    pub cycle_count: i64,
+    pub cycle_count: f64,
 }
 
 
@@ -48,7 +48,7 @@ impl Iterator for Poly1305Reader {
         match self.finished {
             true => None,
             false => {
-                let mut result = Poly1305Result { result: [0; 16], cycle_count: 0 };
+                let mut result = Poly1305Result { result: [0; 16], cycle_count: 0.0 };
                 for line in self.reader.by_ref().lines() {
                     let line = line.unwrap_or_default();
                     //println!("{}", line);
@@ -56,7 +56,7 @@ impl Iterator for Poly1305Reader {
                     let output_regex = Regex::new("([a-f0-9]{32})").expect("Output regex is invalid");
                     if cycle_regex.is_match(line.as_str()) {
                         let captures = cycle_regex.captures(line.as_str()).expect("Cannot get captures from cycle regex");
-                        result.cycle_count = captures[1].parse::<i64>().unwrap_or_default();
+                        result.cycle_count = captures[1].parse::<f64>().unwrap_or_default();
                     } else if output_regex.is_match(line.as_str()) {
                         let bytes = hex::decode(line.as_str()).expect("Failed to decode output result from hex to bytes");
                         for i in 0..16 {
