@@ -102,6 +102,7 @@ fn run_make_upload_only() -> Result<(), SimpleError> {
 
         //as soon as the upload is ok return
         if line.as_str() == "O.K."{
+            info!("make upload successfull");
             return Ok(());
         }
     }

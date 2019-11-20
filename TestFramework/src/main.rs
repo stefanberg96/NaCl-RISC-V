@@ -30,8 +30,16 @@ fn main() -> Result<(), SimpleError> {
     //main loop that runs the tests
     loop {
         let testcase = poly1305_generator::generate_testcase();
-        for _attempt in 0..3 {
-            run_make()?;
+        for _attempt in 0..4 {
+            if _attempt == 3 {
+                return Err(SimpleError::new("Too many failed commands please do a manual check"));
+            }
+
+            if run_make().is_err(){
+                error!("run make failed");
+                continue;
+            }
+
             match rx.recv_timeout(Duration::from_secs(10)) {
                 Ok(result) => {
                     if testcase.expected_result == result.result {
@@ -42,7 +50,11 @@ fn main() -> Result<(), SimpleError> {
 
                     break;
                 }
-                Err(_) => continue,
+                Err(_) => {
+                    error!("Did not get the result within 10 seconds rerunning make");
+                    error!("Input was {:?}", testcase);
+                    continue
+                },
             }
         }
     }
