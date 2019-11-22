@@ -69,12 +69,12 @@ void checkCorrectness() {
 }
 int main() {
 
-  unsigned int out[15]={0};
-  unsigned int a[2]={0xcd,0x34};
-  unsigned int b[2]={0xef,0x87};
-  karatsuba226_2(out,a,b);
+  unsigned int out[17]={0};
+  unsigned int a[3]={0x3FFFFFF,0x3FFFFFF, 0x3ffFFff};
+  unsigned int b[3]={0x3FFFFFF,0x3FFFFFF, 0x3ffFFff};
+  karatsuba226_3(out,a,b);
   toradix28(out);
-  printarray(out,15); 
+  printarray(out,17); 
 
   uint64_t timing[2];
   unsigned char output[16];
