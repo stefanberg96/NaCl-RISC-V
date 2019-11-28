@@ -2,4 +2,4 @@
 #include "onetime_auth.h"
 
 extern uint32_t getcycles();
-void dobenchmark(uint64_t *timings, unsigned char output[16]);
+void dobenchmark(unsigned char output[16]);

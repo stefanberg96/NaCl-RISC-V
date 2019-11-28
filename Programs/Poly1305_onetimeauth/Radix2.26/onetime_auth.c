@@ -64,7 +64,7 @@ int crypto_onetimeauth(unsigned char *out, const unsigned char *in,
   // calculate how much work is left (always less than 16 bytes)
   in += inlen-newinlen;
   inlen = newinlen;
- 
+
   // do the remaining work
   for (j = 0; j < 5; ++j)
     c[j] = 0; // set c to 0

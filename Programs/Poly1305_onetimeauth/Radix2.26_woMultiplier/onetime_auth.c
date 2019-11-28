@@ -1,5 +1,9 @@
 #include "onetime_auth.h"
 
+void printbytes(unsigned int x, unsigned int y){
+   printf("%x, %x\n",x,y);
+}
+
 static const unsigned int minusp[17] = {5, 0, 0, 0, 0, 0, 0, 0,  0,
                                         0, 0, 0, 0, 0, 0, 0, 252};
 

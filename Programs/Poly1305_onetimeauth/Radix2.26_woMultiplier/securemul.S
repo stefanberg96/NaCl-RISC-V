@@ -39,6 +39,8 @@ securemul226:
    sub     t1, zero, t1  #
    and     t1, a0, t1    # apply mask
    add     a3, a3, t1    # increase result
+   sltu    t1, a3, t1
+   mv      a4, t1
 
    srli    a1, a1, 1     # shift 6
    srli    t1, a0, 31    #
@@ -50,7 +52,7 @@ securemul226:
    and     t1, a0, t1    #
    add     a3, t1, a3    # increase result
    sltu    t1, a3, t1    # handle carry
-   mv      a4, t1        # r_h
+   add     a4, a4, t1    # r_h
    add     a4, a4, t2    #
 
    li      a5, 19
@@ -75,16 +77,3 @@ loop:
    mv      a1, a4        #
    ret
 
-
-.globl testasm
-.type testasm, @function
-testasm:
-  mv    t5, ra
-  li    a0, 0x3FFFFFF
-  li    a1, 0x3FFFFFF
-  csrr  t4, mcycle
-  jal securemul226
-  csrr t2, mcycle
-  sub  a0, t2, t4
-  mv   ra, t5
-  ret

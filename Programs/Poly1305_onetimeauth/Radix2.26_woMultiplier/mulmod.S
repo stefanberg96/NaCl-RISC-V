@@ -30,8 +30,8 @@ inner_loop:
     jal    securemul226  
     add    s5, s5, a1    # u+= r[i-j] *h[j]
     add    s4, s4, a0    #
-    sltu   a0, s4, a0    # handle carry
-    add    s5, s5, a0    #
+    sltu   t1, s4, a0    # handle carry
+    add    s5, s5, t1    #
     addi   t4, t4, 4     # update loop variables
     addi   t5, t5, -4    #
     ble    t4, t6, inner_loop
@@ -50,12 +50,12 @@ inner_loop2:
     add    a1, a1, t1    # 
     slli   t1, a0, 2     #
     add    a0, a0, t1    #
-    sltu   t1, a0, t1    # handle carry
-    add    a1, a1, t1    # 
+    sltu   t2, a0, t1    # handle carry
+    add    a1, a1, t2    # 
     add    s5, s5, a1    # u+=high * 5
     add    s4, s4, a0    # u+=low * 5
-    sltu   a0, s4, a0    # handle carry
-    add    s5, s5, a0    #
+    sltu   a1, s4, a0    # handle carry
+    add    s5, s5, a1    #
 
     addi   t4, t4, 4     # update loop variables
     addi   t5, t5, -4    #

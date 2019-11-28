@@ -2,14 +2,20 @@
 //#include "onetime_auth.h"
 
 
-void printarray(unsigned char * in, int inlen){
+void printchararray(unsigned char * in, int inlen){
 
     for(int i =0;i< inlen;i++){
         printf("%02x", in[i]);
     }
     printf("\n");
 }
+void printarray(unsigned int * in, int inlen){
 
+    for(int i =0;i< inlen;i++){
+        printf("%02x, ", in[i]);
+    }
+    printf("\n");
+}
 unsigned char expectedResult[16] = {0xf3, 0xff, 0xc7, 0x70, 0x3f, 0x94,
                                     0x00, 0xe5, 0x2a, 0x7d, 0xfb, 0x4b,
                                     0x3d, 0x33, 0x05, 0xd9};
@@ -63,11 +69,6 @@ void checkCorrectness() {
 int main() {
 
 //  checkCorrectness();
-  uint64_t timing[2];
-  unsigned char output[16];
-  dobenchmark(&timing[0], output);
-  dobenchmark(&timing[1], output);
-  printf("This took %llu cycles\n", timing[1]);
-  printarray(output, 16);
+  dobenchmark( );
   return 0;
 }
