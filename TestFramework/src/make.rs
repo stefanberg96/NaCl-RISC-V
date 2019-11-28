@@ -2,7 +2,7 @@ use std::process::{Command, Stdio};
 use simple_error::SimpleError;
 use std::error::Error;
 use std::env;
-use std::io::{BufReader, BufRead};
+
 
 
 pub fn run_make() -> Result<(), SimpleError> {
@@ -92,20 +92,11 @@ fn run_make_upload_only() -> Result<(), SimpleError> {
         .stderr(Stdio::piped())
         .stdout(Stdio::piped())
         .arg("upload_only")
-        .spawn().expect("Could not run make hex");
+        .spawn().expect("Could not run make upload_only");
 
 
-    let output = child.stdout.unwrap();
-
-    for line in BufReader::new(output).lines(){
-        let line = line.unwrap();
-
-        //as soon as the upload is ok return
-        if line.as_str() == "O.K."{
-            info!("make upload successfull");
-            return Ok(());
-        }
-    }
-
-    return Err(SimpleError::new("Did not find the O.K. keyword for the upload_only"));
+    let output = child.wait_with_output().expect("Cannot read output from upload only");
+    check_for_keyword(output.stdout, "O.K.", "Failed to run make upload_only")?;
+    info!("make upload succeeded");
+    Ok(())
 }

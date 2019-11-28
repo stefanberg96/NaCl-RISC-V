@@ -1,7 +1,7 @@
 use rand::Rng;
 use sodiumoxide::crypto::onetimeauth;
 use std::fs::{remove_file, OpenOptions};
-use std::path::{PathBuf, Path};
+use std::path::{Path};
 use std::env;
 use std::io::Write;
 use log::{info};
@@ -47,27 +47,26 @@ pub fn generate_testcase(messagelen : usize) -> TestcasePoly1305{
     let expected_result = onetimeauth::authenticate(&message_slice, &poly1305_key).0;
     generate_testcasefile(variables.clone(), messagelen);
     TestcasePoly1305 {variables,  expected_result, messagelen}
-
 }
 
-fn get_benchmark_path() -> PathBuf {
-    let buf_path = env::current_dir().expect("Failed to get current path");
-    let current_path = buf_path.as_path();
-    current_path.join(Path::new("benchmark.c"))
-}
 
 fn generate_testcasefile(variables: Vec<String>, inlen: usize){
-    remove_file(get_benchmark_path()).expect("Can not remove benchmark.c");
+    let buf_path = env::current_dir().expect("Failed to get current path");
+    let current_path = buf_path.as_path();
+    let benchmark_path = current_path.join(Path::new("benchmark.c"));
+    remove_file(benchmark_path.clone()).expect("Can not remove benchmark.c");
 
     let mut file = OpenOptions::new()
         .create(true)
         .write(true)
         .read(true)
-        .open(get_benchmark_path()).expect("Couldn't create benchmark.c file");
+        .open(benchmark_path).expect("Couldn't create benchmark.c file");
     //print header stuff
     writeln!(file, "#include \"benchmark.h\"
 
-    void dobenchmark(uint64_t *timings, unsigned char a[16]) {{").expect("write failed");
+    void dobenchmark() {{
+
+    unsigned char a[16]").expect("write failed");
 
     for var in variables {
         writeln!(file, "{}", var).expect("write failed");
@@ -75,12 +74,17 @@ fn generate_testcasefile(variables: Vec<String>, inlen: usize){
 
     //print rest of the code
     writeln!(file, "
-        uint32_t oldcount, newcount;
-        unsigned char x = 5, y = 10;
-        oldcount = getcycles();
-        crypto_onetimeauth(a, c, {}, rs);
-        newcount = getcycles();
-        timings[0] = newcount - oldcount;
+        uint32_t timings[21];
+        for(int i =0;i<21;i++){{
+            timings[i]=getcycles();
+            crypto_onetimeauth(a,c,{},rs);
+        }}
+
+        for(int i=1;i<21;i++){{
+            printf(\"%d, \",timings[i]-timings[i-1]);
+        }}
+        printf(\"\\n\");
+        printchararray(a,16);
     }}", inlen).expect("write failed");
     file.flush().expect("Couldn't flush benchmark file");
     info!("written benchmark.c");

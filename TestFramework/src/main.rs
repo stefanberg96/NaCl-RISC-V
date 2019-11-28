@@ -1,25 +1,27 @@
 #[macro_use]
 extern crate log;
 
-use std::thread;
 use std::sync::mpsc;
-use std::sync::mpsc::Sender;
 use std::time::Duration;
-use crate::poly1305::poly1305_reader::{Poly1305Reader, Poly1305Result};
+use crate::securemul::securemul_reader::{start_reader_thread};
 use crate::poly1305::poly1305_generator;
 use simple_error::SimpleError;
 use env_logger::{Builder, WriteStyle};
 use log::{error, info, LevelFilter};
 use crate::make::run_make;
 use plotlib::boxplot::BoxPlot;
-use plotlib::representation::CategoricalRepresentation;
 use plotlib::view::CategoricalView;
 use plotlib::page::Page;
+use std::fs::{create_dir, OpenOptions};
+use std::path::{Path};
+use chrono::Local;
+use std::io::Write;
+use crate::securemul::securemul_generator::{generate_testcase};
 
 
 mod make;
 mod poly1305;
-
+mod securemul;
 
 fn main() -> Result<(), SimpleError> {
     let mut builder = Builder::new();
@@ -27,18 +29,29 @@ fn main() -> Result<(), SimpleError> {
     builder.filter(None, LevelFilter::Info)
         .write_style(WriteStyle::Always)
         .init();
+    let dt = Local::now();
+    let x = format!("results/{}",dt.format("%Y-%m-%d %H:%M"));
+    let dir = Path::new(&x);
+    let _ = create_dir(dir);
+
+    let mut output = OpenOptions::new()
+        .create(true)
+        .write(true)
+        .read(true)
+        .open(dir.join(Path::new("results.txt"))).expect("Couldn't create output file");
+
 
     // create a thread that reads the output from the board
     let (tx, rx) = mpsc::channel();
     start_reader_thread(tx);
 
     //main loop that runs the tests
-    let messagelen: usize = 150;
     let mut cycles_times = vec![];
-    for i in 0..20 {
-        let testcase = poly1305_generator::generate_testcase(messagelen);
+    for _i in 0..100 {
+        let testcase = generate_testcase();
         for _attempt in 0..4 {
             if _attempt == 3 {
+                error!("Too many failed attempt on this input:\n {:?}", testcase);
                 return Err(SimpleError::new("Too many failed commands please do a manual check"));
             }
 
@@ -49,40 +62,50 @@ fn main() -> Result<(), SimpleError> {
 
             match rx.recv_timeout(Duration::from_secs(10)) {
                 Ok(result) => {
+
                     if testcase.expected_result == result.result {
-                        info!("Result was correct and took {} cycles for a message of size {}", result.cycle_count, testcase.messagelen);
-                        cycles_times.push(result.cycle_count);
+                        info!("Result was correct and took {} cycles ", result.cycle_counts[8]);
+                        cycles_times.push(result.cycle_counts.clone());
+
                     } else {
                         error!("Result was not correct!\n {:?} \n{}", testcase, result);
+                        let _ = writeln!(output, "Output was not correct");
+                        let _ = writeln!(output, "The correct result is {}", testcase.expected_result);
                     }
+
+                    let _ = writeln!(output, "{:?}\n {}", testcase.variables, resultrisc);
 
                     break;
                 }
                 Err(_) => {
                     error!("Did not get the result within 10 seconds rerunning make");
-                    error!("Input was {:?}", testcase);
                     continue;
                 }
             }
         }
     }
 
-    let boxplot = BoxPlot::from_vec(cycles_times);
-    let v = CategoricalView::new().add(&boxplot);
-    let _ = Page::single(&v).save("boxplot.svg");
+
+    let skipped_first_run: Vec<f64> = cycles_times.iter().map(|v| v.iter().skip(1)).flatten().cloned().collect();
+    let filtered: Vec<f64> = cycles_times.iter().map(|v| v.iter().skip(5)).flatten().cloned().collect();
+
+    let boxplot_all = BoxPlot::from_vec(cycles_times.iter().flatten().cloned().collect());
+    let boxplot_skipped_first = BoxPlot::from_vec(skipped_first_run);
+    let boxplot_filtered = BoxPlot::from_vec(filtered);
+
+    let v_all = CategoricalView::new().add(&boxplot_all);
+    let v_skipped_first = CategoricalView::new().add(&boxplot_skipped_first);
+    let v_filtered = CategoricalView::new().add(&boxplot_filtered);
+
+
+    let _ = Page::single(&v_all).save(dir.join("boxplot_all.svg"));
+    let _ = Page::single(&v_skipped_first).save(dir.join("boxplot_first_skipped.svg"));
+    let _ = Page::single(&v_filtered).save(dir.join("boxplot_filtered.svg"));
+
 
     Ok(())
 }
 
-fn start_reader_thread(tx: Sender<Poly1305Result>) {
-    thread::spawn(move || {
-        let reader = Poly1305Reader::new();
-
-        for result in reader {
-            let _ = tx.send(result);
-        }
-    });
-}
 
 
 
