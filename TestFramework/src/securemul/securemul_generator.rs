@@ -14,8 +14,8 @@ pub struct TestcaseSecuremul {
 
 pub fn generate_testcase() -> TestcaseSecuremul {
     let mut rng = rand::thread_rng();
-    let a: u64 = rng.gen_range(0,2^26-1);
-    let b: u64 = rng.gen_range(0, 2^26-1);
+    let a: u64 = rng.gen_range(0,(1<<26)-1);
+    let b: u64 = rng.gen_range(0, (1<<26)-1);
 
 
     //print variables
@@ -66,7 +66,7 @@ fn generate_testcasefile(variables: Vec<String>) {
         }}
         printf(\"\\n\");
         uint64_t output = securemul226(a,b);
-        printf(\"0x%llx\\n\", output);
+        printf(\"0x%016llx\\n\", output);
     }}").expect("write failed");
     file.flush().expect("Couldn't flush benchmark file");
     info!("written benchmark.c");

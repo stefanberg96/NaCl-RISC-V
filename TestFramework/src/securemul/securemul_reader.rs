@@ -1,5 +1,5 @@
-use std::io::{BufReader, BufRead, Read};
-use std::fs::{File};
+use std::io::{BufReader, BufRead, Read, Cursor};
+use std::fs::File;
 use std::path::Path;
 use std::error::Error;
 use regex::Regex;
@@ -8,6 +8,7 @@ use std::fmt::Formatter;
 use std::sync::mpsc::Sender;
 use std::thread;
 use std::str::FromStr;
+use byteorder::{ReadBytesExt, BigEndian};
 
 #[derive(Clone)]
 pub struct SecuremulResult {
@@ -37,8 +38,7 @@ impl Reader {
         };
 
 
-
-        Reader { reader: BufReader::new(file)}
+        Reader { reader: BufReader::new(file) }
     }
 }
 
@@ -61,15 +61,17 @@ impl Iterator for Reader {
                     .collect();
                 result.cycle_counts = z;
             } else if output_regex.is_match(line.as_str()) {
-                println!("{}",line.as_str());
-                let hexstr = &output_regex.captures(line.as_str()).unwrap()[1];
-                let hex = hex::decode(hexstr).unwrap_or_default();
-                let mut val = 0;
-                for i in 0.. hex.len(){
-                    val+= (hex[i]<<((i*8) as u8)) as u64;
+                println!("{}", line.as_str());
+                let mut hexstr = &output_regex.captures(line.as_str()).unwrap()[1];
+                let z = String::from("0") + hexstr;
+                if hexstr.len() % 2 != 0 {
+                    hexstr = z.as_str();
                 }
+                let mut hex = hex::decode(hexstr).unwrap_or_default();
 
-                result.result = val;
+                let mut cursor = Cursor::new(hex);
+                result.result = cursor.read_u64::<BigEndian>().expect("couldn't parse array");
+
                 return Some(result);
             }
         }

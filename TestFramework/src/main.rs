@@ -73,7 +73,7 @@ fn main() -> Result<(), SimpleError> {
                         let _ = writeln!(output, "The correct result is {}", testcase.expected_result);
                     }
 
-                    let _ = writeln!(output, "{:?}\n {}", testcase.variables, resultrisc);
+                    let _ = writeln!(output, "{:?}\n {}", testcase.variables, result);
 
                     break;
                 }
