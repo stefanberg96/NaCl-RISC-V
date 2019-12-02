@@ -3,8 +3,8 @@ extern crate log;
 
 use std::sync::mpsc;
 use std::time::Duration;
-use crate::securemul::securemul_reader::{start_reader_thread};
-use crate::poly1305::poly1305_generator;
+use crate::mulmod::reader::start_reader_thread;
+use crate::poly1305::generator;
 use simple_error::SimpleError;
 use env_logger::{Builder, WriteStyle};
 use log::{error, info, LevelFilter};
@@ -13,15 +13,17 @@ use plotlib::boxplot::BoxPlot;
 use plotlib::view::CategoricalView;
 use plotlib::page::Page;
 use std::fs::{create_dir, OpenOptions};
-use std::path::{Path};
+use std::path::Path;
 use chrono::Local;
 use std::io::Write;
-use crate::securemul::securemul_generator::{generate_testcase};
+use crate::mulmod::generator::{generate_testcase, generator_name};
 
 
 mod make;
 mod poly1305;
 mod securemul;
+mod onetime_authloop;
+mod mulmod;
 
 fn main() -> Result<(), SimpleError> {
     let mut builder = Builder::new();
@@ -30,7 +32,7 @@ fn main() -> Result<(), SimpleError> {
         .write_style(WriteStyle::Always)
         .init();
     let dt = Local::now();
-    let x = format!("results/{}",dt.format("%Y-%m-%d %H:%M"));
+    let x = format!("results/{}_{}", generator_name(),dt.format("%Y-%m-%d %H:%M"));
     let dir = Path::new(&x);
     let _ = create_dir(dir);
 
@@ -39,7 +41,6 @@ fn main() -> Result<(), SimpleError> {
         .write(true)
         .read(true)
         .open(dir.join(Path::new("results.txt"))).expect("Couldn't create output file");
-
 
     // create a thread that reads the output from the board
     let (tx, rx) = mpsc::channel();
@@ -62,16 +63,8 @@ fn main() -> Result<(), SimpleError> {
 
             match rx.recv_timeout(Duration::from_secs(10)) {
                 Ok(result) => {
-
-                    if testcase.expected_result == result.result {
-                        info!("Result was correct and took {} cycles ", result.cycle_counts[8]);
-                        cycles_times.push(result.cycle_counts.clone());
-
-                    } else {
-                        error!("Result was not correct!\n {:?} \n{}", testcase, result);
-                        let _ = writeln!(output, "Output was not correct");
-                        let _ = writeln!(output, "The correct result is {}", testcase.expected_result);
-                    }
+                    info!("Calculation took {} cycles ", result.cycle_counts[8]);
+                    cycles_times.push(result.cycle_counts.clone());
 
                     let _ = writeln!(output, "{:?}\n {}", testcase.variables, result);
 
@@ -101,7 +94,7 @@ fn main() -> Result<(), SimpleError> {
     let _ = Page::single(&v_all).save(dir.join("boxplot_all.svg"));
     let _ = Page::single(&v_skipped_first).save(dir.join("boxplot_first_skipped.svg"));
     let _ = Page::single(&v_filtered).save(dir.join("boxplot_filtered.svg"));
-
+    let _ = Page::single(&v_all).save(dir.join("boxplot_all.svg"));
 
     Ok(())
 }

@@ -7,13 +7,16 @@ use std::io::Write;
 use log::{info};
 
 #[derive(Debug)]
-pub struct TestcasePoly1305{
+pub struct TestcaseAuthLoop {
     pub variables: Vec<String>,
     pub messagelen: usize,
-    pub expected_result: [u8;16],
 }
 
-pub fn generate_testcase(messagelen : usize) -> TestcasePoly1305{
+pub fn generator_name() -> String {
+    String::from_str("authloop")
+}
+
+pub fn generate_testcase(messagelen : usize) -> TestcaseAuthLoop {
     let mut rng = rand::thread_rng();
 
     let mut message: [u8; 256] = [0; 256];
@@ -26,7 +29,7 @@ pub fn generate_testcase(messagelen : usize) -> TestcasePoly1305{
     let mut variables = Vec::new();
 
     let mut var = String::with_capacity((messagelen*2) as usize);
-    var.push_str(format!("        static unsigned char c[{}] = {{", messagelen).as_str());
+    var.push_str(format!("        static unsigned char in[{}] = {{", messagelen).as_str());
 
     for i in 0..messagelen - 1 {
         var.push_str(format!("0x{:x}, ", message[i as usize]).as_str());
@@ -35,8 +38,8 @@ pub fn generate_testcase(messagelen : usize) -> TestcasePoly1305{
     variables.push(var);
 
     var = String::with_capacity((messagelen*2) as usize);
-    var.push_str(format!("        static unsigned char rs[32] = {{").as_str());
-    for i in 0..31 {
+    var.push_str(format!("        static unsigned char k[16] = {{").as_str());
+    for i in 0..16 {
         var.push_str(format!("0x{:x}, ", key[i as usize]).as_str());
     }
     var.push_str(format!("0x{:x}}};", key[31 as usize]).as_str());
@@ -44,9 +47,9 @@ pub fn generate_testcase(messagelen : usize) -> TestcasePoly1305{
 
     let message_slice = &message[0..messagelen];
 
-    let expected_result = onetimeauth::authenticate(&message_slice, &poly1305_key).0;
+
     generate_testcasefile(variables.clone(), messagelen);
-    TestcasePoly1305 {variables,  expected_result, messagelen}
+    TestcaseAuthLoop {variables,  messagelen}
 }
 
 
@@ -66,7 +69,10 @@ fn generate_testcasefile(variables: Vec<String>, inlen: usize){
 
     void dobenchmark() {{
 
-    unsigned char a[16]").expect("write failed");
+    unsigned int c[17];
+    unsigned int h[17]={{0}};
+    unsigned int r[5];
+    ").expect("write failed");
 
     for var in variables {
         writeln!(file, "{}", var).expect("write failed");
@@ -74,17 +80,27 @@ fn generate_testcasefile(variables: Vec<String>, inlen: usize){
 
     //print rest of the code
     writeln!(file, "
+  r[0] = k[0] + (k[1] << 8) + (k[2] << 16) + ((k[3] & 3) << 24);
+  r[1] = ((k[3] >> 2) & 3) + ((k[4] & 252) << 6) + (k[5] << 14) +
+         ((k[6] & 15) << 22);
+  r[2] = (k[6] >> 4) + ((k[7] & 15) << 4) + ((k[8] & 252) << 12) +
+         ((k[9] & 63) << 20);
+  r[3] =
+      (k[9] >> 6) + (k[10] << 2) + ((k[11] & 15) << 10) + ((k[12] & 252) << 18);
+  r[4] = k[13] + (k[14] << 8) + ((k[15] & 15) << 16);
+
+
+
         uint32_t timings[21];
         for(int i =0;i<21;i++){{
             timings[i]=getcycles();
-            crypto_onetimeauth(a,c,{},rs);
+            onetimeauth_loop(in, {}, h, r, c);
         }}
 
         for(int i=1;i<21;i++){{
             printf(\"%d, \",timings[i]-timings[i-1]);
         }}
         printf(\"\\n\");
-        printchararray(a,16);
     }}", inlen).expect("write failed");
     file.flush().expect("Couldn't flush benchmark file");
     info!("written benchmark.c");
