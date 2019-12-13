@@ -19,32 +19,32 @@ onetimeauth_loop:
     mv     s2, a2        # h
     mv     s3, a3        # r
     mv     s4, a4        # c
+    lw     a3, 0(s0)     # load 32 bytes from in[0]
     li     s5, 0x3FFFFFF #
     li     s6, 16        # loop value
     blt    s1, s6, end_loop
 loop:
-    lw     t2, 0(s0)     # load 32 bytes from in[0]
-    and    t3, t2, s5    # get first 26 bits
+    and    t3, a3, s5    # get first 26 bits
+    lw     a2, 4(s0)     # in[4..7]
     sw     t3, 0(s4)     # c[0] = in[0..3] & 0x3FFFFFF
-    srli   t2, t2, 26    # in[3] >> 2
-    lw     t3, 4(s0)     # in[4..7]
-    slli   t4, t3, 6     # in[4..7] << 6
+    srli   t2, a3, 26    # in[3] >> 2
+    slli   t4, a2, 6     # in[4..7] << 6
     or     t2, t2, t4    # in[3] >> 2 + in[4..7]<<6
+    lw     a1, 8(s0)     # in[8..11]
     and    t2, t2, s5    # get first 26 bits
     sw     t2, 4(s4)     # store value
-    srli   t2, t3, 20    # in[4..7]>>20
-    lw     t3, 8(s0)     # in[8..11]
-    slli   t4, t3, 12    # in[8..11]<<12
+    srli   t2, a2, 20    # in[4..7]>>20
+    slli   t4, a1, 12    # in[8..11]<<12
     or     t2, t2, t4    # in[4..7]>>20 + in[8..11]<<12
+    lw     a0, 12(s0)    # in[12..15]
     and    t2, t2, s5    #
     sw     t2, 8(s4)     # 
-    srli   t2, t3, 14    # in[8..11]>>14
-    lw     t3, 12(s0)    # in[12..15]
-    slli   t4, t3, 18    # in[12..15]<<8
+    srli   t2, a1, 14    # in[8..11]>>14
+    slli   t4, a0, 18    # in[12..15]<<8
     or     t2, t2, t4    # in[8..11]>>14 + in[12..15]<<8
     and    t2, t2, s5    #
     sw     t2, 12(s4)    #
-    srli   t2, t3, 8     # in[13..15]
+    srli   t2, a0, 8     # in[13..15]
     li     t3, 0x1000000 # 1<<24
     or     t2, t2, t3    #
     sw     t2, 16(s4)    # 
@@ -55,8 +55,9 @@ loop:
     mv     a0, s2        #
     mv     a1, s3        #
     jal    mulmod226asm
-    addi   s1, s1, -16   # update loop variables
     addi   s0, s0, 16    #
+    lw     a3, 0(s0)     # load in[0] 32 bytes
+    addi   s1, s1, -16   # update loop variables
     bgt    s1, s6, loop
     
 end_loop:

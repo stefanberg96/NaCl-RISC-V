@@ -6,6 +6,7 @@ SRCS=$(wildcard *.c)
 ASM=$(wildcard *.S)
 
 OBJS=$(SRCS:.c=.o) $(ASM:.S=.o)
+BENCHMARK=main.o benchmark.o
 
 upload: hex
 	timeout 10s $(freedom-e-sdk)/scripts/upload --hex ./program.hex --jlink JLinkExe
@@ -18,13 +19,18 @@ reset:
 
 
 hex: $(OBJS)
-	$(riscv64-unknown-elf-gcc)/bin/riscv64-unknown-elf-gcc  -march=rv32imac -mabi=ilp32 -mcmodel=medlow -ffunction-sections -fdata-sections -I$(freedom-e-sdk)/bsp/sifive-hifive1-revb/install/include -Os -g  -Wl,--gc-sections -Wl,-Map,program.map -nostartfiles -nostdlib -L$(freedom-e-sdk)/bsp/sifive-hifive1-revb/install/lib/debug/ -T$(freedom-e-sdk)/bsp/sifive-hifive1-revb/metal.default.lds $(OBJS) -Wl,--start-group -lc -lgcc -lmetal -lmetal-gloss -Wl,--end-group -Wl,--print-memory-usage -o program.elf
+	 $(riscv64-unknown-elf-gcc)/bin/riscv64-unknown-elf-gcc  -march=rv32imac -mabi=ilp32 -mcmodel=medlow -ffunction-sections -fdata-sections -I$(freedom-e-sdk)/bsp/sifive-hifive1-revb/install/include -Os -g  -Wl,--gc-sections -Wl,-Map,program.map -nostartfiles -nostdlib -L$(freedom-e-sdk)/bsp/sifive-hifive1-revb/install/lib/debug/ -T$(freedom-e-sdk)/bsp/sifive-hifive1-revb/metal.default.lds $(OBJS) -Wl,--start-group -lc -lgcc -lmetal -lmetal-gloss -Wl,--end-group -Wl,--print-memory-usage -o program.elf
 	$(riscv64-unknown-elf-gcc)/bin/riscv64-unknown-elf-objcopy -O ihex program.elf program.hex
+
+lib: $(filter-out $(BENCHMARK), $(OBJS))
+	$(riscv64-unknown-elf-gcc)/bin/riscv64-unknown-elf-gcc-ar -target=elf32-elf32-littleriscv  lib.a $(OBJS) 
+
 main.o: main.c
-	clang -O0 -c $< --target=riscv32 -march=rv32ia
+	clang -O0 -c $< --target=riscv32 -march=rv32ia -I$(freedom-e-sdk)/freedom-metal
 
 %.o: %.c
-	clang -O0 -c $< --target=riscv32 -march=rv32ia
+	clang -O0 -c $< --target=riscv32 -march=rv32ia -I$(freedom-e-sdk)/freedom-metal
+
 %.o: %.S
 	clang -O0 -c $< --target=riscv32 -march=rv32ia
 

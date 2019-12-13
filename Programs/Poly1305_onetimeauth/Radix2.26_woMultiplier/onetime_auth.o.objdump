@@ -1,0 +1,567 @@
+
+onetime_auth.o:     file format elf32-littleriscv
+
+
+Disassembly of section .text:
+
+00000000 <printbytes>:
+   0:	fe010113          	addi	sp,sp,-32
+   4:	00112e23          	sw	ra,28(sp)
+   8:	00812c23          	sw	s0,24(sp)
+   c:	02010413          	addi	s0,sp,32
+  10:	00058613          	mv	a2,a1
+  14:	00050693          	mv	a3,a0
+  18:	fea42a23          	sw	a0,-12(s0)
+  1c:	feb42823          	sw	a1,-16(s0)
+  20:	ff442583          	lw	a1,-12(s0)
+  24:	ff042503          	lw	a0,-16(s0)
+  28:	00000737          	lui	a4,0x0
+  2c:	00070713          	mv	a4,a4
+  30:	fea42623          	sw	a0,-20(s0)
+  34:	00070513          	mv	a0,a4
+  38:	fec42703          	lw	a4,-20(s0)
+  3c:	fec42423          	sw	a2,-24(s0)
+  40:	00070613          	mv	a2,a4
+  44:	fed42223          	sw	a3,-28(s0)
+  48:	00000097          	auipc	ra,0x0
+  4c:	000080e7          	jalr	ra # 48 <printbytes+0x48>
+  50:	fea42023          	sw	a0,-32(s0)
+  54:	01812403          	lw	s0,24(sp)
+  58:	01c12083          	lw	ra,28(sp)
+  5c:	02010113          	addi	sp,sp,32
+  60:	00008067          	ret
+
+00000064 <toradix28>:
+  64:	ff010113          	addi	sp,sp,-16
+  68:	00112623          	sw	ra,12(sp)
+  6c:	00812423          	sw	s0,8(sp)
+  70:	01010413          	addi	s0,sp,16
+  74:	00050593          	mv	a1,a0
+  78:	fea42a23          	sw	a0,-12(s0)
+  7c:	ff442503          	lw	a0,-12(s0)
+  80:	01354603          	lbu	a2,19(a0)
+  84:	04c52023          	sw	a2,64(a0)
+  88:	ff442503          	lw	a0,-12(s0)
+  8c:	01254603          	lbu	a2,18(a0)
+  90:	02c52e23          	sw	a2,60(a0)
+  94:	ff442503          	lw	a0,-12(s0)
+  98:	01154603          	lbu	a2,17(a0)
+  9c:	02c52c23          	sw	a2,56(a0)
+  a0:	ff442503          	lw	a0,-12(s0)
+  a4:	01054603          	lbu	a2,16(a0)
+  a8:	02c52a23          	sw	a2,52(a0)
+  ac:	ff442503          	lw	a0,-12(s0)
+  b0:	00c52603          	lw	a2,12(a0)
+  b4:	01265613          	srli	a2,a2,0x12
+  b8:	0ff67613          	andi	a2,a2,255
+  bc:	02c52823          	sw	a2,48(a0)
+  c0:	ff442503          	lw	a0,-12(s0)
+  c4:	00c52603          	lw	a2,12(a0)
+  c8:	00a65613          	srli	a2,a2,0xa
+  cc:	0ff67613          	andi	a2,a2,255
+  d0:	02c52623          	sw	a2,44(a0)
+  d4:	ff442503          	lw	a0,-12(s0)
+  d8:	00c52603          	lw	a2,12(a0)
+  dc:	00265613          	srli	a2,a2,0x2
+  e0:	0ff67613          	andi	a2,a2,255
+  e4:	02c52423          	sw	a2,40(a0)
+  e8:	ff442503          	lw	a0,-12(s0)
+  ec:	00852603          	lw	a2,8(a0)
+  f0:	01465613          	srli	a2,a2,0x14
+  f4:	00c52683          	lw	a3,12(a0)
+  f8:	0036f693          	andi	a3,a3,3
+  fc:	00669693          	slli	a3,a3,0x6
+ 100:	00d60633          	add	a2,a2,a3
+ 104:	02c52223          	sw	a2,36(a0)
+ 108:	ff442503          	lw	a0,-12(s0)
+ 10c:	00852603          	lw	a2,8(a0)
+ 110:	00c65613          	srli	a2,a2,0xc
+ 114:	0ff67613          	andi	a2,a2,255
+ 118:	02c52023          	sw	a2,32(a0)
+ 11c:	ff442503          	lw	a0,-12(s0)
+ 120:	00852603          	lw	a2,8(a0)
+ 124:	00465613          	srli	a2,a2,0x4
+ 128:	0ff67613          	andi	a2,a2,255
+ 12c:	00c52e23          	sw	a2,28(a0)
+ 130:	ff442503          	lw	a0,-12(s0)
+ 134:	00452603          	lw	a2,4(a0)
+ 138:	01665613          	srli	a2,a2,0x16
+ 13c:	00852683          	lw	a3,8(a0)
+ 140:	00f6f693          	andi	a3,a3,15
+ 144:	00469693          	slli	a3,a3,0x4
+ 148:	00d60633          	add	a2,a2,a3
+ 14c:	00c52c23          	sw	a2,24(a0)
+ 150:	ff442503          	lw	a0,-12(s0)
+ 154:	00452603          	lw	a2,4(a0)
+ 158:	00e65613          	srli	a2,a2,0xe
+ 15c:	0ff67613          	andi	a2,a2,255
+ 160:	00c52a23          	sw	a2,20(a0)
+ 164:	ff442503          	lw	a0,-12(s0)
+ 168:	00452603          	lw	a2,4(a0)
+ 16c:	00665613          	srli	a2,a2,0x6
+ 170:	0ff67613          	andi	a2,a2,255
+ 174:	00c52823          	sw	a2,16(a0)
+ 178:	ff442503          	lw	a0,-12(s0)
+ 17c:	00354603          	lbu	a2,3(a0)
+ 180:	00452683          	lw	a3,4(a0)
+ 184:	03f6f693          	andi	a3,a3,63
+ 188:	00269693          	slli	a3,a3,0x2
+ 18c:	00d60633          	add	a2,a2,a3
+ 190:	00c52623          	sw	a2,12(a0)
+ 194:	ff442503          	lw	a0,-12(s0)
+ 198:	00254603          	lbu	a2,2(a0)
+ 19c:	00c52423          	sw	a2,8(a0)
+ 1a0:	ff442503          	lw	a0,-12(s0)
+ 1a4:	00154603          	lbu	a2,1(a0)
+ 1a8:	00c52223          	sw	a2,4(a0)
+ 1ac:	ff442503          	lw	a0,-12(s0)
+ 1b0:	00054603          	lbu	a2,0(a0)
+ 1b4:	00c52023          	sw	a2,0(a0)
+ 1b8:	feb42823          	sw	a1,-16(s0)
+ 1bc:	00812403          	lw	s0,8(sp)
+ 1c0:	00c12083          	lw	ra,12(sp)
+ 1c4:	01010113          	addi	sp,sp,16
+ 1c8:	00008067          	ret
+
+000001cc <crypto_onetimeauth>:
+ 1cc:	f0010113          	addi	sp,sp,-256
+ 1d0:	0e112e23          	sw	ra,252(sp)
+ 1d4:	0e812c23          	sw	s0,248(sp)
+ 1d8:	10010413          	addi	s0,sp,256
+ 1dc:	00068793          	mv	a5,a3
+ 1e0:	00060813          	mv	a6,a2
+ 1e4:	00070893          	mv	a7,a4
+ 1e8:	00058293          	mv	t0,a1
+ 1ec:	00050313          	mv	t1,a0
+ 1f0:	fea42a23          	sw	a0,-12(s0)
+ 1f4:	feb42823          	sw	a1,-16(s0)
+ 1f8:	fed42623          	sw	a3,-20(s0)
+ 1fc:	fec42423          	sw	a2,-24(s0)
+ 200:	fee42223          	sw	a4,-28(s0)
+ 204:	fe442503          	lw	a0,-28(s0)
+ 208:	00054583          	lbu	a1,0(a0)
+ 20c:	00154603          	lbu	a2,1(a0)
+ 210:	00861613          	slli	a2,a2,0x8
+ 214:	00c5e5b3          	or	a1,a1,a2
+ 218:	00254603          	lbu	a2,2(a0)
+ 21c:	01061613          	slli	a2,a2,0x10
+ 220:	00c5e5b3          	or	a1,a1,a2
+ 224:	00354503          	lbu	a0,3(a0)
+ 228:	00357513          	andi	a0,a0,3
+ 22c:	01851513          	slli	a0,a0,0x18
+ 230:	00a5e533          	or	a0,a1,a0
+ 234:	fca42623          	sw	a0,-52(s0)
+ 238:	fe442503          	lw	a0,-28(s0)
+ 23c:	00350583          	lb	a1,3(a0)
+ 240:	0025d593          	srli	a1,a1,0x2
+ 244:	0035f593          	andi	a1,a1,3
+ 248:	00454603          	lbu	a2,4(a0)
+ 24c:	0fc67613          	andi	a2,a2,252
+ 250:	00661613          	slli	a2,a2,0x6
+ 254:	00c5e5b3          	or	a1,a1,a2
+ 258:	00554603          	lbu	a2,5(a0)
+ 25c:	00e61613          	slli	a2,a2,0xe
+ 260:	00c5e5b3          	or	a1,a1,a2
+ 264:	00654503          	lbu	a0,6(a0)
+ 268:	00f57513          	andi	a0,a0,15
+ 26c:	01651513          	slli	a0,a0,0x16
+ 270:	00a5e533          	or	a0,a1,a0
+ 274:	fca42823          	sw	a0,-48(s0)
+ 278:	fe442503          	lw	a0,-28(s0)
+ 27c:	00654583          	lbu	a1,6(a0)
+ 280:	0045d593          	srli	a1,a1,0x4
+ 284:	00754603          	lbu	a2,7(a0)
+ 288:	00f67613          	andi	a2,a2,15
+ 28c:	00461613          	slli	a2,a2,0x4
+ 290:	00c5e5b3          	or	a1,a1,a2
+ 294:	00854603          	lbu	a2,8(a0)
+ 298:	0fc67613          	andi	a2,a2,252
+ 29c:	00c61613          	slli	a2,a2,0xc
+ 2a0:	00c5e5b3          	or	a1,a1,a2
+ 2a4:	00954503          	lbu	a0,9(a0)
+ 2a8:	03f57513          	andi	a0,a0,63
+ 2ac:	01451513          	slli	a0,a0,0x14
+ 2b0:	00a5e533          	or	a0,a1,a0
+ 2b4:	fca42a23          	sw	a0,-44(s0)
+ 2b8:	fe442503          	lw	a0,-28(s0)
+ 2bc:	00954583          	lbu	a1,9(a0)
+ 2c0:	0065d593          	srli	a1,a1,0x6
+ 2c4:	00a54603          	lbu	a2,10(a0)
+ 2c8:	00261613          	slli	a2,a2,0x2
+ 2cc:	00c5e5b3          	or	a1,a1,a2
+ 2d0:	00b54603          	lbu	a2,11(a0)
+ 2d4:	00f67613          	andi	a2,a2,15
+ 2d8:	00a61613          	slli	a2,a2,0xa
+ 2dc:	00c5e5b3          	or	a1,a1,a2
+ 2e0:	00c54503          	lbu	a0,12(a0)
+ 2e4:	0fc57513          	andi	a0,a0,252
+ 2e8:	01251513          	slli	a0,a0,0x12
+ 2ec:	00a5e533          	or	a0,a1,a0
+ 2f0:	fca42c23          	sw	a0,-40(s0)
+ 2f4:	fe442503          	lw	a0,-28(s0)
+ 2f8:	00d54583          	lbu	a1,13(a0)
+ 2fc:	00e54603          	lbu	a2,14(a0)
+ 300:	00861613          	slli	a2,a2,0x8
+ 304:	00c5e5b3          	or	a1,a1,a2
+ 308:	00f54503          	lbu	a0,15(a0)
+ 30c:	00f57513          	andi	a0,a0,15
+ 310:	01051513          	slli	a0,a0,0x10
+ 314:	00a5e533          	or	a0,a1,a0
+ 318:	fca42e23          	sw	a0,-36(s0)
+ 31c:	00000513          	li	a0,0
+ 320:	fea42023          	sw	a0,-32(s0)
+ 324:	f2f42823          	sw	a5,-208(s0)
+ 328:	f3142623          	sw	a7,-212(s0)
+ 32c:	f3042423          	sw	a6,-216(s0)
+ 330:	f2542223          	sw	t0,-220(s0)
+ 334:	f2642023          	sw	t1,-224(s0)
+ 338:	0040006f          	j	33c <crypto_onetimeauth+0x170>
+ 33c:	fe042503          	lw	a0,-32(s0)
+ 340:	01000593          	li	a1,16
+ 344:	02a5ea63          	bltu	a1,a0,378 <crypto_onetimeauth+0x1ac>
+ 348:	0040006f          	j	34c <crypto_onetimeauth+0x180>
+ 34c:	fe042503          	lw	a0,-32(s0)
+ 350:	00251513          	slli	a0,a0,0x2
+ 354:	f8840593          	addi	a1,s0,-120
+ 358:	00a58533          	add	a0,a1,a0
+ 35c:	00000593          	li	a1,0
+ 360:	00b52023          	sw	a1,0(a0)
+ 364:	0040006f          	j	368 <crypto_onetimeauth+0x19c>
+ 368:	fe042503          	lw	a0,-32(s0)
+ 36c:	00150513          	addi	a0,a0,1
+ 370:	fea42023          	sw	a0,-32(s0)
+ 374:	fc9ff06f          	j	33c <crypto_onetimeauth+0x170>
+ 378:	ff042503          	lw	a0,-16(s0)
+ 37c:	fe842583          	lw	a1,-24(s0)
+ 380:	f8840613          	addi	a2,s0,-120
+ 384:	fcc40693          	addi	a3,s0,-52
+ 388:	f4440713          	addi	a4,s0,-188
+ 38c:	00000097          	auipc	ra,0x0
+ 390:	000080e7          	jalr	ra # 38c <crypto_onetimeauth+0x1c0>
+ 394:	f4a42023          	sw	a0,-192(s0)
+ 398:	fe842503          	lw	a0,-24(s0)
+ 39c:	f4042583          	lw	a1,-192(s0)
+ 3a0:	40b50533          	sub	a0,a0,a1
+ 3a4:	ff042583          	lw	a1,-16(s0)
+ 3a8:	00a58533          	add	a0,a1,a0
+ 3ac:	fea42823          	sw	a0,-16(s0)
+ 3b0:	f4042503          	lw	a0,-192(s0)
+ 3b4:	41f55593          	srai	a1,a0,0x1f
+ 3b8:	fea42423          	sw	a0,-24(s0)
+ 3bc:	feb42623          	sw	a1,-20(s0)
+ 3c0:	00000513          	li	a0,0
+ 3c4:	fea42023          	sw	a0,-32(s0)
+ 3c8:	0040006f          	j	3cc <crypto_onetimeauth+0x200>
+ 3cc:	fe042503          	lw	a0,-32(s0)
+ 3d0:	00400593          	li	a1,4
+ 3d4:	02a5ea63          	bltu	a1,a0,408 <crypto_onetimeauth+0x23c>
+ 3d8:	0040006f          	j	3dc <crypto_onetimeauth+0x210>
+ 3dc:	fe042503          	lw	a0,-32(s0)
+ 3e0:	00251513          	slli	a0,a0,0x2
+ 3e4:	f4440593          	addi	a1,s0,-188
+ 3e8:	00a58533          	add	a0,a1,a0
+ 3ec:	00000593          	li	a1,0
+ 3f0:	00b52023          	sw	a1,0(a0)
+ 3f4:	0040006f          	j	3f8 <crypto_onetimeauth+0x22c>
+ 3f8:	fe042503          	lw	a0,-32(s0)
+ 3fc:	00150513          	addi	a0,a0,1
+ 400:	fea42023          	sw	a0,-32(s0)
+ 404:	fc9ff06f          	j	3cc <crypto_onetimeauth+0x200>
+ 408:	00000513          	li	a0,0
+ 40c:	f2a42e23          	sw	a0,-196(s0)
+ 410:	01a00593          	li	a1,26
+ 414:	f2b42c23          	sw	a1,-200(s0)
+ 418:	fea42023          	sw	a0,-32(s0)
+ 41c:	0040006f          	j	420 <crypto_onetimeauth+0x254>
+ 420:	fe042503          	lw	a0,-32(s0)
+ 424:	00000593          	li	a1,0
+ 428:	00f00613          	li	a2,15
+ 42c:	f0b42e23          	sw	a1,-228(s0)
+ 430:	04a66263          	bltu	a2,a0,474 <crypto_onetimeauth+0x2a8>
+ 434:	0040006f          	j	438 <crypto_onetimeauth+0x26c>
+ 438:	fe042503          	lw	a0,-32(s0)
+ 43c:	fec42583          	lw	a1,-20(s0)
+ 440:	fe842603          	lw	a2,-24(s0)
+ 444:	00c53533          	sltu	a0,a0,a2
+ 448:	00000613          	li	a2,0
+ 44c:	00c5c6b3          	xor	a3,a1,a2
+ 450:	00d036b3          	snez	a3,a3
+ 454:	f0a42c23          	sw	a0,-232(s0)
+ 458:	f0d42a23          	sw	a3,-236(s0)
+ 45c:	00c58663          	beq	a1,a2,468 <crypto_onetimeauth+0x29c>
+ 460:	f1442503          	lw	a0,-236(s0)
+ 464:	f0a42c23          	sw	a0,-232(s0)
+ 468:	f1842503          	lw	a0,-232(s0)
+ 46c:	f0a42e23          	sw	a0,-228(s0)
+ 470:	0040006f          	j	474 <crypto_onetimeauth+0x2a8>
+ 474:	f1c42503          	lw	a0,-228(s0)
+ 478:	00157513          	andi	a0,a0,1
+ 47c:	00000593          	li	a1,0
+ 480:	10b50e63          	beq	a0,a1,59c <crypto_onetimeauth+0x3d0>
+ 484:	0040006f          	j	488 <crypto_onetimeauth+0x2bc>
+ 488:	f3842503          	lw	a0,-200(s0)
+ 48c:	00700593          	li	a1,7
+ 490:	0aa5c663          	blt	a1,a0,53c <crypto_onetimeauth+0x370>
+ 494:	0040006f          	j	498 <crypto_onetimeauth+0x2cc>
+ 498:	f3842503          	lw	a0,-200(s0)
+ 49c:	00100593          	li	a1,1
+ 4a0:	00a59533          	sll	a0,a1,a0
+ 4a4:	fff50513          	addi	a0,a0,-1
+ 4a8:	f2a42a23          	sw	a0,-204(s0)
+ 4ac:	ff042503          	lw	a0,-16(s0)
+ 4b0:	fe042583          	lw	a1,-32(s0)
+ 4b4:	00b50533          	add	a0,a0,a1
+ 4b8:	00054503          	lbu	a0,0(a0)
+ 4bc:	f3442583          	lw	a1,-204(s0)
+ 4c0:	00b57533          	and	a0,a0,a1
+ 4c4:	f3842583          	lw	a1,-200(s0)
+ 4c8:	01a00613          	li	a2,26
+ 4cc:	40b605b3          	sub	a1,a2,a1
+ 4d0:	00b51533          	sll	a0,a0,a1
+ 4d4:	f3c42583          	lw	a1,-196(s0)
+ 4d8:	00259593          	slli	a1,a1,0x2
+ 4dc:	f4440613          	addi	a2,s0,-188
+ 4e0:	00b605b3          	add	a1,a2,a1
+ 4e4:	0005a683          	lw	a3,0(a1)
+ 4e8:	00a68533          	add	a0,a3,a0
+ 4ec:	00a5a023          	sw	a0,0(a1)
+ 4f0:	f3c42503          	lw	a0,-196(s0)
+ 4f4:	00150513          	addi	a0,a0,1
+ 4f8:	f2a42e23          	sw	a0,-196(s0)
+ 4fc:	ff042503          	lw	a0,-16(s0)
+ 500:	fe042583          	lw	a1,-32(s0)
+ 504:	00b50533          	add	a0,a0,a1
+ 508:	00054503          	lbu	a0,0(a0)
+ 50c:	f3842583          	lw	a1,-200(s0)
+ 510:	00b55533          	srl	a0,a0,a1
+ 514:	f3c42583          	lw	a1,-196(s0)
+ 518:	00259593          	slli	a1,a1,0x2
+ 51c:	00b605b3          	add	a1,a2,a1
+ 520:	0005a603          	lw	a2,0(a1)
+ 524:	00a60533          	add	a0,a2,a0
+ 528:	00a5a023          	sw	a0,0(a1)
+ 52c:	f3842503          	lw	a0,-200(s0)
+ 530:	01250513          	addi	a0,a0,18
+ 534:	f2a42c23          	sw	a0,-200(s0)
+ 538:	0500006f          	j	588 <crypto_onetimeauth+0x3bc>
+ 53c:	ff042503          	lw	a0,-16(s0)
+ 540:	fe042583          	lw	a1,-32(s0)
+ 544:	00b50533          	add	a0,a0,a1
+ 548:	00054503          	lbu	a0,0(a0)
+ 54c:	f3842583          	lw	a1,-200(s0)
+ 550:	01a00613          	li	a2,26
+ 554:	40b605b3          	sub	a1,a2,a1
+ 558:	00b51533          	sll	a0,a0,a1
+ 55c:	f3c42583          	lw	a1,-196(s0)
+ 560:	00259593          	slli	a1,a1,0x2
+ 564:	f4440613          	addi	a2,s0,-188
+ 568:	00b605b3          	add	a1,a2,a1
+ 56c:	0005a603          	lw	a2,0(a1)
+ 570:	00a60533          	add	a0,a2,a0
+ 574:	00a5a023          	sw	a0,0(a1)
+ 578:	f3842503          	lw	a0,-200(s0)
+ 57c:	ff850513          	addi	a0,a0,-8
+ 580:	f2a42c23          	sw	a0,-200(s0)
+ 584:	0040006f          	j	588 <crypto_onetimeauth+0x3bc>
+ 588:	0040006f          	j	58c <crypto_onetimeauth+0x3c0>
+ 58c:	fe042503          	lw	a0,-32(s0)
+ 590:	00150513          	addi	a0,a0,1
+ 594:	fea42023          	sw	a0,-32(s0)
+ 598:	e89ff06f          	j	420 <crypto_onetimeauth+0x254>
+ 59c:	f3842503          	lw	a0,-200(s0)
+ 5a0:	00000593          	li	a1,0
+ 5a4:	02b51063          	bne	a0,a1,5c4 <crypto_onetimeauth+0x3f8>
+ 5a8:	0040006f          	j	5ac <crypto_onetimeauth+0x3e0>
+ 5ac:	f3c42503          	lw	a0,-196(s0)
+ 5b0:	00150513          	addi	a0,a0,1
+ 5b4:	f2a42e23          	sw	a0,-196(s0)
+ 5b8:	01a00513          	li	a0,26
+ 5bc:	f2a42c23          	sw	a0,-200(s0)
+ 5c0:	0040006f          	j	5c4 <crypto_onetimeauth+0x3f8>
+ 5c4:	f3842503          	lw	a0,-200(s0)
+ 5c8:	01a00593          	li	a1,26
+ 5cc:	40a58533          	sub	a0,a1,a0
+ 5d0:	00100593          	li	a1,1
+ 5d4:	00a59533          	sll	a0,a1,a0
+ 5d8:	f3c42583          	lw	a1,-196(s0)
+ 5dc:	00259593          	slli	a1,a1,0x2
+ 5e0:	f4440613          	addi	a2,s0,-188
+ 5e4:	00b605b3          	add	a1,a2,a1
+ 5e8:	0005a683          	lw	a3,0(a1)
+ 5ec:	00a68533          	add	a0,a3,a0
+ 5f0:	00a5a023          	sw	a0,0(a1)
+ 5f4:	f8840513          	addi	a0,s0,-120
+ 5f8:	f0a42823          	sw	a0,-240(s0)
+ 5fc:	00060593          	mv	a1,a2
+ 600:	00000097          	auipc	ra,0x0
+ 604:	000080e7          	jalr	ra # 600 <crypto_onetimeauth+0x434>
+ 608:	fcc40593          	addi	a1,s0,-52
+ 60c:	f1042503          	lw	a0,-240(s0)
+ 610:	00000097          	auipc	ra,0x0
+ 614:	000080e7          	jalr	ra # 610 <crypto_onetimeauth+0x444>
+ 618:	f1042503          	lw	a0,-240(s0)
+ 61c:	00000097          	auipc	ra,0x0
+ 620:	a48080e7          	jalr	-1464(ra) # 64 <toradix28>
+ 624:	f1042503          	lw	a0,-240(s0)
+ 628:	00000097          	auipc	ra,0x0
+ 62c:	0e0080e7          	jalr	224(ra) # 708 <freeze>
+ 630:	00000513          	li	a0,0
+ 634:	fea42023          	sw	a0,-32(s0)
+ 638:	0040006f          	j	63c <crypto_onetimeauth+0x470>
+ 63c:	fe042503          	lw	a0,-32(s0)
+ 640:	00f00593          	li	a1,15
+ 644:	02a5ee63          	bltu	a1,a0,680 <crypto_onetimeauth+0x4b4>
+ 648:	0040006f          	j	64c <crypto_onetimeauth+0x480>
+ 64c:	fe442503          	lw	a0,-28(s0)
+ 650:	fe042583          	lw	a1,-32(s0)
+ 654:	00b50533          	add	a0,a0,a1
+ 658:	01054503          	lbu	a0,16(a0)
+ 65c:	00259593          	slli	a1,a1,0x2
+ 660:	f4440613          	addi	a2,s0,-188
+ 664:	00b605b3          	add	a1,a2,a1
+ 668:	00a5a023          	sw	a0,0(a1)
+ 66c:	0040006f          	j	670 <crypto_onetimeauth+0x4a4>
+ 670:	fe042503          	lw	a0,-32(s0)
+ 674:	00150513          	addi	a0,a0,1
+ 678:	fea42023          	sw	a0,-32(s0)
+ 67c:	fc1ff06f          	j	63c <crypto_onetimeauth+0x470>
+ 680:	00000513          	li	a0,0
+ 684:	f8a42223          	sw	a0,-124(s0)
+ 688:	f8840593          	addi	a1,s0,-120
+ 68c:	f4440613          	addi	a2,s0,-188
+ 690:	f0a42623          	sw	a0,-244(s0)
+ 694:	00058513          	mv	a0,a1
+ 698:	00060593          	mv	a1,a2
+ 69c:	00000097          	auipc	ra,0x0
+ 6a0:	000080e7          	jalr	ra # 69c <crypto_onetimeauth+0x4d0>
+ 6a4:	f0c42503          	lw	a0,-244(s0)
+ 6a8:	fea42023          	sw	a0,-32(s0)
+ 6ac:	0040006f          	j	6b0 <crypto_onetimeauth+0x4e4>
+ 6b0:	fe042503          	lw	a0,-32(s0)
+ 6b4:	00f00593          	li	a1,15
+ 6b8:	02a5ee63          	bltu	a1,a0,6f4 <crypto_onetimeauth+0x528>
+ 6bc:	0040006f          	j	6c0 <crypto_onetimeauth+0x4f4>
+ 6c0:	fe042503          	lw	a0,-32(s0)
+ 6c4:	00251593          	slli	a1,a0,0x2
+ 6c8:	f8840613          	addi	a2,s0,-120
+ 6cc:	00b605b3          	add	a1,a2,a1
+ 6d0:	0005a583          	lw	a1,0(a1)
+ 6d4:	ff442603          	lw	a2,-12(s0)
+ 6d8:	00a60533          	add	a0,a2,a0
+ 6dc:	00b50023          	sb	a1,0(a0)
+ 6e0:	0040006f          	j	6e4 <crypto_onetimeauth+0x518>
+ 6e4:	fe042503          	lw	a0,-32(s0)
+ 6e8:	00150513          	addi	a0,a0,1
+ 6ec:	fea42023          	sw	a0,-32(s0)
+ 6f0:	fc1ff06f          	j	6b0 <crypto_onetimeauth+0x4e4>
+ 6f4:	00000513          	li	a0,0
+ 6f8:	0f812403          	lw	s0,248(sp)
+ 6fc:	0fc12083          	lw	ra,252(sp)
+ 700:	10010113          	addi	sp,sp,256
+ 704:	00008067          	ret
+
+00000708 <freeze>:
+ 708:	fa010113          	addi	sp,sp,-96
+ 70c:	04112e23          	sw	ra,92(sp)
+ 710:	04812c23          	sw	s0,88(sp)
+ 714:	06010413          	addi	s0,sp,96
+ 718:	00050593          	mv	a1,a0
+ 71c:	fea42a23          	sw	a0,-12(s0)
+ 720:	00000513          	li	a0,0
+ 724:	faa42623          	sw	a0,-84(s0)
+ 728:	fab42223          	sw	a1,-92(s0)
+ 72c:	0040006f          	j	730 <freeze+0x28>
+ 730:	fac42503          	lw	a0,-84(s0)
+ 734:	01000593          	li	a1,16
+ 738:	02a5ee63          	bltu	a1,a0,774 <freeze+0x6c>
+ 73c:	0040006f          	j	740 <freeze+0x38>
+ 740:	ff442503          	lw	a0,-12(s0)
+ 744:	fac42583          	lw	a1,-84(s0)
+ 748:	00259593          	slli	a1,a1,0x2
+ 74c:	00b50533          	add	a0,a0,a1
+ 750:	00052503          	lw	a0,0(a0)
+ 754:	fb040613          	addi	a2,s0,-80
+ 758:	00b605b3          	add	a1,a2,a1
+ 75c:	00a5a023          	sw	a0,0(a1)
+ 760:	0040006f          	j	764 <freeze+0x5c>
+ 764:	fac42503          	lw	a0,-84(s0)
+ 768:	00150513          	addi	a0,a0,1
+ 76c:	faa42623          	sw	a0,-84(s0)
+ 770:	fc1ff06f          	j	730 <freeze+0x28>
+ 774:	ff442503          	lw	a0,-12(s0)
+ 778:	000005b7          	lui	a1,0x0
+ 77c:	00058593          	mv	a1,a1
+ 780:	00000097          	auipc	ra,0x0
+ 784:	000080e7          	jalr	ra # 780 <freeze+0x78>
+ 788:	ff442503          	lw	a0,-12(s0)
+ 78c:	04052503          	lw	a0,64(a0)
+ 790:	00755513          	srli	a0,a0,0x7
+ 794:	00000593          	li	a1,0
+ 798:	40a58533          	sub	a0,a1,a0
+ 79c:	faa42423          	sw	a0,-88(s0)
+ 7a0:	fab42623          	sw	a1,-84(s0)
+ 7a4:	0040006f          	j	7a8 <freeze+0xa0>
+ 7a8:	fac42503          	lw	a0,-84(s0)
+ 7ac:	01000593          	li	a1,16
+ 7b0:	04a5e863          	bltu	a1,a0,800 <freeze+0xf8>
+ 7b4:	0040006f          	j	7b8 <freeze+0xb0>
+ 7b8:	fa842503          	lw	a0,-88(s0)
+ 7bc:	fac42583          	lw	a1,-84(s0)
+ 7c0:	00259593          	slli	a1,a1,0x2
+ 7c4:	fb040613          	addi	a2,s0,-80
+ 7c8:	00b60633          	add	a2,a2,a1
+ 7cc:	00062603          	lw	a2,0(a2)
+ 7d0:	ff442683          	lw	a3,-12(s0)
+ 7d4:	00b685b3          	add	a1,a3,a1
+ 7d8:	0005a683          	lw	a3,0(a1) # 0 <printbytes>
+ 7dc:	00d64633          	xor	a2,a2,a3
+ 7e0:	00c57533          	and	a0,a0,a2
+ 7e4:	00a6c533          	xor	a0,a3,a0
+ 7e8:	00a5a023          	sw	a0,0(a1)
+ 7ec:	0040006f          	j	7f0 <freeze+0xe8>
+ 7f0:	fac42503          	lw	a0,-84(s0)
+ 7f4:	00150513          	addi	a0,a0,1
+ 7f8:	faa42623          	sw	a0,-84(s0)
+ 7fc:	fadff06f          	j	7a8 <freeze+0xa0>
+ 800:	05812403          	lw	s0,88(sp)
+ 804:	05c12083          	lw	ra,92(sp)
+ 808:	06010113          	addi	sp,sp,96
+ 80c:	00008067          	ret
+
+Disassembly of section .rodata.str1.1:
+
+00000000 <.L.str>:
+   0:	7825                	lui	a6,0xfffe9
+   2:	202c                	fld	fa1,64(s0)
+   4:	7825                	lui	a6,0xfffe9
+   6:	000a                	c.slli	zero,0x2
+
+Disassembly of section .rodata:
+
+00000000 <minusp>:
+   0:	0005                	c.nop	1
+	...
+  3e:	0000                	unimp
+  40:	00fc                	addi	a5,sp,76
+	...
+
+Disassembly of section .comment:
+
+00000000 <.comment>:
+   0:	6300                	flw	fs0,0(a4)
+   2:	616c                	flw	fa1,68(a0)
+   4:	676e                	flw	fa4,216(sp)
+   6:	7620                	flw	fs0,104(a2)
+   8:	7265                	lui	tp,0xffff9
+   a:	6e6f6973          	csrrsi	s2,0x6e6,30
+   e:	3820                	fld	fs0,112(s0)
+  10:	302e                	fld	ft0,232(sp)
+  12:	302e                	fld	ft0,232(sp)
+  14:	0020                	addi	s0,sp,8
+
+Disassembly of section .llvm_addrsig:
+
+00000000 <.llvm_addrsig>:
+   0:	05090c0b          	0x5090c0b
+   4:	0308                	addi	a0,sp,384
+   6:	0406                	slli	s0,s0,0x1

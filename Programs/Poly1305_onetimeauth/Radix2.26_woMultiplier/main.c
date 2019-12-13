@@ -1,8 +1,8 @@
 #include "onetime_auth.h"
 #include "benchmark.h"
 
-extern uint32_t getcycles();
 extern uint64_t securemul226(unsigned int a, unsigned int b);
+extern disable_interrupts();
 
 void checkCorrectness() {
   static unsigned char rs[32] = {0xee, 0xa6, 0xa7, 0x25, 0x1c, 0x1e, 0x72, 0x91,
