@@ -14,10 +14,10 @@ getcycles:
 .globl icachemisses
 .type icachemisses, @function
 icachemisses:
-    li t0, 0x6001
-    csrw mhpmevent3, t0 #Branch misprediction
-    li t0, 0x11b01
-    csrw mhpmevent4, t0 #Other count
+    li t0, 0x2001
+    csrw mhpmevent3, t0 #Branch direction mis
+    li t0, 0x4001
+    csrw mhpmevent4, t0 #Branch target miss
     ret
 
 .globl getsp

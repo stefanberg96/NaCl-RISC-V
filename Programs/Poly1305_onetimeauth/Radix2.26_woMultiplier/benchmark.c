@@ -25,10 +25,10 @@ void printintarray(unsigned int *a, int initialoffset){
 	printf("Cycle counts:          ");	
 	printintarray(counters, 0);
 
-	printf("Branch misprediction:  ");
+	printf("Branch dir mis:        ");
 	printintarray(counters, 1);
 	
-	printf("Remaining counts       ");
+	printf("Brach target mis:      ");
 	printintarray(counters, 2);
 
 	printf("Result:                ");
