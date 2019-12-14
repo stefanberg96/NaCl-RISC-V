@@ -70,8 +70,11 @@ void printarray(unsigned int * in, int inlen){
     printf("\n");
 }
 
+extern void test(int a);
+
 int main() {
 //  checkCorrectness();
+	test(3);
   dobenchmark();
   return 0;
 }

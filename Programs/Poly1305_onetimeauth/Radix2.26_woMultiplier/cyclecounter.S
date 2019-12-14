@@ -3,18 +3,21 @@
 .globl getcycles
 .align 2
 getcycles:
-#    csrr a1, mcycleh
-    csrr a0, mhpmcounter3
-    csrr a1, mcycle
-#    csrr a2, mcycleh
-#    bne a1, a2, getcycles
+    csrr t0, mcycle
+    sw   t0, 0(a0)
+    csrr t0, mhpmcounter3
+    sw   t0, 4(a0)
+    csrr t0, mhpmcounter4
+    sw   t0, 8(a0)
     ret
 
 .globl icachemisses
 .type icachemisses, @function
 icachemisses:
     li t0, 0x6001
-    csrw mhpmevent3, t0 #instruction cache misses
+    csrw mhpmevent3, t0 #Branch misprediction
+    li t0, 0x11b01
+    csrw mhpmevent4, t0 #Other count
     ret
 
 .globl getsp
