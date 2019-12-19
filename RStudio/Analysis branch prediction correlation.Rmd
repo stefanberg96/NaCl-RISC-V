@@ -1,0 +1,198 @@
+---
+title: "Analysis correclation between cycle count and branch prediction"
+output: html_notebook
+---
+
+
+
+```{r}
+library("ggplot2")
+library("dplyr") 
+library("car")
+library("plyr")
+library("sqldf")
+```
+
+Check if the data has no incorrect solutions
+```{r}
+data<-read.csv("/home/stefan/Documents/Graduation/RISC-V-toolchain/riscv/Programs/Poly1305_onetimeauth/Radix2.26_woMultiplier/results/poly1305_2019-12-17 10:41/raw_output.csv", colClasses = c("Correct"="logical"))
+nrow(subset(data, Correct==FALSE))
+```
+
+
+```{r}
+data$Branch.target.mis = as.factor(data$Branch.target.mis)
+ggplot(data, aes(x=Branch.direction.mis, y=cycles, color=Branch.target.mis)) + geom_point()
+```
+
+Skipping the first four runs, since those often have deviations due to loading from flash or cold caches.
+```{r}
+data$Branch.target.mis = as.factor(data$Branch.target.mis)
+
+z<- dplyr::filter(data, id>3)
+ggplot(z, aes(x=Branch.direction.mis, y=cycles, color=Branch.target.mis)) + geom_count() + scale_size_area(max_size = 10)
+```
+In the plot above it shows that there is a certain grouping between the cycle count and the branch prediction. However some other factor is also influencing the cycle count, since certain color groups occure multiple times per branch direction misprediction. So a closer look on other factors is taken. 
+
+Sadly there are only two hardware performance monitors available and thus not all three values can be measured at the same time. So it is difficult to get to one conclusion. So certain factors are checked seperately first and checked if they are somehow related to the cycle count.  A possible factor that could explain the delays is the load-use and latency interlock events. Which stalls the cpu waiting for values after either loading or read-after-write.
+
+Once again checking if there is no incorrect result
+```{r}
+data<-read.csv("/home/stefan/Documents/Graduation/RISC-V-toolchain/riscv/Programs/Poly1305_onetimeauth/Radix2.26_woMultiplier/results/poly1305_2019-12-17 13:11/raw_output.csv", colClasses = c("Correct"="logical"))
+nrow(subset(data, Correct==FALSE))
+```
+```{r}
+ggplot(data, aes(x=Load.use.interlock, y=cycles, color = id)) + geom_point()+ geom_jitter(position=position_jitter(0.2))
+ggplot(data, aes(x=Latency.interlock, y=cycles, color = id)) + geom_point()+ geom_jitter(position=position_jitter(0.2))
+```
+As you can see in the plot above the values with an id of less than 5 take a long time to load, either due to the flash or other circumstances. So we are once again filtering out the first 4 trials of a run.
+```{r}
+z<- dplyr::filter(data, id>3)
+ggplot(z, aes(x=Load.use.interlock, y=cycles))  +  geom_count() + scale_size_area(max_size = 10)
+```
+In the above plot(with jitter for overlapping points) it can be seend that there are groups that occur more often than others. However these groups are mostly around the 92590 cycles, which is the value that occurs the most. One things that is visible is that the higher the value the lower the cycle count gets, this could be conincidence, but it did seem worth trying out in combination with the branch prediction.
+
+```{r}
+q<-z
+q<-cut(q$cycles, breaks=seq(min(q$cycles), max(q$cycles), (max(q$cycles)-min(q$cycles))/5))
+barplot(table(q))
+```
+In the barplot above it is confirmed that most of the values are between 92585 and 92596, 
+
+```{r}
+ggplot(z, aes(x=Latency.interlock, y=cycles)) + geom_point()+ geom_jitter(position=position_jitter(0.1))+expand_limits(x=c(4837,4839))
+```
+The latency interlock is definitly not a factor, since for all testcases the latency interlock has the same value.
+
+A test is run with the branch direction misprediction and the load-use interlock as factors. 
+```{r}
+data<-read.csv("/home/stefan/Documents/Graduation/RISC-V-toolchain/riscv/Programs/Poly1305_onetimeauth/Radix2.26_woMultiplier/results/poly1305_2019-12-17 14:45/raw_output.csv", colClasses = c("Correct"="logical"))
+nrow(subset(data, Correct==FALSE))
+```
+Once again it is checked that no wrong answers exist in the solution, and the first 4 trials of each run are removed.
+
+```{r}
+z<- dplyr::filter(data, id>3)
+z$Load.use.interlock = as.factor(z$Load.use.interlock)
+ggplot(z, aes(x=Branch.direction.mis, y=cycles, color=Load.use.interlock ))  +  geom_count() + scale_size_area(max_size = 10)
+```
+
+```{r}
+z$Branch.direction.mis <- as.factor(z$Branch.direction.mis)
+ggplot(z, aes(x=factor(1), fill=Branch.direction.mis, )) + geom_bar(width=1)+ coord_polar("y") + theme(axis.title.x=element_blank(),
+        axis.text.x=element_blank(), axis.title.y = element_blank(), axis.text.y = element_blank(), axis.ticks = element_blank(), panel.grid =  element_blank())
+```
+Larger dataset
+```{r}
+large_branch_interlock<-read.csv("/home/stefan/Documents/Graduation/RISC-V-toolchain/riscv/Programs/Poly1305_onetimeauth/Radix2.26_woMultiplier/results/poly1305_2019-12-17 15:45/raw_output.csv", colClasses = c("Correct"="logical"))
+nrow(subset(large_branch_interlock, Correct==FALSE))
+```
+
+```{r}
+large_branch_interlock_filtered<- dplyr::filter(large_branch_interlock, id>3)
+large_branch_interlock_filtered$Load.use.interlock = as.factor(large_branch_interlock_filtered$Load.use.interlock)
+ggplot(large_branch_interlock_filtered, aes(x=Branch.direction.mis, y=cycles, color=Load.use.interlock ))  +  geom_count() + scale_size_area(max_size = 10)
+```
+The same analyses as before is applied on the plot above. The patterns are the same, so it might be possible to now switch this out for a data-set where instead of load-use interlock the branching target misprediction is measured. The dataset could then be merged on the similar cycle count and the branch direction misprediction count. Then a thrid hardware performance monitor is not needed to check if there is a correclation between cycle count and the combination of load-use interlock, branching direction/target misprediction.
+```{r}
+large_branch_interlock2<-read.csv("/home/stefan/Documents/Graduation/RISC-V-toolchain/riscv/Programs/Poly1305_onetimeauth/Radix2.26_woMultiplier/results/poly1305_2019-12-17 21:42/raw_output.csv", colClasses = c("Correct"="logical"))
+nrow(subset(large_branch_interlock2, Correct==FALSE))
+large_branch_interlock_filtered2<- dplyr::filter(large_branch_interlock2, id>3)
+large_branch_interlock_filtered2$Load.use.interlock = as.factor(large_branch_interlock_filtered2$Load.use.interlock)
+ggplot(large_branch_interlock_filtered2, aes(x=Branch.direction.mis, y=cycles ))  +  geom_count() + scale_size_area(max_size = 10)
+```
+  
+```{r}
+large_dir_target = read.csv("/home/stefan/Documents/Graduation/RISC-V-toolchain/riscv/Programs/Poly1305_onetimeauth/Radix2.26_woMultiplier/results/poly1305_2019-12-17 23:38/raw_output.csv", colClasses = c("Correct"="logical"))
+nrow(subset(large_dir_target, Correct==FALSE))
+```
+  
+```{r}
+large_dir_target_filtered<- dplyr::filter(large_dir_target, id>3)
+
+large_dir_target_filtered$Branch.target.mis = as.factor(large_dir_target_filtered$Branch.target.mis)
+
+ggplot(large_dir_target_filtered, aes(x=Branch.direction.mis, y=cycles, color=Branch.target.mis ))  +  geom_count() + scale_size_area(max_size=10)
+
+ggplot(large_dir_target_filtered, aes(x=Branch.direction.mis, y=cycles ))  +  geom_count(alpha=0.4, aes(color = 'target misprediction')) + geom_count(alpha=0.4,aes(x=Branch.direction.mis, y=cycles-1, color='load-use mis'), data=large_branch_interlock_filtered2)
+```
+Sadly the two data sets do not have the same pattern for the cycle count, branch direction mispredcition plot, so it would not be possible to map them onto eachother. However when a new test is run the data sets for the same values will overlap. As can be seen in the plot below. This would mean that depending on the values that are being measured the cycle count differs. This could be due to the fact that the load-use interlock counter needs to be incremented more often than the branch target misprediction, but then the graphs plot could be shifted in y-direction and it should line up.
+
+```{r}
+ggplot(large_branch_interlock_filtered, aes(x=Branch.direction.mis, y=cycles ))  +  geom_count(alpha=0.4, aes(color = 'target misprediction')) + geom_count(alpha=0.4,aes(x=Branch.direction.mis, y=cycles, color='load-use mis'), data=large_branch_interlock_filtered2)
+```
+
+To calculate the percentage that they have in common the following is being done. First the frequency of each of the cycles, branch direction misprediction pairs is calculated for both data sets. The minimum frequency is taken of each pair after a join on the cycle, misprediction pair. The minimu values are then summed and divided by the original dataset size (8000). This has been tried for multiple shifts in data, but that doesn't seem to help a lot the highest percentage in common is 37.2%. 
+
+```{r}
+large_dir_target_filtered$run <- NULL
+large_dir_target_filtered$id <- NULL
+large_branch_interlock_filtered$run <- NULL
+large_branch_interlock_filtered$id <- NULL
+
+lbif_freq<-ddply(large_branch_interlock_filtered, .(large_branch_interlock_filtered$cycles, large_branch_interlock_filtered$Branch.direction.mis, large_branch_interlock_filtered$Load.use.interlock), nrow)
+ldtf_freq<-ddply(large_dir_target_filtered, .(large_dir_target_filtered$cycles, large_dir_target_filtered$Branch.direction.mis, large_dir_target_filtered$Branch.target.mis), nrow)
+
+names(ldtf_freq) <- c("cycles", "bdm",  "btm","freq")
+names(lbif_freq) <- c("cycles", "bdm", "interlock","freq" )
+
+lbif_freq$cycles <- lbif_freq$cycles-1
+test<- sqldf('SELECT lbif.cycles, lbif.bdm, lbif.freq,ldtf.freq as ldtffreq, ldtf.btm, lbif.interlock
+        FROM lbif_freq as lbif, ldtf_freq as ldtf
+        WHERE lbif.cycles == ldtf.cycles AND lbif.bdm == ldtf.bdm
+      ')
+test <- test %>% rowwise() %>% mutate(common = min(freq, ldtffreq))
+(sum(test$common)/8000)*100
+```
+
+```{r}
+fasd<- sqldf('SELECT test.cycles, test.bdm, test.btm, test.interlock, test.common as freq1, test2.common as freq2
+        FROM test INNER JOIN test as test2
+        WHERE test.bdm == test2.bdm AND test.btm == test2.btm AND test.interlock != test2.interlock
+      ')
+fasd <- fasd %>% rowwise() %>% mutate(common = min(freq1, freq2))
+(sum(fasd$common)/sum(test$common))*100
+```
+
+
+Remove the run and the id, since they are not needed for filtering anymore
+```{r}
+test <- merge(large_dir_target_filtered, large_branch_interlock_filtered, all=FALSE)
+combined<-inner_join(large_dir_target_filtered, large_branch_interlock_filtered)
+
+
+combined <- ddply(combined, .(combined$cycles, combined$Branch.direction.mis, combined$Load.use.interlock, combined$Branch.target.mis), nrow)
+
+combined$`combined$Branch.target.mis` <- as.integer(combined$`combined$Branch.target.mis`)
+colors<- c("#b3360b","#1160df","#52e443","#3c4255","#3df4f5","#038969","#cd346f")
+plot_ly(combined, x=combined$Branch.direction.mis, y=combined$Branch.target.mis , z=combined$cycles, color=combined$`combined$Load.use.interlock`, colors=colors,  size=combined$V1) %>%
+  add_markers(x=combined$`combined$Branch.direction.mis`, y=combined$`combined$Branch.target.mis`,z=combined$`combined$cycles` ) %>%
+    layout(title="Correlation cyclecount to branch prediction and interlocking",
+           scene =  list(
+             xaxis=list(
+               title="Branch direction misses"
+             ),
+           yaxis=list(
+             title="Branch target misses"
+           ),
+           zaxis=list(
+             title="Cycles"
+           )))
+combined$`combined$Load.use.interlock` <- as.integer(combined$`combined$Load.use.interlock`)
+combined$`combined$Branch.target.mis` <- as.factor(combined$`combined$Branch.target.mis`)
+plot_ly(combined, x=combined$Branch.direction.mis, y=combined$Load.use.interlock , z=combined$cycles, color=combined$`combined$Branch.target.mis`, colors=c("#ff0000","#00ff00","#0000ff", "#00FFFF"),  size=combined$V1) %>%
+  add_markers(x=combined$`combined$Branch.direction.mis`, y=combined$`combined$Load.use.interlock`,z=combined$`combined$cycles` ) %>%
+    layout(title="Correlation cyclecount to branch prediction and interlocking",
+           scene =  list(
+             xaxis=list(
+               title="Branch direction misses"
+             ),
+           yaxis=list(
+             title="Load-use interlocking"
+           ),
+           zaxis=list(
+             title="Cycles"
+           )))
+
+```
+
