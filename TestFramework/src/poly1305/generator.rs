@@ -5,6 +5,7 @@ use std::path::{Path};
 use std::env;
 use std::io::Write;
 use log::{info};
+use std::str::FromStr;
 
 #[derive(Debug)]
 pub struct TestcasePoly1305{
@@ -14,7 +15,7 @@ pub struct TestcasePoly1305{
 }
 
 pub fn generator_name() -> String {
-    String::from_str("poly1305")
+    String::from_str("poly1305").unwrap()
 }
 
 pub fn generate_testcase(messagelen : usize) -> TestcasePoly1305{
@@ -67,6 +68,16 @@ fn generate_testcasefile(variables: Vec<String>, inlen: usize){
         .open(benchmark_path).expect("Couldn't create benchmark.c file");
     //print header stuff
     writeln!(file, "#include \"benchmark.h\"
+    extern void icachemisses();
+
+    void printintarray(unsigned int *a, int initialoffset){{
+
+           for(int i = initialoffset+3; i < 21*3;i+=3){{
+               printf(\"%6u, \", a[i]-a[i-3]);
+        }}
+        printf(\"\\n\");
+    }}
+
 
     void dobenchmark() {{
 
@@ -78,17 +89,29 @@ fn generate_testcasefile(variables: Vec<String>, inlen: usize){
 
     //print rest of the code
     writeln!(file, "
+
+        unsigned int counters[3*21];
+        icachemisses();
+
         uint32_t timings[21];
         for(int i =0;i<21;i++){{
-            timings[i]=getcycles();
+            getcycles(&counters[i*3]);
             crypto_onetimeauth(a,c,{},rs);
         }}
 
-        for(int i=1;i<21;i++){{
-            printf(\"%d, \",timings[i]-timings[i-1]);
-        }}
-        printf(\"\\n\");
+        printf(\"Cycle counts:          \");
+        printintarray(counters, 0);
+
+        printf(\"Branch dir mis:        \");
+        printintarray(counters, 1);
+
+        printf(\"Branch target mis:    \");
+        printintarray(counters, 2);
+
+        printf(\"Result: \");
         printchararray(a,16);
+        printf(\"\\n\\n\");
+
     }}", inlen).expect("write failed");
     file.flush().expect("Couldn't flush benchmark file");
     info!("written benchmark.c");

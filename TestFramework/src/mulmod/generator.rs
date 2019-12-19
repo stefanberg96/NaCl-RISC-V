@@ -5,6 +5,7 @@ use std::path::{Path};
 use std::env;
 use std::io::Write;
 use log::{info};
+use std::str::FromStr;
 
 #[derive(Debug)]
 pub struct MulModTestcase {
@@ -12,7 +13,7 @@ pub struct MulModTestcase {
 }
 
 pub fn generator_name() -> String {
-    String::from_str("mulmod")
+    String::from_str("mulmod").unwrap()
 }
 
 pub fn generate_testcase() -> MulModTestcase {

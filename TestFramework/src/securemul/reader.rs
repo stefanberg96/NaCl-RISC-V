@@ -14,6 +14,7 @@ use byteorder::{ReadBytesExt, BigEndian};
 pub struct SecuremulResult {
     pub result: u64,
     pub cycle_counts: Vec<f64>,
+    pub raw_output: Vec<String>,
 }
 
 
@@ -51,9 +52,10 @@ impl Iterator for Reader {
         let output_regex = Regex::new(output_regex_str.as_str()).expect("Output regex is invalid");
 
 
-        let mut result = SecuremulResult { result: 0, cycle_counts: Vec::new() };
+        let mut result = SecuremulResult { result: 0, cycle_counts: Vec::new(), raw_output: Vec::new() };
         for line in self.reader.by_ref().lines() {
             let line = line.unwrap_or_default();
+            add_to_raw(&mut result, line.clone());
             if cycle_regex.is_match(line.as_str()) {
                 let z: Vec<f64> = cycle_regex.captures_iter(line.as_str())
                     .map(|c| c[1].parse::<f64>())
@@ -80,6 +82,18 @@ impl Iterator for Reader {
 }
 
 
+fn add_to_raw(result: &mut SecuremulResult, line: String) {
+    if line.trim().len() == 0 {
+        return;
+    }
+
+    let ignore_list = vec!("ATE0-->ATE0", "AT+BLEINIT=0-->OK", "AT+CWMODE=0-->OK", "OK", "Bench Clock Reset Complete", "Send Flag Timed Out Busy. Giving Up.",
+                           "Receive Length Timed Out Busy", "AT+BLEINIT=0-->Send Flag Timed Out Busy. Giving Up.");
+    if !ignore_list.contains(&line.trim()) {
+        result.raw_output.push(line);
+    }
+}
+
 pub fn start_reader_thread(tx: Sender<SecuremulResult>) {
     thread::spawn(move || {
         let reader = Reader::new_securemul();
@@ -89,4 +103,5 @@ pub fn start_reader_thread(tx: Sender<SecuremulResult>) {
         }
     });
 }
+
 

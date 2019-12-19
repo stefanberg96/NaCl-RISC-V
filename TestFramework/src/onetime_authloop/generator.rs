@@ -5,6 +5,7 @@ use std::path::{Path};
 use std::env;
 use std::io::Write;
 use log::{info};
+use std::str::FromStr;
 
 #[derive(Debug)]
 pub struct TestcaseAuthLoop {
@@ -13,7 +14,7 @@ pub struct TestcaseAuthLoop {
 }
 
 pub fn generator_name() -> String {
-    String::from_str("authloop")
+    String::from_str("authloop").unwrap()
 }
 
 pub fn generate_testcase(messagelen : usize) -> TestcaseAuthLoop {

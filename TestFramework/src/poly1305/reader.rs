@@ -1,5 +1,5 @@
 use std::io::{BufReader, BufRead, Read};
-use std::fs::{File};
+use std::fs::File;
 use std::path::Path;
 use std::error::Error;
 use regex::Regex;
@@ -12,6 +12,7 @@ use std::thread;
 pub struct Poly1305Result {
     pub result: [u8; 16],
     pub cycle_counts: Vec<f64>,
+    pub raw_output: Vec<String>,
 }
 
 
@@ -40,8 +41,7 @@ impl Reader {
         };
 
 
-
-        Reader { reader: BufReader::new(file), outputlen: 32}
+        Reader { reader: BufReader::new(file), outputlen: 32 }
     }
 }
 
@@ -53,18 +53,19 @@ impl Iterator for Reader {
         let cycle_regex = Regex::new("(?:([0-9]+), )").expect("Cycle regex is invalid");
         let output_regex = Regex::new(output_regex_str.as_str()).expect("Output regex is invalid");
 
-
-        let mut result = Poly1305Result { result: [0; 16], cycle_counts: Vec::new() };
+        let mut result = Poly1305Result { result: [0; 16], cycle_counts: Vec::new(), raw_output: Vec::new() };
         for line in self.reader.by_ref().lines() {
             let line = line.unwrap_or_default();
-            if cycle_regex.is_match(line.as_str()) {
+            add_to_raw(&mut result, line.clone());
+            if line.starts_with("Cycle counts:          ") {
                 let z: Vec<f64> = cycle_regex.captures_iter(line.as_str())
                     .map(|c| c[1].parse::<f64>())
                     .filter_map(Result::ok)
                     .collect();
                 result.cycle_counts = z;
-            } else if output_regex.is_match(line.as_str()) {
-                let bytes = hex::decode(line.as_str()).expect("Failed to decode output result from hex to bytes");
+            } else if line.starts_with("Result: ") {
+                let hex = output_regex.captures(line.as_str()).unwrap();
+                let bytes = hex::decode(&hex[0]).expect("Failed to decode output result from hex to bytes");
                 for i in 0..16 {
                     result.result[i] = bytes[i];
                 }
@@ -75,6 +76,21 @@ impl Iterator for Reader {
     }
 }
 
+
+fn add_to_raw(result: &mut Poly1305Result, line: String) {
+    if line.trim().len() == 0 {
+        return;
+    }
+
+    let ignore_list = vec!("ATE0-->ATE0", "ATE0-->OK", "AT+BLEINIT=0-->OK", "AT+CWMODE=0-->OK", "OK", "Bench Clock Reset Complete", "Send Flag Timed Out Busy. Giving Up.",
+                           "Receive Length Timed Out Busy", "AT+BLEINIT=0-->Send Flag Timed Out Busy. Giving Up.", "ATE0--> Send Flag error: #0 #0 #0 #0 AT+BLEINIT=0-->AT+BLEINIT=0","AT+CWMODE=0-->AT+CWMODE=0");
+    if ignore_list.contains(&line.trim()) || line.contains( "Bench Clock Reset Complete"){
+       return
+    }
+
+
+    result.raw_output.push(line);
+}
 
 pub fn start_reader_thread(tx: Sender<Poly1305Result>) {
     thread::spawn(move || {

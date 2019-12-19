@@ -5,12 +5,19 @@ use std::path::Path;
 use std::env;
 use std::io::Write;
 use log::info;
+use std::str::FromStr;
 
 #[derive(Debug)]
 pub struct TestcaseSecuremul {
     pub variables: Vec<String>,
     pub expected_result: u64,
 }
+
+
+pub fn generator_name() -> String {
+    String::from_str("securemul").unwrap()
+}
+
 
 pub fn generate_testcase() -> TestcaseSecuremul {
     let mut rng = rand::thread_rng();

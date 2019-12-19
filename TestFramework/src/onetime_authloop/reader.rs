@@ -13,6 +13,7 @@ use std::thread;
 #[derive(Clone)]
 pub struct AuthLoopResult {
     pub cycle_counts: Vec<f64>,
+    pub raw_output: Vec<String>,
 }
 
 
@@ -49,9 +50,10 @@ impl Iterator for Reader {
     fn next(&mut self) -> Option<AuthLoopResult> {
         let cycle_regex = Regex::new("(?:([0-9]+), )").expect("Cycle regex is invalid");
 
-        let mut result = AuthLoopResult {  cycle_counts: Vec::new() };
+        let mut result = AuthLoopResult {  cycle_counts: Vec::new(), raw_output:Vec::new() };
         for line in self.reader.by_ref().lines() {
             let line = line.unwrap_or_default();
+            add_to_raw(&mut result, line.clone());
             if cycle_regex.is_match(line.as_str()) {
                 let z: Vec<f64> = cycle_regex.captures_iter(line.as_str())
                     .map(|c| c[1].parse::<f64>())
@@ -63,6 +65,19 @@ impl Iterator for Reader {
         }
         return None;
     }
+}
+
+
+fn add_to_raw(result: &mut AuthLoopResult, line: String){
+    if line.trim().len() == 0{
+        return
+    }
+
+    let ignore_list  = vec!("ATE0-->ATE0", "AT+BLEINIT=0-->OK", "AT+CWMODE=0-->OK", "OK", "Bench Clock Reset Complete");
+    if !ignore_list.contains(&line.trim()){
+        result.raw_output.push(line);
+    }
+
 }
 
 
