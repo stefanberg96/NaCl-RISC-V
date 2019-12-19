@@ -67,20 +67,35 @@ void checkCorrectness() {
         printf("They were the same\n");
     }
 }
+
+extern void karatsuba226_2asm(unsigned int res[4], unsigned int a[2], unsigned int b[2]);
+void printbyte(unsigned int x){
+
+	printf("%x\n",x);
+}
+
 int main() {
 
   unsigned int out[17]={0};
-  unsigned int a[3]={0x3FFFFFF,0x3FFFFFF, 0x3ffFFff};
-  unsigned int b[3]={0x3FFFFFF,0x3FFFFFF, 0x3ffFFff};
-  karatsuba226_3(out,a,b);
+  unsigned int a[2]={0x150e0fd,0x23e4427};
+  unsigned int b[2]={0x38ec9da,0x235b7aa};
+  karatsuba226_2asm(out,a,b);
+  out[1] += out[0]>>26;
+  out[0] &= 0x3ffffff;
+  out[2] += out[1]>>26;
+  out[1] &= 0x3ffffff;
+  out[3] += out[2]>>26;
+  out[2] &= 0x3ffffff;
+  out[4] += out[3] >>26;
+  out[3] &= 0x3ffffff;
   toradix28(out);
   printarray(out,17); 
 
-  uint64_t timing[2];
-  unsigned char output[16];
-  dobenchmark(&timing[0], output);
-  dobenchmark(&timing[1], output);
-  printf("This took %llu cycles\n", timing[1]);
-  printarray(output, 16);
+//  uint64_t timing[2];
+//  unsigned char output[16];
+//  dobenchmark(&timing[0], output);
+ // dobenchmark(&timing[1], output);
+//  printf("This took %llu cycles\n", timing[1]);
+//  printarray(output, 16);
   return 0;
 }

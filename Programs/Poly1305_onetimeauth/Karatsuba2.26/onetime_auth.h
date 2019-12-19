@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdint.h>
 
-void karatsuba226_2(unsigned int out[4], const unsigned int a[2], const unsigned int b[2]);
+void karatsuba226(unsigned int out[5], const unsigned int a[5], const unsigned int b[5]);
 
 extern unsigned int* getsp();
 int crypto_onetimeauth(unsigned char *out, const unsigned char *in,
