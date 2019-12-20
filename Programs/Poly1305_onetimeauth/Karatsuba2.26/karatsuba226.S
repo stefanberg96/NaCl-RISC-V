@@ -119,17 +119,6 @@ karatsuba226asm:
     addi  a2, s2, 0     # address B0B1B2
     jal   karatsuba226_3asm # A0A1A2*B0B1B2 = x
 
-    lw    a0, 20(sp)
-    jal printbyte
-    lw    a0, 24(sp)
-    jal printbyte
-    lw    a0, 28(sp)
-    jal printbyte
-    lw    a0, 32(sp)
-    jal printbyte
-    lw    a0, 36(sp)
-    jal printbyte
-
     lw    t0, 20(sp)    # x_0
     lw    t1, 24(sp)    # x_1
     lw    t2, 28(sp)    # x_2
