@@ -24,6 +24,7 @@ karatsuba226_3asm:
 
     mv   a0, sp         # place to store A0A1*B0B1
     jal  karatsuba226_2asm # calulate A0A1*B0B1=x
+    
     lw   s8, 0(sp)      # x_0
     lw   s9, 4(sp)      # x_1=result[1]
     lw   s4, 8(sp)      # x_2
@@ -53,9 +54,15 @@ karatsuba226_3asm:
     andi t2, t3, 1      # possible borrow from A1
     sub  t1, t1, t2     # 
     srai s7, t1, 31     # sign of A1
-    add  t1, t1, s7     # absolute value of A1
-    xor  t1, t1, s7     #
-    sw   t0, 0(sp)      # store A0A1-A2 on the stack
+    and  t2, s7, s10    # cut mask to 26 bits length
+    xor  t1, t1, s7     # absolute value of A0A1-A2
+    xor  t0, t0, t2     # 
+    neg  t3, s7         #
+    add  t0, t0, t3     #    
+    srli t3, t0, 26     # handle carry
+    add  t1, t1, t3     #
+    and  t0, t0, s10    #
+    sw   t0, 0(sp)      # store |A0A1-A2| on the stack
     sw   t1, 4(sp)      #
 
     lw   t0, 0(s2)      # load B0
@@ -69,8 +76,14 @@ karatsuba226_3asm:
     andi t2, t3, 1      # possible borrow from B1
     sub  t1, t1, t2     # 
     srai t3, t1, 31     # sign of B1
-    add  t1, t1, t3     # absolute value of B1
-    xor  t1, t1, t3     #
+    and  a0, t3, s10    # cut mask to 26 bits
+    xor  t1, t1, t3     # absolute value of B0B1-B2
+    xor  t0, t0, a0     #
+    neg  t4, t3         #
+    add  t0, t0, t4     #
+    srli t4, t0, 26     # handle carry
+    add  t1, t1, t4     #
+    and  t0, t0, s10    #
     sw   t0, 8(sp)      # store B0B1-B2 on the stack
     sw   t1, 12(sp)     #
     xor  s7, s7, t3     # sign of (A0A1-A2)*(B0B1-B2)

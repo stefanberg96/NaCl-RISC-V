@@ -68,8 +68,10 @@ void checkCorrectness() {
     }
 }
 
-extern void karatsuba226_3asm(unsigned int res[5], unsigned int a[3], unsigned int b[3]);
 extern uint64_t securemul226(unsigned int a, unsigned int b);
+extern void karatsuba226asm(unsigned int res[5], unsigned int a[5], unsigned int b[5]);
+extern void karatsuba226_3asm(unsigned int res[5], unsigned int a[5], unsigned int b[5]);
+extern void karatsuba226_2asm(unsigned int res[5], unsigned int a[5], unsigned int b[5]);
 void printbyte(unsigned int x){
 
 	printf("%x\n",x);
@@ -77,11 +79,19 @@ void printbyte(unsigned int x){
 
 int main() {
 
+  unsigned int out1[5]={0};
+  unsigned int a1[3]={0x2fbd1a, 0x0, 0x358d90e};
+  unsigned int b1[3]={0x2a77f3e, 0x0, 0x3fa42bc};
+  karatsuba226_3asm(out1, a1, b1);
+
+  printf("%x, %x, %x, %x, %x\n",out1[0],out1[1],out1[2],out1[3],out1[4]);
 
   unsigned int out[17]={0};
-  unsigned int a[3]={0x150e0fd, 0x23e4427, 0x3fa42bc};
-  unsigned int b[3]={0x38ec9da, 0x235b7aa, 0x358d90e};
-  karatsuba226_3asm(out,a,b);
+  unsigned int a[5]={0x150e0fd, 0x23e4427, 0x3fa42bc, 0x2a961bf, 0x23e4426};
+  unsigned int b[5]={0x38ec9da, 0x235b7aa, 0x358d90e, 0x35f0cc0, 0x235b7aa};
+  karatsuba226asm(out,a,b);
+  printf("%x, %x, %x, %x, %x\n",out[0],out[1],out[2],out[3],out[4]);
+  squeeze226(out);
   toradix28(out);
   printarray(out,17); 
 

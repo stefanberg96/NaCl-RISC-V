@@ -28,7 +28,7 @@ static void add226(unsigned int h[5], const unsigned int c[5]) {
 }
 
 // used in mulmod
-static void squeeze226(unsigned int h[6]) {
+void squeeze226(unsigned int h[6]) {
   unsigned int j;
   uint64_t u;
   u = h[5] * 5;
