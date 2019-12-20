@@ -14,11 +14,11 @@ karatsuba226_2asm:
     sw      ra, 0(sp)
 
     mv      s0, a0      # Result pointer
-    lw      a0, 0(a1)   # load A0
     mv      s1, a1      # A pointer
-    lw      a1, 0(a2)   # load B0
     mv      s2, a2      # B pointer
 
+    lw      a0, 0(a1)   # load A0
+    lw      a1, 0(a2)   # load B0
     jal     securemul226 # mul A0*B0
     sw      a0, 0(s0)   # res[0]=A0*B0_l
     add     s3, a0, a1  # res[1]=A0*B0_l + A0*B0_h
@@ -34,7 +34,8 @@ karatsuba226_2asm:
     lw      t3, 4(s2)   # load B1
     add     s4, s4, a0  # res[2]+= A1*B1_l
     add     s4, s4, a1  # res[2]+= A1*B1_h
-    sw      a1, 12(s0)  # res[3]=A1*B1_h
+    mv      t6, a1      # res[3]=A1*B1_h temporarily store it in t6 (not used by securemul226)
+
     
     sub     t0, t0, t1  # A0-A1
     srai    s5, t0, 31  # get the sign of the subtraction
@@ -44,18 +45,28 @@ karatsuba226_2asm:
     xor     a0, t0, s5  #
     add     t2, t2, s6  # absolute value of B0-B1
     xor     a1, t2, s6  #
+    xor     s5, s5, s6  # sign of the multiplication
+    mv      s6, t6
 
     jal     securemul226 # |A0-A1|*|B0-B1|
 
-    xor     s5, s5, s6  # sign of the multiplication
     add     a0, a0, s5  # if sign is negative make the value negative
     xor     a0, a0, s5  # otherwise keep it the same
     sub     s3, s3, a0  # res[1]-=(A0-A1)*(B0-B1)_l
     add     a1, a1, s5  # if sign is negative make the value negative
     xor     a1, a1, s5  # otherwise keep it the same
     sub     s4, s4, a1  # res[2]-=(A0-A1)*(B0-B1)_l
+
+    srli    t0, s3, 26  # handle overflow
+    add     s4, s4, t0  #
+    li      t1, 0x3ffffff # 2^26-1
+    and     s3, s3, t1  #
+    srli    t0, s4, 26  #
+    add     s6, s6, t0  #
+    and     s4, s4, t1  #
     sw      s3, 4(s0)   # store res[1]
     sw      s4, 8(s0)   # store res[2]
+    sw      s6, 12(s0)  # store res[3]
 
     lw      s0, 28(sp)  # restore variables and stack
     lw      s1, 24(sp)

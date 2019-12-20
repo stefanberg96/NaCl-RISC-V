@@ -68,7 +68,8 @@ void checkCorrectness() {
     }
 }
 
-extern void karatsuba226_2asm(unsigned int res[4], unsigned int a[2], unsigned int b[2]);
+extern void karatsuba226_3asm(unsigned int res[5], unsigned int a[3], unsigned int b[3]);
+extern uint64_t securemul226(unsigned int a, unsigned int b);
 void printbyte(unsigned int x){
 
 	printf("%x\n",x);
@@ -76,18 +77,11 @@ void printbyte(unsigned int x){
 
 int main() {
 
+
   unsigned int out[17]={0};
-  unsigned int a[2]={0x150e0fd,0x23e4427};
-  unsigned int b[2]={0x38ec9da,0x235b7aa};
-  karatsuba226_2asm(out,a,b);
-  out[1] += out[0]>>26;
-  out[0] &= 0x3ffffff;
-  out[2] += out[1]>>26;
-  out[1] &= 0x3ffffff;
-  out[3] += out[2]>>26;
-  out[2] &= 0x3ffffff;
-  out[4] += out[3] >>26;
-  out[3] &= 0x3ffffff;
+  unsigned int a[3]={0x150e0fd, 0x23e4427, 0x3fa42bc};
+  unsigned int b[3]={0x38ec9da, 0x235b7aa, 0x358d90e};
+  karatsuba226_3asm(out,a,b);
   toradix28(out);
   printarray(out,17); 
 
@@ -97,5 +91,6 @@ int main() {
  // dobenchmark(&timing[1], output);
 //  printf("This took %llu cycles\n", timing[1]);
 //  printarray(output, 16);
+printf("\n\n\n\n");
   return 0;
 }

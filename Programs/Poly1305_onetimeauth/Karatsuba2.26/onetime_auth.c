@@ -267,6 +267,7 @@ int crypto_onetimeauth(unsigned char *out, const unsigned char *in,
   for (j = 0; j < 17; ++j)
     h[j] = 0;
 
+//TODO insert ontime_authloop and only do this once 
   while (inlen > 0) {
     for (j = 0; j < 17; ++j)
       c[j] = 0; // set c to 0

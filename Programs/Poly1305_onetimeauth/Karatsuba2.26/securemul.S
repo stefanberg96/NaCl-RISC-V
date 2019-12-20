@@ -75,12 +75,9 @@ loop:
 
    srli    t1, a3, 26    # handle overflow
    slli    a4, a4, 6     #
-   add     a4, a4, t1    #
+   add     a1, a4, t1    #
    li      t1, 0x3ffffff #
-   and     a3, a3, t1    #
+   and     a0, a3, t1    #
    
-
-   mv      a0, a3        # return result
-   mv      a1, a4        #
    ret
 
