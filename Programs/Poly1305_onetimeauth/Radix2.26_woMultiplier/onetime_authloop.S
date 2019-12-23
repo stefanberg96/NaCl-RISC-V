@@ -59,6 +59,8 @@ loop:
     jal    karatsuba226asm_inplace
     mv     a0, s2        #
     jal    squeeze226asm #
+    mv     a0, s2
+    jal    squeeze226asm
     addi   s0, s0, 16    #
     lw     a3, 0(s0)     # load in[0] 32 bytes
     addi   s1, s1, -16   # update loop variables

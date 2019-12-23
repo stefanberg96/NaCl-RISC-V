@@ -3,8 +3,6 @@
 .globl getcycles
 .align 2
 getcycles:
-    csrr a0, mcycle
-    ret 
     csrr t0, mcycle
     sw   t0, 0(a0)
     csrr t0, mhpmcounter3
