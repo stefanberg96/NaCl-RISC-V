@@ -61,11 +61,14 @@ void printchararray(unsigned char * in, int inlen){
     printf("\n");
 }
 
+void printbyte(unsigned int x){
+  printf("%x\n",x);
+}
 
 void printarray(unsigned int * in, int inlen){
 
     for(int i =0;i< inlen;i++){
-        printf("%x, ", in[i]);
+        printf("%02x, ", in[i]);
     }
     printf("\n");
 }

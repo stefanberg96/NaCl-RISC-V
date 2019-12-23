@@ -1,5 +1,5 @@
 #include <stdint.h>
 #include "onetime_auth.h"
 
-extern void getcycles(unsigned int *a);
+extern uint32_t getcycles();
 void dobenchmark();

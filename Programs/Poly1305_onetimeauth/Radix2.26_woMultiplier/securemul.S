@@ -73,7 +73,11 @@ loop:
    addi    a5, a5, -1    # update loop variables
    bnez    a5, loop
 
-   mv      a0, a3        # return result
-   mv      a1, a4        #
+   srli    t0, a3, 26    # handle overflow
+   slli    a1, a4, 6     #
+   or      a1, a1, t0
+   li      t0, 0x3ffffff # 2^26-1
+   and     a0, a3, t0    #
+
    ret
 
