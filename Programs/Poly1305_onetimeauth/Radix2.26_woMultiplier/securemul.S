@@ -55,7 +55,7 @@ securemul226:
    add     a4, a4, t1    # r_h
    add     a4, a4, t2    #
 
-   li      a5, 19
+   li      a5, 20
 loop:
    srli    a1, a1, 1     # shift 
    slli    a2, a2, 1     #

@@ -28,6 +28,7 @@ karatsuba226_2asm:
 
     lw      a1, 4(s2)   # load B1
     jal     securemul226 # mul A1*B1
+
     add     s3, s3, a0  # res[1]+= A1*B1_l
     lw      t0, 0(s1)   # load A0 preloading to prevent load-use interlock
     lw      t1, 4(s1)   # load A1

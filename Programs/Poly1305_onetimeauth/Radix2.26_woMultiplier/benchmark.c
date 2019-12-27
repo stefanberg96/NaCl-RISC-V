@@ -9,6 +9,13 @@
         printf("\n");
     }
 
+    printoutput(unsigned int* out, int inlen){
+        for(int i =0;i<inlen;i++){
+           printf("%2x, ", out[i]);
+	}
+	printf("\n");
+    }
+
 
     void dobenchmark() {
 
@@ -21,10 +28,19 @@
         icachemisses();
 
         uint32_t timings[21];
-        for(int i =0;i<21;i++){
+	unsigned int out[17];
+	unsigned int d[5]={0x3824294, 0x289a8f, 0x651916, 0x1dba9f8, 0x3e66a1c};
+	unsigned int e[5]={0x12d9f3, 0x13e8000, 0x3840071, 0xf007fd, 0x543a4};
+        for(int i =0;i<1;i++){
             getcycles(&counters[i*3]);
-            crypto_onetimeauth(a,c,135,rs);
+	    karatsuba226asm(out, d, e);
+        //    crypto_onetimeauth(a,c,135,rs);
         }
+
+        printf("%x, %x, %x, %x, %x\n",out[0], out[1], out[2], out[3], out[4]);
+	squeeze226asm(out);
+	toradix28(out);
+        printoutput(out,17);
 
         printf("Cycle counts:          ");
         printintarray(counters, 0);

@@ -58,6 +58,15 @@ karatsuba226asm:
     addi  a2, a2, 12    # address B3
     jal   karatsuba226_2asm # A3A4*B3B4=y
 
+#    lw    a0, 0(sp)     #
+#    jal printbyte
+#    lw    a0, 4(sp)     #
+#    jal printbyte
+#    lw    a0, 8(sp)     #
+#    jal printbyte
+#    lw    a0, 12(sp)    #
+#    jal printbyte
+    
     lw    s6, 0(sp)     # y_0
     lw    s5, 4(sp)     # y_1=res[2]
     lw    s3, 8(sp)     # y_2=res[0]
@@ -150,6 +159,17 @@ karatsuba226asm:
     addi  a2, s2, 0     # address B0B1B2
     jal   karatsuba226_3asm # A0A1A2*B0B1B2 = x
 
+   # lw   a0, 20(sp)
+   # jal printbyte
+   # lw   a0, 24(sp)
+   # jal printbyte
+   # lw   a0, 28(sp)
+   # jal printbyte
+   # lw   a0, 32(sp)
+   # jal printbyte
+   # lw  a0,  36(sp)
+   # jal printbyte
+
     lw    t0, 20(sp)    # x_0
     lw    t1, 24(sp)    # x_1
     lw    t2, 28(sp)    # x_2
@@ -187,6 +207,32 @@ karatsuba226asm:
     sub  s4, s4, a3     # res[1] -= m_3
     sub  s5, s5, a4     # res[2] -= m_4
 
+
+
+    sltz t1, s3         # underflow in result[0]
+    sub  s4, s4, t0     # borrow from result[1]
+    addi a0, s10, 1     # 2^26
+    neg  t1, t1         # generate mask
+    and  t1, a0, t1     # 
+    add  s3, t1, s3     #
+
+    sltz t1, s4         # underflow in result[1]
+    sub  s5, s5, t1     # borrow from result[2]
+    neg  t1, t1         # generate mask
+    and  t1, a0, t1     # 
+    add  s4, t1, s4     #
+
+    sltz t1, s5         # underflow in result[2]
+    neg  t1, t1         # generate mask
+    andi t2, t1, 5
+    sub  s6, s6, t2     # borrow from result[3]
+    and  t1, a0, t1     # 
+    add  s5, t1, s5     #
+
+    lw    t0, 20(sp)    # x_0
+    lw    t1, 24(sp)    # x_1
+    lw    t2, 28(sp)    # x_2
+
     slli a0, s3, 2      # res[0] * 4
     add  s3, s3, a0     # res[0] *= 5
     add  s3, s3, t0     # res[0] += x_0
@@ -196,6 +242,42 @@ karatsuba226asm:
     slli a0, s5, 2      # res[2] * 4
     add  s5, s5, a0     # res[2] *= 5
     add  s5, s5, t2     # res[2] += x_2
+
+    mv a0, s3
+    jal printbyte
+    
+    sltz t0, s3         # underflow in result[0]
+    sub  s4, s4, t0     # borrow from result[1]
+    addi a0, s10, 1     # 2^26
+    neg  t0, t0         # generate mask
+    and  t0, a0, t0     # 
+    add  s3, t0, s3     #
+
+    sltz t0, s4         # underflow in result[1]
+    sub  s5, s5, t0     # borrow from result[2]
+    neg  t0, t0         # generate mask
+    and  t0, a0, t0     # 
+    add  s4, t0, s4     #
+
+    sltz t0, s5         # underflow in result[2]
+    sub  s6, s6, t0     # borrow from result[3]
+    neg  t0, t0         # generate mask
+    and  t0, a0, t0     # 
+    add  s5, t0, s5     #
+
+    sltz t0, s6         # underflow in result[3]
+    sub  s7, s7, t0     # borrow from result[4]
+    neg  t0, t0         # generate mask
+    and  t0, a0, t0     # 
+    add  s6, t0, s6     #
+
+    sltz t0, s7         # underflow in result[4]
+    li   t1, 5          #
+    neg  t0, t0         # generate mask
+    and  t1, t0, t1     # 
+    sub  s3, s3, t1     # borrow 5 from result[0]
+    and  t0, a0, t0     #
+    add  s7, a0, s7     #
 
     srli a0, s3, 26     # handle overflow
     add  s4, s4, a0     #
