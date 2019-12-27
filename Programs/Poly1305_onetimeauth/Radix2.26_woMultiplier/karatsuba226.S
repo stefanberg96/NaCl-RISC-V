@@ -207,10 +207,11 @@ karatsuba226asm:
     sub  s4, s4, a3     # res[1] -= m_3
     sub  s5, s5, a4     # res[2] -= m_4
 
-
+    mv a0, s4
+    jal printbyte
 
     sltz t1, s3         # underflow in result[0]
-    sub  s4, s4, t0     # borrow from result[1]
+    sub  s4, s4, t1     # borrow from result[1]
     addi a0, s10, 1     # 2^26
     neg  t1, t1         # generate mask
     and  t1, a0, t1     # 
@@ -220,7 +221,7 @@ karatsuba226asm:
     sub  s5, s5, t1     # borrow from result[2]
     neg  t1, t1         # generate mask
     and  t1, a0, t1     # 
-    add  s4, t1, s4     #
+    add  s4, s4, t1     #
 
     sltz t1, s5         # underflow in result[2]
     neg  t1, t1         # generate mask
@@ -228,6 +229,10 @@ karatsuba226asm:
     sub  s6, s6, t2     # borrow from result[3]
     and  t1, a0, t1     # 
     add  s5, t1, s5     #
+
+    mv a0, s4
+    jal printbyte
+
 
     lw    t0, 20(sp)    # x_0
     lw    t1, 24(sp)    # x_1
@@ -243,7 +248,7 @@ karatsuba226asm:
     add  s5, s5, a0     # res[2] *= 5
     add  s5, s5, t2     # res[2] += x_2
 
-    mv a0, s3
+    mv a0, s4
     jal printbyte
     
     sltz t0, s3         # underflow in result[0]
@@ -277,7 +282,7 @@ karatsuba226asm:
     and  t1, t0, t1     # 
     sub  s3, s3, t1     # borrow 5 from result[0]
     and  t0, a0, t0     #
-    add  s7, a0, s7     #
+    add  s7, t0, s7     #
 
     srli a0, s3, 26     # handle overflow
     add  s4, s4, a0     #
