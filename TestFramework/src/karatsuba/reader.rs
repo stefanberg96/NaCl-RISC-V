@@ -9,18 +9,21 @@ use core::fmt;
 use std::fmt::Formatter;
 use std::sync::mpsc::Sender;
 use std::thread;
+use num_bigint::BigUint;
+use num_traits::One;
 
 #[derive(Clone)]
-pub struct MulModResult {
+pub struct KaratsubaResult {
     pub cycle_counts: Vec<f64>,
     pub raw_output: Vec<String>,
+    pub result: BigUint,
 }
 
 
-impl fmt::Display for MulModResult {
+impl fmt::Display for KaratsubaResult {
     fn fmt(&self, f: &mut Formatter) -> fmt::Result {
         writeln!(f, "Cycle counts:{:?}", self.cycle_counts).expect("write failed");
-
+        writeln!(f, "{}", self.result);
         Ok(())
     }
 }
@@ -45,12 +48,14 @@ impl Reader {
 }
 
 impl Iterator for Reader {
-    type Item = MulModResult;
+    type Item = KaratsubaResult;
 
-    fn next(&mut self) -> Option<MulModResult> {
+    fn next(&mut self) -> Option<KaratsubaResult> {
+
         let cycle_regex = Regex::new("(?:([0-9]+), )").expect("Cycle regex is invalid");
+        let result_regex = Regex::new("(?:[0-9a-z]{16})").expect("Result regex is invalid");
 
-        let mut result = MulModResult {  cycle_counts: Vec::new(), raw_output:Vec::new() };
+        let mut result = KaratsubaResult {  cycle_counts: Vec::new(), raw_output:Vec::new(), result: One::one()};
         for line in self.reader.by_ref().lines() {
             let line = line.unwrap_or_default();
             add_to_raw(&mut result, line.clone());
@@ -60,6 +65,10 @@ impl Iterator for Reader {
                     .filter_map(Result::ok)
                     .collect();
                 result.cycle_counts = z;
+            }else if result_regex.is_match(line.as_str()){
+                let hex = result_regex.captures(line.as_str()).unwrap();
+                let bytes = hex::decode(&hex[0]).expect("Failed to decode output result from hex to bytes");
+                result.result = BigUint::from_bytes_le(bytes.as_slice());
                 return Some(result);
             }
         }
@@ -67,7 +76,7 @@ impl Iterator for Reader {
     }
 }
 
-fn add_to_raw(result: &mut MulModResult, line: String){
+fn add_to_raw(result: &mut KaratsubaResult, line: String){
     if line.trim().len() == 0{
         return
     }
@@ -80,7 +89,7 @@ fn add_to_raw(result: &mut MulModResult, line: String){
 }
 
 
-pub fn start_reader_thread(tx: Sender<MulModResult>) {
+pub fn start_reader_thread(tx: Sender<KaratsubaResult>) {
     thread::spawn(move || {
         let reader = Reader::new_authloop();
 

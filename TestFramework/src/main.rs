@@ -18,6 +18,7 @@ use chrono::Local;
 use std::io::Write;
 use crate::poly1305::generator::{generate_testcase, generator_name};
 use core::fmt;
+use std::process::exit;
 
 
 mod make;
@@ -25,6 +26,7 @@ mod poly1305;
 mod securemul;
 mod onetime_authloop;
 mod mulmod;
+mod karatsuba;
 
 fn main() -> Result<(), SimpleError> {
     let mut builder = Builder::new();
@@ -77,7 +79,13 @@ fn main() -> Result<(), SimpleError> {
                     for line in result.raw_output{
                         let _ = writeln!(raw_output, "{}", line);
                     }
-                    let _ = writeln!(raw_output, "Expected result: {}", HexSlice::new(&testcase.expected_result));
+                    let _ = writeln!(raw_output, "Expected result: {}", &HexSlice::new(&testcase.expected_result));
+                    if result.result != testcase.expected_result{
+                        error!("multiplication not correct \n
+                        Result: {}\n
+                        Expected: {}", &HexSlice::new(&result.result), &HexSlice::new(&testcase.expected_result));
+                        exit(1);
+                    }
                     break;
                 }
                 Err(_) => {
