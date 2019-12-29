@@ -50,7 +50,7 @@ karatsuba226_2asm:
     xor     s5, s5, s6  # sign of the multiplication
     mv      s6, t6
     jal     securemul226 # |A0-A1|*|B0-B1|
-    
+
     add     a0, a0, s5  # if sign is negative make the value negative
     xor     a0, a0, s5  # otherwise keep it the same
     sub     s3, s3, a0  # res[1]-=(A0-A1)*(B0-B1)_l
@@ -58,9 +58,22 @@ karatsuba226_2asm:
     xor     a1, a1, s5  # otherwise keep it the same
     sub     s4, s4, a1  # res[2]-=(A0-A1)*(B0-B1)_l
 
+    li      t1, 0x3ffffff # 2^26-1
+    sltz    t0, s3      # handle underflow
+    sub     s4, s4, t0  #
+    addi    t2, t1, 1   # 2^26
+    neg     t0, t0      # mask
+    and     t0, t2, t0  # mask 2^26
+    add     s3, s3, t0  #
+    
+    sltz    t0, s4      # handle underflow
+    sub     s6, s6, t0  #
+    neg     t0, t0      # mask
+    and     t0, t2, t0  # mask 2^26
+    add     s4, s4, t0
+
     srli    t0, s3, 26  # handle overflow
     add     s4, s4, t0  #
-    li      t1, 0x3ffffff # 2^26-1
     and     s3, s3, t1  #
     srli    t0, s4, 26  #
     add     s6, s6, t0  #

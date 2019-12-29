@@ -207,9 +207,6 @@ karatsuba226asm:
     sub  s4, s4, a3     # res[1] -= m_3
     sub  s5, s5, a4     # res[2] -= m_4
 
-    mv a0, s4
-    jal printbyte
-
     sltz t1, s3         # underflow in result[0]
     sub  s4, s4, t1     # borrow from result[1]
     addi a0, s10, 1     # 2^26
@@ -230,10 +227,6 @@ karatsuba226asm:
     and  t1, a0, t1     # 
     add  s5, t1, s5     #
 
-    mv a0, s4
-    jal printbyte
-
-
     lw    t0, 20(sp)    # x_0
     lw    t1, 24(sp)    # x_1
     lw    t2, 28(sp)    # x_2
@@ -248,28 +241,25 @@ karatsuba226asm:
     add  s5, s5, a0     # res[2] *= 5
     add  s5, s5, t2     # res[2] += x_2
 
-    mv a0, s4
-    jal printbyte
-    
-    sltz t0, s3         # underflow in result[0]
-    sub  s4, s4, t0     # borrow from result[1]
-    addi a0, s10, 1     # 2^26
-    neg  t0, t0         # generate mask
-    and  t0, a0, t0     # 
-    add  s3, t0, s3     #
-
-    sltz t0, s4         # underflow in result[1]
-    sub  s5, s5, t0     # borrow from result[2]
-    neg  t0, t0         # generate mask
-    and  t0, a0, t0     # 
-    add  s4, t0, s4     #
-
-    sltz t0, s5         # underflow in result[2]
-    sub  s6, s6, t0     # borrow from result[3]
-    neg  t0, t0         # generate mask
-    and  t0, a0, t0     # 
-    add  s5, t0, s5     #
-
+#    sltz t0, s3         # underflow in result[0]
+#    sub  s4, s4, t0     # borrow from result[1]
+#    addi a0, s10, 1     # 2^26
+#    neg  t0, t0         # generate mask
+#    and  t0, a0, t0     # 
+#    add  s3, t0, s3     #
+#
+#    sltz t0, s4         # underflow in result[1]
+#    sub  s5, s5, t0     # borrow from result[2]
+#    neg  t0, t0         # generate mask
+#    and  t0, a0, t0     # 
+#    add  s4, t0, s4     #
+#
+#    sltz t0, s5         # underflow in result[2]
+#    sub  s6, s6, t0     # borrow from result[3]
+#    neg  t0, t0         # generate mask
+#    and  t0, a0, t0     # 
+#    add  s5, t0, s5     #
+#
     sltz t0, s6         # underflow in result[3]
     sub  s7, s7, t0     # borrow from result[4]
     neg  t0, t0         # generate mask
