@@ -167,19 +167,19 @@ karatsuba226_3asm:
     sub  s4, s4, t0     # borrow from result[2]
     neg  t0, t0         # generate mask
     and  t0, a0, t0     # 
-    add  s9, t0, s9     #
+    add  a1, t0, s9     #
 
     sltz t0, s4         # underflow in result[2]
     sub  s5, s5, t0     # borrow from result[3]
     neg  t0, t0         # generate mask
     and  t0, a0, t0     # 
-    add  s4, t0, s4     #
+    add  a2, t0, s4     #
 
     sltz t0, s5         # underflow in result[3]
     sub  s6, s6, t0     # borrow from result[4]
     neg  t0, t0         # generate mask
     and  t0, a0, t0     # 
-    add  s5, t0, s5     #
+    add  a3, t0, s5     #
 
     sltz t0, s6         # underflow in result[4]
     li   t1, 5          #
@@ -187,26 +187,17 @@ karatsuba226_3asm:
     and  t1, t0, t1     # 
     sub  s3, s3, t1     # borrow 5 from result[0]
     and  t0, a0, t0     #
-    add  s6, t0, s6     #
+    add  a4, t0, s6     #
 
-    srli t0, s3, 26     # handle overflow
-    add  s9, s9, t0     #
-    and  s3, s3, s10    #
-    sw   s3, 0(s0)      # store result[0]
-    srli t0, s9, 26     #
-    add  s4, s4, t0     #
-    and  s9, s9, s10    #
-    sw   s9, 4(s0)      # store result[1]
-    srli t0, s4, 26     #
-    add  s5, s5, t0     #
-    and  s4, s4, s10    #
-    sw   s4, 8(s0)      # store result[2]
-    srli t0, s5, 26     #
-    add  s6, s6, t0     #
-    and  s5, s5, s10    #
-    sw   s5, 12(s0)     # store result[3]
-    sw   s6, 16(s0)     # store result[4]
- 
+    mv   a0, s3         #
+    jal squeeze226param
+
+    sw   a0, 0(s0)      # store results
+    sw   a1, 4(s0)      #
+    sw   a2, 8(s0)      #
+    sw   a3, 12(s0)     #
+    sw   a4, 16(s0)     #
+
     lw   s0, 92(sp)     # restore variables
     lw   s1, 88(sp)     #
     lw   s2, 84(sp)     #

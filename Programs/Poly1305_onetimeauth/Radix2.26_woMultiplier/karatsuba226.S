@@ -159,16 +159,16 @@ karatsuba226asm:
     addi  a2, s2, 0     # address B0B1B2
     jal   karatsuba226_3asm # A0A1A2*B0B1B2 = x
 
-   # lw   a0, 20(sp)
-   # jal printbyte
-   # lw   a0, 24(sp)
-   # jal printbyte
-   # lw   a0, 28(sp)
-   # jal printbyte
-   # lw   a0, 32(sp)
-   # jal printbyte
-   # lw  a0,  36(sp)
-   # jal printbyte
+    lw   a0, 0(sp)
+    jal printbyte
+    lw   a0, 4(sp)
+    jal printbyte
+    lw   a0, 8(sp)
+    jal printbyte
+    lw   a0, 12(sp)
+    jal printbyte
+    lw  a0,  16(sp)
+    jal printbyte
 
     lw    t0, 20(sp)    # x_0
     lw    t1, 24(sp)    # x_1
@@ -264,7 +264,7 @@ karatsuba226asm:
     sub  s7, s7, t0     # borrow from result[4]
     neg  t0, t0         # generate mask
     and  t0, a0, t0     # 
-    add  s6, t0, s6     #
+    add  a3, t0, s6     #
 
     sltz t0, s7         # underflow in result[4]
     li   t1, 5          #
@@ -272,26 +272,18 @@ karatsuba226asm:
     and  t1, t0, t1     # 
     sub  s3, s3, t1     # borrow 5 from result[0]
     and  t0, a0, t0     #
-    add  s7, t0, s7     #
+    add  a4, t0, s7     #
 
-    srli a0, s3, 26     # handle overflow
-    add  s4, s4, a0     #
-    and  s3, s3, s10    #
-    srli a0, s4, 26     #
-    add  s5, s5, a0     #
-    and  s4, s4, s10    #
-    srli a0, s5, 26     #
-    add  s6, s6, a0     #
-    and  s5, s5, s10    #
-    srli a0, s6, 26     #
-    add  s7, s7, a0     #
-    and  s6, s6, s10    #
+    mv   a0, s3         #
+    mv   a1, s4         #
+    mv   a2, s5         #
+    jal squeeze226param 
 
-    sw    s3, 0(s0)     # store result
-    sw    s4, 4(s0)     #
-    sw    s5, 8(s0)     #
-    sw    s6, 12(s0)    #
-    sw    s7, 16(s0)    #
+    sw    a0, 0(s0)     # store result
+    sw    a1, 4(s0)     #
+    sw    a2, 8(s0)     #
+    sw    a3, 12(s0)    #
+    sw    a4, 16(s0)    #
     
     lw    s0, 92(sp)
     lw    s1, 88(sp)
