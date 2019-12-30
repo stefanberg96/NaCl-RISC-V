@@ -93,13 +93,8 @@ int crypto_onetimeauth(unsigned char *out, const unsigned char *in,
   c[index] += 1 << (26 - bitleft);
 
   add226asm(h, c);    // c to the state
-  printf("c:%x, %x, %x, %x, %x, \n", c[0], c[1], c[2], c[3], c[4]);
   squeeze226asm(h);
-  printf("h:%x, %x, %x, %x, %x, \n", h[0], h[1], h[2], h[3], h[4]);
-  printf("r:%x, %x, %x, %x, %x, \n", r[0], r[1], r[2], r[3], r[4]);
   karatsuba226asm_inplace(h, r); // multiply state with the secret key modulo 2^130-5
-  squeeze226asm(h);
-  printf("h:%x, %x, %x, %x, %x, \n", h[0], h[1], h[2], h[3], h[4]);
 
   // go back to radix 2.8
   toradix28(h);
