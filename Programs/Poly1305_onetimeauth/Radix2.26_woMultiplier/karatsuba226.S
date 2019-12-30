@@ -58,14 +58,14 @@ karatsuba226asm:
     addi  a2, a2, 12    # address B3
     jal   karatsuba226_2asm # A3A4*B3B4=y
 
-#    lw    a0, 0(sp)     #
-#    jal printbyte
-#    lw    a0, 4(sp)     #
-#    jal printbyte
-#    lw    a0, 8(sp)     #
-#    jal printbyte
-#    lw    a0, 12(sp)    #
-#    jal printbyte
+    #lw    a0, 0(sp)     #
+    #jal printbyte
+    #lw    a0, 4(sp)     #
+    #jal printbyte
+    #lw    a0, 8(sp)     #
+    #jal printbyte
+    #lw    a0, 12(sp)    #
+    #jal printbyte
     
     lw    s6, 0(sp)     # y_0
     lw    s5, 4(sp)     # y_1=res[2]
@@ -159,16 +159,16 @@ karatsuba226asm:
     addi  a2, s2, 0     # address B0B1B2
     jal   karatsuba226_3asm # A0A1A2*B0B1B2 = x
 
-    lw   a0, 0(sp)
-    jal printbyte
-    lw   a0, 4(sp)
-    jal printbyte
-    lw   a0, 8(sp)
-    jal printbyte
-    lw   a0, 12(sp)
-    jal printbyte
-    lw  a0,  16(sp)
-    jal printbyte
+    #lw   a0, 20(sp)
+    #jal printbyte
+    #lw   a0, 24(sp)
+    #jal printbyte
+    #lw   a0, 28(sp)
+    #jal printbyte
+    #lw   a0, 32(sp)
+    #jal printbyte
+    #lw  a0,  36(sp)
+    #jal printbyte
 
     lw    t0, 20(sp)    # x_0
     lw    t1, 24(sp)    # x_1
@@ -241,25 +241,7 @@ karatsuba226asm:
     add  s5, s5, a0     # res[2] *= 5
     add  s5, s5, t2     # res[2] += x_2
 
-#    sltz t0, s3         # underflow in result[0]
-#    sub  s4, s4, t0     # borrow from result[1]
-#    addi a0, s10, 1     # 2^26
-#    neg  t0, t0         # generate mask
-#    and  t0, a0, t0     # 
-#    add  s3, t0, s3     #
-#
-#    sltz t0, s4         # underflow in result[1]
-#    sub  s5, s5, t0     # borrow from result[2]
-#    neg  t0, t0         # generate mask
-#    and  t0, a0, t0     # 
-#    add  s4, t0, s4     #
-#
-#    sltz t0, s5         # underflow in result[2]
-#    sub  s6, s6, t0     # borrow from result[3]
-#    neg  t0, t0         # generate mask
-#    and  t0, a0, t0     # 
-#    add  s5, t0, s5     #
-#
+    addi a0, s10, 1     # 2^26
     sltz t0, s6         # underflow in result[3]
     sub  s7, s7, t0     # borrow from result[4]
     neg  t0, t0         # generate mask
