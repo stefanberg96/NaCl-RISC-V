@@ -58,15 +58,6 @@ karatsuba226asm:
     addi  a2, a2, 12    # address B3
     jal   karatsuba226_2asm # A3A4*B3B4=y
 
-    #lw    a0, 0(sp)     #
-    #jal printbyte
-    #lw    a0, 4(sp)     #
-    #jal printbyte
-    #lw    a0, 8(sp)     #
-    #jal printbyte
-    #lw    a0, 12(sp)    #
-    #jal printbyte
-    
     lw    s6, 0(sp)     # y_0
     lw    s5, 4(sp)     # y_1=res[2]
     lw    s3, 8(sp)     # y_2=res[0]
@@ -158,17 +149,6 @@ karatsuba226asm:
     addi  a1, s1, 0     # address A0A1A2
     addi  a2, s2, 0     # address B0B1B2
     jal   karatsuba226_3asm # A0A1A2*B0B1B2 = x
-
-    #lw   a0, 20(sp)
-    #jal printbyte
-    #lw   a0, 24(sp)
-    #jal printbyte
-    #lw   a0, 28(sp)
-    #jal printbyte
-    #lw   a0, 32(sp)
-    #jal printbyte
-    #lw  a0,  36(sp)
-    #jal printbyte
 
     lw    t0, 20(sp)    # x_0
     lw    t1, 24(sp)    # x_1

@@ -25,15 +25,6 @@ karatsuba226_3asm:
     mv   a0, sp         # place to store A0A1*B0B1
     jal  karatsuba226_2asm # calulate A0A1*B0B1=x
 
-    #lw   a0, 0(sp)      # x_0
-    #jal printbyte
-    #lw   a0, 4(sp)      # x_1=result[1]
-    #jal printbyte
-    #lw   a0, 8(sp)      # x_2
-    #jal printbyte
-    #lw   a0, 12(sp)     # x_3
-    #jal printbyte
- 
     lw   s8, 0(sp)      # x_0
     lw   s9, 4(sp)      # x_1=result[1]
     lw   s4, 8(sp)      # x_2
@@ -102,18 +93,6 @@ karatsuba226_3asm:
     addi a2, sp, 8      # B0B1-B2 stack location
     jal  karatsuba226_2asm # Calculate (A0A1-A2)*(B0B1-B2) =m
 
-    #lw  a0, 20(sp)
-    #jal printbyte
-    #lw  a0, 24(sp)
-    #jal printbyte
-    #lw  a0, 28(sp)
-    #jal printbyte
-    #lw a0, 32(sp)
-    #jal printbyte
-    #lw a0, 36(sp)
-    #jal printbyte
-
-
     lw   a0, 20(sp)     # m_0
     lw   a1, 24(sp)     # m_1
     lw   a2, 28(sp)     # m_2
@@ -144,18 +123,6 @@ karatsuba226_3asm:
     add  s3, s3, t0     # result[0] *= 5
     add  s3, s3, s8     # result[0] += x_0
     
-#    mv   a0, s3     
-#    jal printbyte
-#    mv   a0, s9    
-#    jal printbyte
-#    mv   a0, s4   
-#    jal printbyte
-#    mv   a0, s5  
-#    jal printbyte
-#    mv   a0, s6
-#    jal printbyte
-
- 
     sltz t0, s3         # underflow in result[0]
     sub  s9, s9, t0     # borrow from result[1]
     addi a0, s10, 1     # 2^26
