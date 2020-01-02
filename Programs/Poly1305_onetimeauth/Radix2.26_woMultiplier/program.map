@@ -880,17 +880,17 @@ LOAD benchmark.o
 LOAD onetime_auth.o
 LOAD main.o
 LOAD radixconv.o
+LOAD karatsuba226.o
 LOAD karatsuba226_2.o
 LOAD karatsuba226_3.o
-LOAD karatsuba226.o
 LOAD securemul.o
 LOAD mulmod.o
+LOAD squeeze.o
 LOAD test.o
 LOAD interrupt.o
 LOAD add.o
 LOAD onetime_authloop.o
 LOAD cyclecounter.o
-LOAD squeeze.o
 START GROUP
 LOAD /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a
 LOAD /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/rv32imac/ilp32/libgcc.a
@@ -930,29 +930,29 @@ END GROUP
                 0x0000000020010ea8                printbyte
                 0x0000000020010efc                printarray
                 0x0000000020010fa0                main
- .text          0x0000000020010fe8      0x138 karatsuba226_2.o
-                0x0000000020010fe8                karatsuba226_2asm
- .text          0x0000000020011120      0x270 karatsuba226_3.o
-                0x0000000020011120                karatsuba226_3asm
- .text          0x0000000020011390      0x394 karatsuba226.o
-                0x0000000020011390                karatsuba226asm_inplace
-                0x00000000200113ec                karatsuba226asm
+ .text          0x0000000020010fe8      0x394 karatsuba226.o
+                0x0000000020010fe8                karatsuba226asm_inplace
+                0x0000000020011044                karatsuba226asm
+ .text          0x000000002001137c      0x138 karatsuba226_2.o
+                0x000000002001137c                karatsuba226_2asm
+ .text          0x00000000200114b4      0x270 karatsuba226_3.o
+                0x00000000200114b4                karatsuba226_3asm
  .text          0x0000000020011724      0x124 securemul.o
                 0x0000000020011724                securemul226
- .text          0x0000000020011848        0xc test.o
-                0x0000000020011848                test
- .text          0x0000000020011854       0xc0 add.o
-                0x0000000020011854                addasm
-                0x0000000020011888                add226asm
- .text          0x0000000020011914      0x120 onetime_authloop.o
-                0x0000000020011914                onetimeauth_loop
- .text          0x0000000020011a34       0x40 cyclecounter.o
-                0x0000000020011a34                getcycles
-                0x0000000020011a50                icachemisses
-                0x0000000020011a6c                getsp
- .text          0x0000000020011a74       0xf0 squeeze.o
-                0x0000000020011a74                squeeze226asm
-                0x0000000020011b00                squeeze226param
+ .text          0x0000000020011848       0xf0 squeeze.o
+                0x0000000020011848                squeeze226asm
+                0x00000000200118d4                squeeze226param
+ .text          0x0000000020011938        0xc test.o
+                0x0000000020011938                test
+ .text          0x0000000020011944       0xc0 add.o
+                0x0000000020011944                addasm
+                0x0000000020011978                add226asm
+ .text          0x0000000020011a04      0x120 onetime_authloop.o
+                0x0000000020011a04                onetimeauth_loop
+ .text          0x0000000020011b24       0x40 cyclecounter.o
+                0x0000000020011b24                getcycles
+                0x0000000020011b40                icachemisses
+                0x0000000020011b5c                getsp
  .text          0x0000000020011b64       0x4e /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-printf.o)
                 0x0000000020011b64                _printf_r
                 0x0000000020011b84                printf
