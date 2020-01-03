@@ -46,13 +46,13 @@ void add226(unsigned int out[10], const unsigned int a[10],
   unsigned int j;
   unsigned int u;
   u = 0;
-  for (j = 0; j < 31; ++j) {
+  for (j = 0; j < 9; ++j) {
     u += a[j] + b[j];
-    out[j] = u & 255;
-    u >>= 8;
+    out[j] = u & 0x3ffffff;
+    u >>= 26;
   }
-  u += a[31] + b[31];
-  out[31] = u;
+  u += a[9] + b[9];
+  out[9] = u;
 }
 
 // subtraction of a and b 
