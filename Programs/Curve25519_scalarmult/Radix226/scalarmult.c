@@ -9,7 +9,7 @@ Derived from public domain code by D. J. Bernstein.
 
 // addition of a and b
 // possible need to squeeze for the karatsuba
-static void add(unsigned int out[32], const unsigned int a[32],
+void add(unsigned int out[32], const unsigned int a[32],
                 const unsigned int b[32]) {
   unsigned int j;
   unsigned int u;
@@ -25,7 +25,7 @@ static void add(unsigned int out[32], const unsigned int a[32],
 
 // subtraction of a and b (TODO check if negative numbers are expected, since
 // this could screw with my karatsuba mult)
-static void sub(unsigned int out[32], const unsigned int a[32],
+void sub(unsigned int out[32], const unsigned int a[32],
                 const unsigned int b[32]) {
   unsigned int j;
   unsigned int u;
@@ -39,7 +39,37 @@ static void sub(unsigned int out[32], const unsigned int a[32],
   out[31] = u;
 }
 
-// handle overflow (TODO possibly use overflow from the karatsuba assembly)
+// addition of a and b
+// possible need to squeeze for the karatsuba
+void add226(unsigned int out[10], const unsigned int a[10],
+                const unsigned int b[10]) {
+  unsigned int j;
+  unsigned int u;
+  u = 0;
+  for (j = 0; j < 31; ++j) {
+    u += a[j] + b[j];
+    out[j] = u & 255;
+    u >>= 8;
+  }
+  u += a[31] + b[31];
+  out[31] = u;
+}
+
+// subtraction of a and b 
+void sub226(unsigned int out[10], const unsigned int a[10],
+                const unsigned int b[10]) {
+  unsigned int j;
+  unsigned long long u;
+  u = 0x3fffda0;
+  for (j = 0; j < 9; ++j) {
+    u += a[j] + 0xffffffc000000 - b[j];
+    out[j] = u & 0x3ffffff;
+    u >>= 26;
+  }
+  u += a[9] - b[9];
+}
+
+// handle overflow (TODO possibly use overflow from the karat=uba assembly)
 static void squeeze(unsigned int a[32]) {
   unsigned int j;
   unsigned int u;
@@ -329,7 +359,7 @@ void convert_to_radix226(unsigned int *r, unsigned char *k) {
   r[9] = (k[29] >> 2) + (k[30] << 6) + (k[31] << 14);
 }
 
-void toradix28(unsigned int h[17]) {
+void toradix28(unsigned int h[32]) {
 
   h[31] = (h[9] >> 14);
   h[30] = (h[9] >> 6) & 0xff;
@@ -376,23 +406,14 @@ int crypto_scalarmult(unsigned char *q, const unsigned char *n,
   e[31] &= 127;
   e[31] |= 64;
 
-  unsigned int er[32];
-  convert_to_radix226(er, e);
-
-  for(int i2=0;i2<10;++i2){
-    printf("%x, ", er[i2]);
-  }
-  printf("\n");
-
-  toradix28(er);
-
-  for(int i2=0;i2<32;++i2){
-    printf("%x, ", er[i2]);
-  }
-  printf("\n");
+  unsigned int e226[32];
+  convert_to_radix226(e226, e);
 
   for (i = 0; i < 32; ++i)
     work[i] = p[i];
+  unsigned int work226[32]; 
+  convert_to_radix226(work226, work);
+
   printf("before mainloop\n");
   mainloop(work, e);
   printf("passed mainloop\n");
