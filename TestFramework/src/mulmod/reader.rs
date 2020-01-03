@@ -16,6 +16,7 @@ pub struct MulModResult {
     pub raw_output: Vec<String>,
 }
 
+pub const TIMEOUT: u64 = 10;
 
 impl fmt::Display for MulModResult {
     fn fmt(&self, f: &mut Formatter) -> fmt::Result {

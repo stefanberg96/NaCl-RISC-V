@@ -15,6 +15,7 @@ pub struct Poly1305Result {
     pub raw_output: Vec<String>,
 }
 
+pub const TIMEOUT: u64 = 10;
 
 impl fmt::Display for Poly1305Result {
     fn fmt(&self, f: &mut Formatter) -> fmt::Result {

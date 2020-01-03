@@ -3,8 +3,8 @@ extern crate log;
 
 use std::sync::mpsc;
 use std::time::Duration;
-use crate::poly1305::reader::start_reader_thread;
-use crate::poly1305::generator;
+use crate::scalarmult::reader::{start_reader_thread, TIMEOUT};
+use crate::scalarmult::generator;
 use simple_error::SimpleError;
 use env_logger::{Builder, WriteStyle};
 use log::{error, info, LevelFilter};
@@ -16,7 +16,7 @@ use std::fs::{create_dir, OpenOptions};
 use std::path::Path;
 use chrono::Local;
 use std::io::Write;
-use crate::poly1305::generator::{generate_testcase, generator_name};
+use crate::scalarmult::generator::{generate_testcase, generator_name};
 use core::fmt;
 use std::process::exit;
 
@@ -27,6 +27,7 @@ mod securemul;
 mod onetime_authloop;
 mod mulmod;
 mod karatsuba;
+mod scalarmult;
 
 fn main() -> Result<(), SimpleError> {
     let mut builder = Builder::new();
@@ -58,7 +59,7 @@ fn main() -> Result<(), SimpleError> {
     //main loop that runs the tests
     let mut cycles_times = vec![];
     for _i in 0..500 {
-        let testcase = generate_testcase(messagelen);
+        let testcase = generate_testcase();
         for _attempt in 0..4 {
             if _attempt == 3 {
                 error!("Too many failed attempt on this input:\n {:?}", testcase);
@@ -70,7 +71,7 @@ fn main() -> Result<(), SimpleError> {
                 continue;
             }
 
-            match rx.recv_timeout(Duration::from_secs(10)) {
+            match rx.recv_timeout(Duration::from_secs(TIMEOUT)) {
                 Ok(result) => {
                     info!("Calculation took {} instructions ", result.cycle_counts[8]);
                     cycles_times.push(result.cycle_counts.clone());
@@ -79,17 +80,18 @@ fn main() -> Result<(), SimpleError> {
                     for line in result.raw_output{
                         let _ = writeln!(raw_output, "{}", line);
                     }
-                    let _ = writeln!(raw_output, "Expected result: {}", &HexSlice::new(&testcase.expected_result));
-                    if result.result != testcase.expected_result{
+                    let _ = writeln!(raw_output, "Expected result: {}", &HexSlice::new(&testcase.expected_result.0));
+                    if result.result != testcase.expected_result.0{
                         error!("multiplication not correct \n
                         Result: {}\n
-                        Expected: {}", &HexSlice::new(&result.result), &HexSlice::new(&testcase.expected_result));
+                        Expected: {}", &HexSlice::new(&result.result), &HexSlice::new(&testcase.expected_result.0));
                         exit(1);
                     }
                     break;
                 }
                 Err(_) => {
-                    error!("Did not get the result within 10 seconds rerunning make");
+                    error!("Did not get the result within {} seconds rerunning make", TIMEOUT);
+                    error!("Expected: {}", &HexSlice::new(&testcase.expected_result.0));
                     continue;
                 }
             }
@@ -120,7 +122,3 @@ impl<'a> fmt::Display for HexSlice<'a> {
         Ok(())
     }
 }
-
-
-
-

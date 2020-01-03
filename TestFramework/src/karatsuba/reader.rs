@@ -19,6 +19,7 @@ pub struct KaratsubaResult {
     pub result: BigUint,
 }
 
+pub const TIMEOUT: u64 = 10;
 
 impl fmt::Display for KaratsubaResult {
     fn fmt(&self, f: &mut Formatter) -> fmt::Result {
@@ -53,7 +54,7 @@ impl Iterator for Reader {
     fn next(&mut self) -> Option<KaratsubaResult> {
 
         let cycle_regex = Regex::new("(?:([0-9]+), )").expect("Cycle regex is invalid");
-        let result_regex = Regex::new("(?:[0-9a-z]{16})").expect("Result regex is invalid");
+        let result_regex = Regex::new("(?:[0-9a-z]{34})").expect("Result regex is invalid");
 
         let mut result = KaratsubaResult {  cycle_counts: Vec::new(), raw_output:Vec::new(), result: One::one()};
         for line in self.reader.by_ref().lines() {
@@ -68,7 +69,7 @@ impl Iterator for Reader {
             }else if result_regex.is_match(line.as_str()){
                 let hex = result_regex.captures(line.as_str()).unwrap();
                 let bytes = hex::decode(&hex[0]).expect("Failed to decode output result from hex to bytes");
-                result.result = BigUint::from_bytes_le(bytes.as_slice());
+                result.result = BigUint::from_bytes_be(bytes.as_slice());
                 return Some(result);
             }
         }
