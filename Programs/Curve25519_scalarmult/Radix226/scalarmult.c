@@ -329,6 +329,42 @@ void convert_to_radix226(unsigned int *r, unsigned char *k) {
   r[9] = (k[29] >> 2) + (k[30] << 6) + (k[31] << 14);
 }
 
+void toradix28(unsigned int h[17]) {
+
+  h[31] = (h[9] >> 14);
+  h[30] = (h[9] >> 6) & 0xff;
+  h[29] = (h[8] >> 24) + ((h[9] & 0x3f) << 2);
+  h[28] = (h[8] >> 16) & 0xff;
+  h[27] = (h[8] >> 8) & 0xff;
+  h[26] = h[8] & 0xff;
+  h[25] = (h[7] >> 18) & 0xff;
+  h[24] = (h[7] >> 10) & 0xff;
+  h[23] = (h[7] >> 2) & 0xff;
+  h[22] = (h[6] >> 20) + ((h[7] & 0x3) << 6);
+  h[21] = (h[6] >> 12) & 0xff;
+  h[20] = (h[6] >> 4) & 0xff;
+  h[19] = (h[5] >> 22) + ((h[6] & 0x0f) << 4);
+  h[18] = (h[5] >> 14)  & 0xff;
+  h[17] = (h[5] >> 6) & 0xff;
+  h[16] = (h[4] >> 24) + ((h[5] & 0x3f) << 2);;
+  h[15] = (h[4] >> 16) & 0xFF;
+  h[14] = (h[4] >> 8) & 0xFF;
+  h[13] = h[4] & 0xFF;
+  h[12] = (h[3] >> 18) & 0xFF;
+  h[11] = (h[3] >> 10) & 0xFF;
+  h[10] = (h[3] >> 2) & 0xFF;
+  h[9] = (h[2] >> 20) + ((h[3] & 3) << 6);
+  h[8] = (h[2] >> 12) & 0xFF;
+  h[7] = (h[2] >> 4) & 0xFF;
+  h[6] = (h[1] >> 22) + ((h[2] & 0x0F) << 4);
+  h[5] = (h[1] >> 14) & 0xFF;
+  h[4] = (h[1] >> 6) & 0xFF;
+  h[3] = (h[0] >> 24) + ((h[1] & 0x3f) << 2);
+  h[2] = (h[0] >> 16) & 0xFF;
+  h[1] = (h[0] >> 8) & 0xFF;
+  h[0] = h[0] & 0xFF;
+}
+
 int crypto_scalarmult(unsigned char *q, const unsigned char *n,
                       const unsigned char *p) {
   unsigned int work[96];
@@ -340,10 +376,17 @@ int crypto_scalarmult(unsigned char *q, const unsigned char *n,
   e[31] &= 127;
   e[31] |= 64;
 
-  unsigned int er[10];
+  unsigned int er[32];
   convert_to_radix226(er, e);
 
   for(int i2=0;i2<10;++i2){
+    printf("%x, ", er[i2]);
+  }
+  printf("\n");
+
+  toradix28(er);
+
+  for(int i2=0;i2<32;++i2){
     printf("%x, ", er[i2]);
   }
   printf("\n");
