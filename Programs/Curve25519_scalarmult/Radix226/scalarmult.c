@@ -109,10 +109,31 @@ static void freeze(unsigned int a[32]) {
     a[j] ^= negative & (aorig[j] ^ a[j]);
 }
 
+static void squeeze226(unsigned int a[10]) {
+  unsigned int j;
+  unsigned int u;
+  u = 0;
+  for (j = 0; j < 9; ++j) {
+    u += a[j];
+    a[j] = u & 0x3ffffff;
+    u >>= 26;
+  }
+  u += a[9];
+  a[9] = u & 0x1fffff;
+  u = 19 * (u >> 21);
+  for (j = 0; j < 9; ++j) {
+    u += a[j];
+    a[j] = u & 0x3ffffff;
+    u >>= 26;
+  }
+  u += a[9];
+  a[9] = u;
+}
+
 // multiplication of a and b with handling overflow
 // TODO make into karatsuba with split 130 125 using modified assembly from
 // poly1305
-static void mult(unsigned int out[32], const unsigned int a[32],
+void mult(unsigned int out[32], const unsigned int a[32],
                  const unsigned int b[32]) {
   unsigned int i;
   unsigned int j;
