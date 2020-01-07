@@ -35,7 +35,7 @@
 	convert_to_radix226(g226, g_bytes);
 		printf("%x, %x, %x, %x, %x, %x, %x, %x, %x, %x\n", n226[0], n226[1], n226[2], n226[3], n226[4], n226[5], n226[6], n226[7], n226[8], n226[9]);
 	printf("%x, %x, %x, %x, %x, %x, %x, %x, %x, %x\n", g226[0], g226[1], g226[2], g226[3], g226[4], g226[5], g226[6], g226[7], g226[8], g226[9]);
-	karatsuba226_3asm(r, n226, g226);
+	karatsuba226_5asm(r, n226, g226);
 	
 	printf("%x, %x, %x, %x, %x, %x, %x, %x, %x, %x\n", r[0], r[1], r[2], r[3], r[4], r[5], r[6], r[7], r[8], r[9]);
 	toradix28(r);
@@ -64,4 +64,8 @@
         printarray(q, 32);
 */
         printf("\n\n");
+    }
+
+    void print6(unsigned int a0,unsigned int a1,unsigned int a2,unsigned int a3,unsigned int a4,unsigned int a5){
+	printf("%x, %x, %x, %x, %x, %x\n", a0, a1, a2, a3, a4, a5);
     }

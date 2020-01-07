@@ -70,30 +70,30 @@ karatsuba226_3asm:
     addi a2, sp, 40     # B0B1-B2 stack location
     jal  karatsuba226_2asm # Calculate (A0A1-A2)*(B0B1-B2) =m
 
-#    lw a0, 32(sp)
+#    lw a0, 0(sp)
 #    jal printbyte
-#    lw a0, 36(sp)
+#    lw a0, 4(sp)
 #    jal printbyte
-#    lw a0, 40(sp)
+#    lw a0, 8(sp)
 #    jal printbyte
-#    lw a0, 44(sp)
+#    lw a0, 12(sp)
 #    jal printbyte
-
-   # lw  a0, 16(sp)
-   # jal printbyte 
-   # lw a0, 20(sp)
-   # jal printbyte
-   # lw a0, 24(sp)
-   # jal printbyte
-   # lw a0, 28(sp)
-   # jal printbyte
+#
+#    lw  a0, 16(sp)
+#    jal printbyte 
+#    lw a0, 20(sp)
+#    jal printbyte
+#    lw a0, 24(sp)
+#    jal printbyte
+#    lw a0, 28(sp)
+#    jal printbyte
 
     lw   a0, 8(s1)      # A2
     lw   a1, 8(s2)      # B2
     jal securemul226    # A2*B2 = y 
 
-    lw   a4, 8(sp)      # x_3
-    lw   a5, 12(sp)     # x_4
+    lw   a4, 8(sp)      # x_2
+    lw   a5, 12(sp)     # x_3
     lw   a2, 0(sp)      # x_0
     lw   a3, 4(sp)      # x_1
 
@@ -102,10 +102,10 @@ karatsuba226_3asm:
     add  a4, a0, a2     # result[2] = x_2+y_0+x_0
     add  a5, a1, a3     # result[3] = x_3+y_1+x_1
 
-    lw   t0, 20(sp)     # m_0
-    lw   t1, 24(sp)     # m_1
-    lw   t2, 28(sp)     # m_2
-    lw   t3, 32(sp)     # m_3
+    lw   t0, 16(sp)     # m_0
+    lw   t1, 20(sp)     # m_1
+    lw   t2, 24(sp)     # m_2
+    lw   t3, 28(sp)     # m_3
     add  t0, t0, s3     # for each m make it negative if multiplication flag is 0xffffff
     xor  t0, t0, s3     # otherwise leave it
     add  t1, t1, s3     # m_1
@@ -118,7 +118,7 @@ karatsuba226_3asm:
     sub  a4, a4, t0     # result[2] -= m_0
     sub  a5, a5, t1     # result[3] -= m_1
     sub  a0, a0, t2     # result[4] -= m_2
-    sub  a1, a1, t3     # result[0] -= m_3
+    sub  a1, a1, t3     # result[5] -= m_3
    
     sltz t0, a4         # underflow in result[2]
     sub  a5, a5, t0     # borrow from result[3]
@@ -131,13 +131,13 @@ karatsuba226_3asm:
     sub  a0, a0, t0     # borrow from result[4]
     neg  t0, t0         # generate mask
     and  t0, t2, t0     # 
-    add  a1, t0, a5     #
+    add  a5, t0, a5     #
 
     sltz t0, a0         # underflow in result[4]
     sub  a1, a1, t0     # borrow from result[5]
     neg  t0, t0         # generate mask
     and  t0, t2, t0     # 
-    add  a1, t0, a1     #
+    add  a0, t0, a0     #
 
     srli t0, a4, 26     # overflow in result[2]
     add  a5, a5, t0     #
@@ -164,6 +164,6 @@ karatsuba226_3asm:
     lw   s3, 64(sp)     #
     lw   s4, 60(sp)     #
     lw   ra, 56(sp)     #
-    addi sp, sp, 84     #
+    addi sp, sp, 80     #
     ret
 
