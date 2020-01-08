@@ -89,7 +89,7 @@ fn generate_testcasefile(variables: Vec<String>){
         for(int i =inlen-1;i>=0;i--){{
             printf(\"%02x\", in[i]);
         }}
-        printf(\"\\n\");
+        printf(\"\\n\");vim
     }}
 
     void convert_to_radix226(unsigned int* r, unsigned char *k){{

@@ -437,12 +437,14 @@ karatsuba226:
     and   a4, a4, s4    #
     srli  t0, a5, 26    # overflow in res[8]
     add   a6, a6, t0    #
-    and   a5, a5, s4    # overflow in res[9]
-    srli  t0, a6, 21    #
+    and   a5, a5, s4    #
+    srli  t0, a6, 21    # overflow in res[9]
     slli  t1, t0, 1     # overflow *2
     slli  t2, t0, 4     # overflow *16
     add   t1, t1, t2    # overflow *18
     add   t1, t1, t0    # overflow*19
+    li    t0, 0x1fffff  # 2^21
+    and   a6, a6, t0    # 
     add   t4, t4, t1    #
 
     srli  t0, t4, 26    # overflow in res[0]
