@@ -57,7 +57,7 @@ karatsuba226:
     sub   t4, t4, a0    #
     sub   t4, t4, t5    # A4-A9
     srai  s3, t4, 31    # sign of A0..A4-A5..A9
-    and   a0, s3, a6    # mask 2^26 with the sign
+    and   a0, s3, s4    # mask 2^26-1 with the sign
     xor   t0, t0, a0    # absolute value of A0..A4-A5..A9
     xor   t1, t1, a0    #
     xor   t2, t2, a0    #
@@ -102,7 +102,7 @@ karatsuba226:
     add   t1, t1, a1    # apply borrow
     andi  a0, a0, 1     # borrow from B2
     sub   t2, t2, a0    #
-    sub   t2, t2, t5    #
+    sub   t2, t2, t5    # B2-B7
     lw    t3, 12(s2)    # B3
     srai  a0, t2, 31    # sign of B2
     and   a1, a6, a0    # mask 2^26 with sign
@@ -120,7 +120,7 @@ karatsuba226:
     sub   t4, t4, a0    #
     sub   t4, t4, t5    # B4-B9
     srai  a1, t4, 31    # sign of B0..B4-B5..B9
-    and   a0, a1, a6    # mask 2^26 with the sign
+    and   a0, a1, s4    # mask 2^26-1 with the sign
     xor   t0, t0, a0    # absolute value of B0..B4-B5..B9
     xor   t1, t1, a0    #
     xor   t2, t2, a0    #
@@ -146,37 +146,37 @@ karatsuba226:
     sw    t2, 108(sp)   #
     sw    t3, 112(sp)   #
     sw    t4, 116(sp)   #
-
+    
     mv    a0, sp        # result address
     addi  a1, sp, 80    # address |A0..A4-A5..A9|
     addi  a2, sp, 100   # address |B0..B4-B5..B9| 
     jal   karatsuba226_5asm # multiplication of a1 and a2=m
 
+    lw a0, 0(sp)
+    jal printbyte
+    lw a0, 4(sp)
+    jal printbyte
+    lw a0, 8(sp)
+    jal printbyte
+    lw a0, 12(sp)
+    jal printbyte
+    lw a0, 16(sp)
+    jal printbyte
+    lw a0, 20(sp)
+    jal printbyte
+    lw a0, 24(sp)
+    jal printbyte
+    lw a0, 28(sp)
+    jal printbyte
+    lw a0, 32(sp)
+    jal printbyte
+    lw a0, 36(sp)
+    jal printbyte
+
     addi  a0, sp, 80    # result address
     addi  a1, s1, 20    # address A5..A9
     addi  a2, s2, 20    # address B5..B9
     jal   karatsuba226_5asm # (A5..A9)*(B5..B9) = y
-
-    #lw a0, 0(sp)
-    #jal printbyte
-    #lw a0, 4(sp)
-    #jal printbyte
-    #lw a0, 8(sp)
-    #jal printbyte
-    #lw a0, 12(sp)
-    #jal printbyte
-    #lw a0, 16(sp)
-    #jal printbyte
-    #lw a0, 20(sp)
-    #jal printbyte
-    #lw a0, 24(sp)
-    #jal printbyte
-    #lw a0, 28(sp)
-    #jal printbyte
-    #lw a0, 32(sp)
-    #jal printbyte
-    #lw a0, 36(sp)
-    #jal printbyte
 
     lw    t4, 60(sp)    # x_5
     lw    t5, 64(sp)    # x_6

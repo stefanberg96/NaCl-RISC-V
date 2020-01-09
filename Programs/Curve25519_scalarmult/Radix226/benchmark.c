@@ -1,71 +1,42 @@
 #include "benchmark.h"
 
-    void printarray(unsigned char *in, int inlen){
-        for(int i =0;i<inlen;i++){
+    void printarrayinv(unsigned int *in, int inlen){
+        for(int i =inlen-1;i>=0;i--){
             printf("%02x", in[i]);
-        }
-        printf("\n");
-    }
-
-    void printcounters(unsigned int *a, int initialoffset){
-
-           for(int i = initialoffset+3; i < 21*3;i+=3){
-               printf("%6u, ", a[i]-a[i-3]);
         }
         printf("\n");
     }
 
     void dobenchmark() {
 
-        static unsigned char g_bytes[32] = {0xb0, 0x5e, 0x73, 0x79, 0x7d, 0x7f, 0x1b, 0x81, 0xf8, 0xbb, 0xcf, 0x36, 0xd7, 0x81, 0xc, 0x20, 0x53, 0x19, 0x4e, 0x3d, 0x8c, 0x32, 0xdd, 0xfd, 0xfc, 0x1a, 0x3a, 0xae, 0x9e, 0xa3, 0x8, 0x5f};
-        static unsigned char n_bytes[32] = {0xc8, 0x6a, 0xd6, 0x8b, 0xcb, 0x7d, 0xf5, 0x43, 0xc3, 0x53, 0xec, 0xd6, 0xf4, 0xf1, 0xb, 0x6b, 0x1e, 0xb7, 0x18, 0x20, 0x2a, 0x69, 0xa, 0x63, 0xfe, 0x8c, 0x5c, 0x7d, 0x87, 0x2b, 0x9a, 0x5f};
- 
+        unsigned int a[10];
+        unsigned int b[10];
     
-        static unsigned int g[32] = {0xb0, 0x5e, 0x73, 0x79, 0x7d, 0x7f, 0x1b, 0x81, 0xf8, 0xbb, 0xcf, 0x36, 0xd7, 0x81, 0xc, 0x20, 0x53, 0x19, 0x4e, 0x3d, 0x8c, 0x32, 0xdd, 0xfd, 0xfc, 0x1a, 0x3a, 0xae, 0x9e, 0xa3, 0x8, 0x5f};
-        static unsigned int n[32] = {0xc8, 0x6a, 0xd6, 0x8b, 0xcb, 0x7d, 0xf5, 0x43, 0xc3, 0x53, 0xec, 0xd6, 0xf4, 0xf1, 0xb, 0x6b, 0x1e, 0xb7, 0x18, 0x20, 0x2a, 0x69, 0xa, 0x63, 0xfe, 0x8c, 0x5c, 0x7d, 0x87, 0x2b, 0x9a, 0x5f};
-        unsigned int er[32];
-	mult(er, n, g);
+        static unsigned char a_bytes[32] = {0x6e, 0x21, 0x85, 0x6c, 0xee, 0x47, 0x18, 0xb1, 0xed, 0x19, 0xb6, 0x98, 0x72, 0xd9, 0xd, 0x15, 0xda, 0x8b, 0xfb, 0x19, 0x4a, 0xce, 0xd3, 0x66, 0x14, 0x52, 0xab, 0xe2, 0x9a, 0xa, 0xc8, 0x4a};
+        static unsigned char b_bytes[32] = {0xff, 0x57, 0x63, 0xed, 0xd9, 0x1d, 0x19, 0x2a, 0xe4, 0xb1, 0xb5, 0x31, 0x4c, 0xd5, 0xdf, 0x5, 0xe8, 0xaf, 0x66, 0x81, 0xd1, 0xda, 0x11, 0x3d, 0xba, 0xb2, 0x75, 0xa8, 0x47, 0x4e, 0x78, 0x59};
 
-	printintarray(er, 32);
 
-	unsigned int r[32];
-	unsigned int n226[32];
-	unsigned int g226[32];
-	convert_to_radix226(n226, n_bytes);
-	convert_to_radix226(g226, g_bytes);
-		printf("%x, %x, %x, %x, %x, %x, %x, %x, %x, %x\n", n226[0], n226[1], n226[2], n226[3], n226[4], n226[5], n226[6], n226[7], n226[8], n226[9]);
-	printf("%x, %x, %x, %x, %x, %x, %x, %x, %x, %x\n", g226[0], g226[1], g226[2], g226[3], g226[4], g226[5], g226[6], g226[7], g226[8], g226[9]);
-	karatsuba226(r, n226, g226);
-	
-	printf("%x, %x, %x, %x, %x, %x, %x, %x, %x, %x\n", r[0], r[1], r[2], r[3], r[4], r[5], r[6], r[7], r[8], r[9]);
-	toradix28(r);
-	printintarray(r, 32);
+        convert_to_radix226(a, a_bytes);
+        convert_to_radix226(b,b_bytes);
 
-/*
-        unsigned int counters[3*21];
-        icachemisses();
+        printf("A: %x, %x, %x, %x, %x, %x, %x, %x, %x, %x\n", a[0], a[1], a[2], a[3], a[4], a[5], a[6], a[7], a[8], a[9]);
+        printf("B: %x, %x, %x, %x, %x, %x, %x, %x, %x, %x\n", b[0], b[1], b[2], b[3], b[4], b[5], b[6], b[7], b[8], b[9]);
 
-        unsigned char q[32];
-        for(int i =0;i<1;i++){
-            getcycles(&counters[i*3]);
-            crypto_scalarmult(q, n_bytes, g_bytes);
+        uint32_t timings[21];
+        unsigned int out[32];
+        for(int i =0;i<21;i++){
+            timings[i]=getcycles();
+            karatsuba226(out, a,b);
         }
 
-        printf("Cycle counts:          ");
-        printcounters(counters, 0);
+        for(int i=1;i<21;i++){
+            printf("%d, ",timings[i]-timings[i-1]);
+        }
+        printf("\n");
 
-        printf("Branch dir mis:        ");
-        printcounters(counters, 1);
+        printf("R: %x, %x, %x, %x, %x, %x, %x, %x, %x, %x\n", out[0], out[1], out[2], out[3], out[4], out[5], out[6], out[7], out[8], out[9]);
 
-        printf("Branch target mis:    ");
-        printcounters(counters, 2);
-
-        printf("Result: ");
-        printarray(q, 32);
-*/
-        printf("\n\n");
-    }
-
-    void print6(unsigned int a0,unsigned int a1,unsigned int a2,unsigned int a3,unsigned int a4,unsigned int a5){
-	printf("%x, %x, %x, %x, %x, %x\n", a0, a1, a2, a3, a4, a5);
+        toradix28(out);
+        printarrayinv(out,32);
+        printf("\n");
     }
