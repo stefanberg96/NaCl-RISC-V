@@ -40,3 +40,7 @@
         printarrayinv(out,32);
         printf("\n");
     }
+
+    void print6(unsigned int a0, unsigned int a1, unsigned int a2, unsigned int a3, unsigned int a4, unsigned int a5, unsigned int a6){
+	printf("%x, %x, %x, %x, %x\n", a2, a3, a4, a5, a6);
+    }

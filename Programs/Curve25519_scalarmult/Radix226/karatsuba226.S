@@ -152,26 +152,26 @@ karatsuba226:
     addi  a2, sp, 100   # address |B0..B4-B5..B9| 
     jal   karatsuba226_5asm # multiplication of a1 and a2=m
 
-    lw a0, 0(sp)
-    jal printbyte
-    lw a0, 4(sp)
-    jal printbyte
-    lw a0, 8(sp)
-    jal printbyte
-    lw a0, 12(sp)
-    jal printbyte
-    lw a0, 16(sp)
-    jal printbyte
-    lw a0, 20(sp)
-    jal printbyte
-    lw a0, 24(sp)
-    jal printbyte
-    lw a0, 28(sp)
-    jal printbyte
-    lw a0, 32(sp)
-    jal printbyte
-    lw a0, 36(sp)
-    jal printbyte
+    #lw a0, 0(sp)
+    #jal printbyte
+    #lw a0, 4(sp)
+    #jal printbyte
+    #lw a0, 8(sp)
+    #jal printbyte
+    #lw a0, 12(sp)
+    #jal printbyte
+    #lw a0, 16(sp)
+    #jal printbyte
+    #lw a0, 20(sp)
+    #jal printbyte
+    #lw a0, 24(sp)
+    #jal printbyte
+    #lw a0, 28(sp)
+    #jal printbyte
+    #lw a0, 32(sp)
+    #jal printbyte
+    #lw a0, 36(sp)
+    #jal printbyte
 
     addi  a0, sp, 80    # result address
     addi  a1, s1, 20    # address A5..A9
@@ -252,8 +252,8 @@ karatsuba226:
     add   t1, t1, t0    # y_9*19
     srli  s1, t1, 21    # y_9*608 overflow
     slli  t1, t1, 5     # y_9*608
-    add   t1, t1, s2    # y_8*608 overflow
     and   t1, t1, s4    #
+    add   t1, t1, s2    # y_8*608 overflow
     add   a6, a6, t1    # res[9] += 608*y_9
     slli  t1, s1, 1     # y_9*608 overflow *2
     slli  t2, s1, 4     # y_9*608 overflow *16
@@ -271,13 +271,9 @@ karatsuba226:
     neg   t1, t1        # create mask
     and   t1, a7, t1    # 2^26 masked
     add   t4, t4, t1    #
-    slli  t1, t4, 1     # res[0]*2
-    slli  t2, t4, 4     # res[0]*16
-    add   t1, t1, t2    # res[0]*18
-    add   t4, t4, t1    # res[0]*19
-    srli  s1, t4, 21    # res[0]*608 overflow
-    slli  t4, t4, 5     # res[0]*608_l
-    and   t4, t4, s4    # 
+    srli  t1, t4, 26    # handle overflow
+    add   t5, t5, t1    #
+    and   t4, t4, s4    #
      
     lw    t3, 28(sp)    # m_7
     add   t0, t0, s3    # negative if negflag is set other leave as is
@@ -288,14 +284,9 @@ karatsuba226:
     neg   t1, t1        # create mask
     and   t1, a7, t1    # 2^26 masked
     add   t5, t5, t1    #
-    slli  t1, t5, 1     # res[1]*2
-    slli  t2, t5, 4     # res[1]*16
-    add   t1, t1, t2    # res[1]*18
-    add   t5, t5, t1    # res[1]*19
-    srli  s2, t5, 21    # res[1]*608 overflow
-    slli  t5, t5, 5     # res[1]*608_l
+    srli  t1, t5, 26    # handle overflow
+    add   t6, t6, t1    #
     and   t5, t5, s4    #
-    add   t5, t5, s1    # res[0]*608 overflow
 
     lw    t0, 32(sp)    # m_8
     add   t3, t3, s3    # negative if negflag is set otherwise leave as is
@@ -306,14 +297,9 @@ karatsuba226:
     neg   t1, t1        # create mask
     and   t1, a7, t1    # 2^26 masked
     add   t6, t6, t1    #
-    slli  t1, t6, 1     # res[2]*2
-    slli  t2, t6, 4     # res[2]*16
-    add   t1, t1, t2    # res[2]*18
-    add   t6, t1, t6    # res[2]*19
-    srli  s1, t6, 21    # res[2]*608 overflow
-    slli  t6, t6, 5     # res[2]*608_l
+    srli  t1, t6, 26    # handle overflow
+    add   a0, a0, t1    #
     and   t6, t6, s4    #
-    add   t6, t6, s2    # res[1]*608 overflow
 
     lw    t3, 36(sp)    # m_9
     add   t0, t0, s3    # negative if negflag is set otherwise leave as is
@@ -324,14 +310,9 @@ karatsuba226:
     neg   t1, t1        # create mask
     and   t1, t1, a7    # 2^26 masked
     add   a0, a0, t1    # 
-    slli  t1, a0, 1     # res[3]*2
-    slli  t2, a0, 4     # res[3]*16
-    add   t1, t1, t2    # res[3]*18
-    add   a0, t1, a0    # res[3]*19
-    srli  s2, a0, 21    # res[3]*608 overflow
-    slli  a0, a0, 5     # res[3]*608_l
+    srli  t1, a0, 26    # handle overflow
+    add   a1, a1, t1    #
     and   a0, a0, s4    #
-    add   a0, a0, s1    # res[2]*608 overflow
 
     add   t3, t3, s3    # negative if negflag is set otherwise leave as is
     xor   t3, t3, s3    #
@@ -343,6 +324,50 @@ karatsuba226:
     sub   a2, a2, t2    # borrow 608 from res[5]
     and   t1, t1, a7    # 2^26 masked
     add   a1, a1, t1    #
+    srli  t1, a1, 26    # handle overflow
+    slli  t2, t1, 1     # overflow *2
+    slli  t3, t1, 4     # overflow*16
+    add   t2, t2, t3    # overflow*18
+    add   t1, t1, t2    # overflow*19
+    slli  t1, t1, 5     # overflow*608
+    add   a2, a2, t1    #
+    and   a1, a1, s4    #
+
+    slli  t1, t4, 1     # res[0]*2
+    slli  t2, t4, 4     # res[0]*16
+    add   t1, t1, t2    # res[0]*18
+    add   t4, t4, t1    # res[0]*19
+    srli  s1, t4, 21    # res[0]*608 overflow
+    slli  t4, t4, 5     # res[0]*608_l
+    and   t4, t4, s4    # 
+
+    slli  t1, t5, 1     # res[1]*2
+    slli  t2, t5, 4     # res[1]*16
+    add   t1, t1, t2    # res[1]*18
+    add   t5, t5, t1    # res[1]*19
+    srli  s2, t5, 21    # res[1]*608 overflow
+    slli  t5, t5, 5     # res[1]*608_l
+    and   t5, t5, s4    #
+    add   t5, t5, s1    # res[0]*608 overflow
+    
+    slli  t1, t6, 1     # res[2]*2
+    slli  t2, t6, 4     # res[2]*16
+    add   t1, t1, t2    # res[2]*18
+    add   t6, t1, t6    # res[2]*19
+    srli  s1, t6, 21    # res[2]*608 overflow
+    slli  t6, t6, 5     # res[2]*608_l
+    and   t6, t6, s4    #
+    add   t6, t6, s2    # res[1]*608 overflow
+
+    slli  t1, a0, 1     # res[3]*2
+    slli  t2, a0, 4     # res[3]*16
+    add   t1, t1, t2    # res[3]*18
+    add   a0, t1, a0    # res[3]*19
+    srli  s2, a0, 21    # res[3]*608 overflow
+    slli  a0, a0, 5     # res[3]*608_l
+    and   a0, a0, s4    #
+    add   a0, a0, s1    # res[2]*608 overflow
+
     slli  t1, a1, 1     # res[4]*2
     slli  t2, a1, 4     # res[4]*16
     add   t1, t1, t2    # res[4]*18
@@ -351,13 +376,13 @@ karatsuba226:
     slli  a1, a1, 5     # res[4]*608_l
     and   a1, a1, s4    #
     add   a1, a1, s2    # res[3]*608 overflow
+    add   a2, a2, s1    # res[5] += res[4]*608 overflow
 
     lw    t0, 40(sp)    # x_0
     lw    t1, 44(sp)    # x_1
     lw    t2, 48(sp)    # x_2
     lw    s2, 52(sp)    # x_3
     lw    t3, 56(sp)    # x_4
-    add   a2, a2, s1    # res[5] += res[4]*608 overflow
     add   a2, a2, t0    # res[5] += x_0
     add   t4, t4, t0    # res[0] += x_0
     lw    t0, 0(sp)     # m_0
@@ -371,6 +396,8 @@ karatsuba226:
     add   a1, a1, t3    # res[4] += x_4
 
     lw    t3, 4(sp)     # m_1
+    add   t0, t0, s3    # negative if negflag otherwise leave as is
+    xor   t0, t0, s3    #
     sub   a2, a2, t0    # res[5] -= m_0
     sltz  t1, a2        # handle underflow
     sub   a3, a3, t1    # borrow from res[6]
@@ -379,6 +406,8 @@ karatsuba226:
     add   a2, a2, t1    #
 
     lw    t0, 8(sp)     # m_2
+    add   t3, t3, s3    # negative if negflag otherwise leave as is
+    xor   t3, t3, s3    #
     sub   a3, a3, t3    # res[6] -= m_1
     sltz  t1, a3        # handle underflow
     sub   a4, a4, t1    # borrow from res[7]
@@ -387,6 +416,8 @@ karatsuba226:
     add   a3, a3, t1    #
 
     lw    t3, 12(sp)    # m_3
+    add   t0, t0, s3    # negative if negflag otherwise leave as is
+    xor   t0, t0, s3    #
     sub   a4, a4, t0    # res[7] -= m_2
     sltz  t1, a4        # handle underflow
     sub   a5, a5, t1    # borrow from res[8]
@@ -395,6 +426,8 @@ karatsuba226:
     add   a4, a4, t1    #
 
     lw    t0, 16(sp)    # m_4
+    add   t3, t3, s3    # negative if negflag otherwise leave as is
+    xor   t3, t3, s3    #
     sub   a5, a5, t3    # res[8] -= m_3
     sltz  t1, a5        # handle underflow
     sub   a6, a6, t1    # borrow from res[9]
@@ -402,6 +435,8 @@ karatsuba226:
     and   t1, t1, a7    # 2^26 masked
     add   a5, a5, t1    #
 
+    add   t0, t0, s3    # negative if negflag otherwise leave as is
+    xor   t0, t0, s3    #
     sub   a6, a6, t0    # res[9] -= m_4
     sltz  t1, a6        # handle underflow
     neg   t1, t1        # create mask
