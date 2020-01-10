@@ -131,8 +131,6 @@ static void squeeze226(unsigned int a[10]) {
 }
 
 // multiplication of a and b with handling overflow
-// TODO make into karatsuba with split 130 125 using modified assembly from
-// poly1305
 void mult(unsigned int out[32], const unsigned int a[32],
                  const unsigned int b[32]) {
   unsigned int i;

@@ -26,13 +26,14 @@
         unsigned int out[32];
         for(int i =0;i<21;i++){
             timings[i]=getcycles();
-            karatsuba226(out, a,b);
+            mul121665asm(out, a);
         }
 
         for(int i=1;i<21;i++){
             printf("%d, ",timings[i]-timings[i-1]);
         }
         printf("\n");
+	printf("%x, %x, %x, %x, %x, %x, %x, %x, %x, %x\n", out[0], out[1], out[2], out[3], out[4], out[5], out[6], out[7], out[8], out[9]);
         toradix28(out);
         printarrayinv(out,32);
         printf("\n");
