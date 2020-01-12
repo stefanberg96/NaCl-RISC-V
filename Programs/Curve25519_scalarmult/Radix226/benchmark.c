@@ -26,7 +26,7 @@
         unsigned int out[32];
         for(int i =0;i<21;i++){
             timings[i]=getcycles();
-            mul121665asm(out, a);
+            square226_2asm(out, a);
         }
 
         for(int i=1;i<21;i++){
