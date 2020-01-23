@@ -17,8 +17,8 @@ karatsuba226_2asm:
     mv      s1, a1      # A pointer
     mv      s2, a2      # B pointer
 
-    lw      a0, 0(a1)   # load A0
-    lw      a1, 0(a2)   # load B0
+    lw      a0, 0(s1)   # load A0
+    lw      a1, 0(s2)   # load B0
     jal     securemul226 # mul A0*B0
 
     sw      a0, 0(s0)   # res[0]=A0*B0_l

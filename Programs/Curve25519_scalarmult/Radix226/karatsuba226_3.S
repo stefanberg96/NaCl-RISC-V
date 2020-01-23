@@ -91,7 +91,6 @@ karatsuba226_3asm:
     lw   a0, 8(s1)      # A2
     lw   a1, 8(s2)      # B2
     jal securemul226    # A2*B2 = y 
-
     lw   a4, 8(sp)      # x_2
     lw   a5, 12(sp)     # x_3
     lw   a2, 0(sp)      # x_0

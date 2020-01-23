@@ -27,3 +27,8 @@ icachemisses:
 getsp:
     mv a0, sp
     ret
+
+.globl getra
+getra:
+    lw a0, 1244(sp)
+    ret

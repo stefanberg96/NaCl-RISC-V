@@ -10,7 +10,7 @@ Derived from public domain code by D. J. Bernstein.
 // addition of a and b
 // possible need to squeeze for the karatsuba
 void add(unsigned int out[32], const unsigned int a[32],
-                const unsigned int b[32]) {
+         const unsigned int b[32]) {
   unsigned int j;
   unsigned int u;
   u = 0;
@@ -26,7 +26,7 @@ void add(unsigned int out[32], const unsigned int a[32],
 // subtraction of a and b (TODO check if negative numbers are expected, since
 // this could screw with my karatsuba mult)
 void sub(unsigned int out[32], const unsigned int a[32],
-                const unsigned int b[32]) {
+         const unsigned int b[32]) {
   unsigned int j;
   unsigned int u;
   u = 218;
@@ -42,7 +42,7 @@ void sub(unsigned int out[32], const unsigned int a[32],
 // addition of a and b
 // possible need to squeeze for the karatsuba
 void add226(unsigned int out[10], const unsigned int a[10],
-                const unsigned int b[10]) {
+            const unsigned int b[10]) {
   unsigned int j;
   unsigned int u;
   u = 0;
@@ -53,11 +53,12 @@ void add226(unsigned int out[10], const unsigned int a[10],
   }
   u += a[9] + b[9];
   out[9] = u;
+  squeeze226(out);
 }
 
-// subtraction of a and b 
+// subtraction of a and b
 void sub226(unsigned int out[10], const unsigned int a[10],
-                const unsigned int b[10]) {
+            const unsigned int b[10]) {
   unsigned int j;
   unsigned long long u;
   u = 0x3fffda0;
@@ -67,6 +68,8 @@ void sub226(unsigned int out[10], const unsigned int a[10],
     u >>= 26;
   }
   u += a[9] - b[9];
+  out[9] = u;
+  squeeze226(out);
 }
 
 // handle overflow (TODO possibly use overflow from the karat=uba assembly)
@@ -109,7 +112,7 @@ static void freeze(unsigned int a[32]) {
     a[j] ^= negative & (aorig[j] ^ a[j]);
 }
 
-static void squeeze226(unsigned int a[10]) {
+void squeeze226(unsigned int a[10]) {
   unsigned int j;
   unsigned int u;
   u = 0;
@@ -132,7 +135,7 @@ static void squeeze226(unsigned int a[10]) {
 
 // multiplication of a and b with handling overflow
 void mult(unsigned int out[32], const unsigned int a[32],
-                 const unsigned int b[32]) {
+          const unsigned int b[32]) {
   unsigned int i;
   unsigned int j;
   unsigned int u;
@@ -213,7 +216,7 @@ static void crypto_select(unsigned int p[64], unsigned int q[64],
 
 // main loop of basic operations
 // work is the group element and e is the scalar
-static void mainloop(unsigned int work[64], const unsigned char e[32]) {
+void mainloop(unsigned int work[64], const unsigned char e[32]) {
   unsigned int xzm1[64];
   unsigned int xzm[64];
   unsigned int xzmb[64];
@@ -243,13 +246,13 @@ static void mainloop(unsigned int work[64], const unsigned char e[32]) {
   xzm[0] = 1;
   for (j = 1; j < 64; ++j)
     xzm[j] = 0;
-
+  int debug = 0;
   for (pos = 254; pos >= 0; --pos) {
     // select each bit from e
     b = e[pos / 8] >> (pos & 7);
     b &= 1;
     // if b==1 then xzmb = xzm xzm1b = xzm1 else
-    //              xzmb= xzm1 xzmb1= xzmb
+    //              xzmb= xzm1 xzm1b= xzm
     crypto_select(xzmb, xzm1b, xzm, xzm1, b);
 
     add(a0, xzmb, xzmb + 32);
@@ -269,15 +272,126 @@ static void mainloop(unsigned int work[64], const unsigned char e[32]) {
     mult(xznb, b0, b0 + 32);
     mult(xznb + 32, s, u);
     square(xzn1b, c1);
-
     mult(xzn1b + 32, r, work);
+
     // if b==1 then xzmb = xzm xzm1b = xzm1 else
     //              xzmb= xzm1 xzmb1= xzmb
     crypto_select(xzm, xzm1, xznb, xzn1b, b);
+    /*printf("bit:%d\n",  pos);
+    printf("b:%d\n", b);
+    printintarray(xzm, 64);
+    printintarray(xzm1b, 64);*/
   }
 
   for (j = 0; j < 64; ++j)
     work[j] = xzm[j];
+}
+
+void mainloop226(unsigned int work[20], const unsigned int e[10]) {
+  unsigned int xzm1[20];
+  unsigned int xzm[20];
+  unsigned int a0[20];
+  unsigned int a1[20];
+  unsigned int b0[20];
+  int i;
+  int j;
+  unsigned int b;
+  int pos;
+
+  for (j = 0; j < 10; ++j)
+    xzm1[j] = work[j];
+  xzm1[10] = 1;
+  for (j = 11; j < 20; ++j)
+    xzm1[j] = 0;
+
+  xzm[0] = 1;
+  for (j = 1; j < 20; ++j)
+    xzm[j] = 0;
+  i = 9;
+  for (j = 20; j >= 0; --j) {
+    // select each bit from e
+    b = (e[i]) >> (j);
+    b &= 1;
+    // if b==1 then xzmb = xzm xzm1b = xzm1 else
+    //              xzmb= xzm1 xzmb1= xzmb
+    crypto_select_asm(xzm, xzm1, xzm, xzm1, b);
+
+    add226(a0, xzm, xzm + 10);
+    sub226(a0 + 10, xzm, xzm + 10);
+
+    add226(a1, xzm1, xzm1 + 10);
+    sub226(a1 + 10, xzm1, xzm1 + 10);
+
+    square226(b0, a0);
+    square226(b0 + 10, a0 + 10);
+
+    karatsuba226(a0, a1 + 10, a0);
+    karatsuba226(a0 + 10, a1, a0 + 10);
+
+    add226(a1, a0 + 10, a0);
+    sub226(a1 + 10, a0 + 10, a0);
+
+    square226(a0, a1 + 10);
+    karatsuba226(xzm1 + 10, a0, work);
+    square226(xzm1, a1);
+
+    sub226(a1, b0, b0 + 10);
+
+    mul121665asm(a1 + 10, a1);
+
+    add226(a1 + 10, a1 + 10, b0);
+
+    karatsuba226(xzm, b0, b0 + 10);
+    karatsuba226(xzm + 10, a1, a1 + 10);
+
+    crypto_select_asm(xzm, xzm1, xzm, xzm1, b);
+  }
+
+  for (i = 8; i >= 0; --i) {
+    for (j = 25; j >= 0; --j) {
+      // select each bit from e
+      b = (e[i]) >> (j);
+      b &= 1;
+      // if b==1 then xzmb = xzm xzm1b = xzm1 else
+      //              xzmb= xzm1 xzmb1= xzmb
+      crypto_select_asm(xzm, xzm1, xzm, xzm1, b);
+
+      add226(a0, xzm, xzm + 10);
+      sub226(a0 + 10, xzm, xzm + 10);
+
+      add226(a1, xzm1, xzm1 + 10);
+      sub226(a1 + 10, xzm1, xzm1 + 10);
+
+      square226(b0, a0);
+      square226(b0 + 10, a0 + 10);
+
+      karatsuba226(a0, a1 + 10, a0);
+      karatsuba226(a0 + 10, a1, a0 + 10);
+
+      add226(a1, a0 + 10, a0);
+      sub226(a1 + 10, a0 + 10, a0);
+
+      square226(a0, a1 + 10);
+      karatsuba226(xzm1 + 10, a0, work);
+      square226(xzm1, a1);
+
+      sub226(a1, b0, b0 + 10);
+
+      mul121665asm(a1 + 10, a1);
+
+      add226(a1 + 10, a1 + 10, b0);
+
+      karatsuba226(xzm, b0, b0 + 10);
+      karatsuba226(xzm + 10, a1, a1 + 10);
+
+      crypto_select_asm(xzm, xzm1, xzm, xzm1, b);
+    }
+  }
+
+  for (j = 0; j < 20; ++j)
+    work[j] = xzm[j];
+
+  return;
 }
 
 // no idea what this does
@@ -370,11 +484,24 @@ void convert_to_radix226(unsigned int *r, unsigned char *k) {
   r[1] = (k[3] >> 2) + (k[4] << 6) + (k[5] << 14) + ((k[6] & 15) << 22);
   r[2] = (k[6] >> 4) + (k[7] << 4) + (k[8] << 12) + ((k[9] & 63) << 20);
   r[3] = (k[9] >> 6) + (k[10] << 2) + ((k[11]) << 10) + (k[12] << 18);
-  r[4] = k[13] + (k[14] << 8) + (k[15] << 16) + ((k[16]&3) << 24);
+  r[4] = k[13] + (k[14] << 8) + (k[15] << 16) + ((k[16] & 3) << 24);
   r[5] = (k[16] >> 2) + (k[17] << 6) + (k[18] << 14) + ((k[19] & 15) << 22);
   r[6] = (k[19] >> 4) + (k[20] << 4) + (k[21] << 12) + ((k[22] & 63) << 20);
   r[7] = (k[22] >> 6) + (k[23] << 2) + ((k[24]) << 10) + (k[25] << 18);
-  r[8] = k[26] + (k[27] << 8) + (k[28] << 16) + ((k[29]&3) << 24);
+  r[8] = k[26] + (k[27] << 8) + (k[28] << 16) + ((k[29] & 3) << 24);
+  r[9] = (k[29] >> 2) + (k[30] << 6) + (k[31] << 14);
+}
+
+void convert_to_radix226_int(unsigned int *r, unsigned int *k) {
+  r[0] = k[0] + (k[1] << 8) + (k[2] << 16) + ((k[3] & 3) << 24);
+  r[1] = (k[3] >> 2) + (k[4] << 6) + (k[5] << 14) + ((k[6] & 15) << 22);
+  r[2] = (k[6] >> 4) + (k[7] << 4) + (k[8] << 12) + ((k[9] & 63) << 20);
+  r[3] = (k[9] >> 6) + (k[10] << 2) + ((k[11]) << 10) + (k[12] << 18);
+  r[4] = k[13] + (k[14] << 8) + (k[15] << 16) + ((k[16] & 3) << 24);
+  r[5] = (k[16] >> 2) + (k[17] << 6) + (k[18] << 14) + ((k[19] & 15) << 22);
+  r[6] = (k[19] >> 4) + (k[20] << 4) + (k[21] << 12) + ((k[22] & 63) << 20);
+  r[7] = (k[22] >> 6) + (k[23] << 2) + ((k[24]) << 10) + (k[25] << 18);
+  r[8] = k[26] + (k[27] << 8) + (k[28] << 16) + ((k[29] & 3) << 24);
   r[9] = (k[29] >> 2) + (k[30] << 6) + (k[31] << 14);
 }
 
@@ -393,9 +520,10 @@ void toradix28(unsigned int h[32]) {
   h[21] = (h[6] >> 12) & 0xff;
   h[20] = (h[6] >> 4) & 0xff;
   h[19] = (h[5] >> 22) + ((h[6] & 0x0f) << 4);
-  h[18] = (h[5] >> 14)  & 0xff;
+  h[18] = (h[5] >> 14) & 0xff;
   h[17] = (h[5] >> 6) & 0xff;
-  h[16] = (h[4] >> 24) + ((h[5] & 0x3f) << 2);;
+  h[16] = (h[4] >> 24) + ((h[5] & 0x3f) << 2);
+  ;
   h[15] = (h[4] >> 16) & 0xFF;
   h[14] = (h[4] >> 8) & 0xFF;
   h[13] = h[4] & 0xFF;
@@ -430,8 +558,8 @@ int crypto_scalarmult(unsigned char *q, const unsigned char *n,
 
   for (i = 0; i < 32; ++i)
     work[i] = p[i];
-  unsigned int work226[32]; 
-  convert_to_radix226(work226, work);
+  unsigned int work226[32];
+  convert_to_radix226_int(work226, work);
 
   printf("before mainloop\n");
   mainloop(work, e);
