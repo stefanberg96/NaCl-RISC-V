@@ -296,7 +296,6 @@ void mainloop226(unsigned int work[20], const unsigned int e[10]) {
   int i;
   int j;
   unsigned int b;
-  int pos;
 
   for (j = 0; j < 10; ++j)
     xzm1[j] = work[j];

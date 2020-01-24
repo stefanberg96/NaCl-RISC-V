@@ -19,7 +19,7 @@ reset:
 
 
 hex: $(OBJS)
-	 $(riscv64-unknown-elf-gcc)/bin/riscv64-unknown-elf-gcc  -march=rv32imac -mabi=ilp32 -mcmodel=medlow -ffunction-sections -fdata-sections -I$(freedom-e-sdk)/bsp/sifive-hifive1-revb/install/include -Os -g  -Wl,--gc-sections -Wl,-Map,program.map -nostartfiles -nostdlib -L$(freedom-e-sdk)/bsp/sifive-hifive1-revb/install/lib/debug/ -Xlinker --defsym=__stack_size=0x600 -T$(freedom-e-sdk)/bsp/sifive-hifive1-revb/metal.default.lds $(OBJS) -Wl,--start-group -lc -lgcc -lmetal -lmetal-gloss -Wl,--end-group -Wl,--print-memory-usage -o program.elf
+	 $(riscv64-unknown-elf-gcc)/bin/riscv64-unknown-elf-gcc  -march=rv32imac -mabi=ilp32 -mcmodel=medlow -ffunction-sections -fdata-sections -I$(freedom-e-sdk)/bsp/sifive-hifive1-revb/install/include -Os -g  -Wl,--gc-sections -Wl,-Map,program.map -nostartfiles -nostdlib -L$(freedom-e-sdk)/bsp/sifive-hifive1-revb/install/lib/debug/ -Xlinker --defsym=__stack_size=0x1200 -T$(freedom-e-sdk)/bsp/sifive-hifive1-revb/metal.default.lds $(OBJS) -Wl,--start-group -lc -lgcc -lmetal -lmetal-gloss -Wl,--end-group -Wl,--print-memory-usage -o program.elf
 	$(riscv64-unknown-elf-gcc)/bin/riscv64-unknown-elf-objcopy -O ihex program.elf program.hex
 
 headers: hex
@@ -32,7 +32,7 @@ main.o: main.c
 	clang -O3 -c $< --target=riscv32 -march=rv32ia -I$(freedom-e-sdk)/freedom-metal
 
 %.o: %.c
-	clang -O3 -c $< --target=riscv32 -march=rv32ia -I$(freedom-e-sdk)/freedom-metal
+	clang -O0 -c $< --target=riscv32 -march=rv32ia -I$(freedom-e-sdk)/freedom-metal
 
 %.o: %.S
 	clang -O0 -c $< --target=riscv32 -march=rv32ia
