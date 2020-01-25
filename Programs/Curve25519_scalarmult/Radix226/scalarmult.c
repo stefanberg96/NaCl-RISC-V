@@ -420,7 +420,7 @@ static void recip(unsigned int out[32], const unsigned int z[32]) {
   /* 2^8 - 2^3 */ square(t0, t1);
   /* 2^9 - 2^4 */ square(t1, t0);
   /* 2^10 - 2^5 */ square(t0, t1);
-  /* 2^10 - 2^0 */ mult(z2_10_0, t0, z2_5_0);
+  /* 2^10 - 2^0 */ mult(z2_10_0, t0, z2_5_0); //last use z2_5_0
 
   /* 2^11 - 2^1 */ square(t0, z2_10_0);
   /* 2^12 - 2^2 */ square(t1, t0);
@@ -436,7 +436,7 @@ static void recip(unsigned int out[32], const unsigned int z[32]) {
     square(t0, t1);
     square(t1, t0);
   }
-  /* 2^40 - 2^0 */ mult(t0, t1, z2_20_0);
+  /* 2^40 - 2^0 */ mult(t0, t1, z2_20_0); //last use of z2_20_0
 
   /* 2^41 - 2^1 */ square(t1, t0);
   /* 2^42 - 2^2 */ square(t0, t1);
@@ -444,7 +444,7 @@ static void recip(unsigned int out[32], const unsigned int z[32]) {
     square(t1, t0);
     square(t0, t1);
   }
-  /* 2^50 - 2^0 */ mult(z2_50_0, t0, z2_10_0);
+  /* 2^50 - 2^0 */ mult(z2_50_0, t0, z2_10_0); //last use z2_10_0
 
   /* 2^51 - 2^1 */ square(t0, z2_50_0);
   /* 2^52 - 2^2 */ square(t1, t0);
@@ -460,7 +460,7 @@ static void recip(unsigned int out[32], const unsigned int z[32]) {
     square(t1, t0);
     square(t0, t1);
   }
-  /* 2^200 - 2^0 */ mult(t1, t0, z2_100_0);
+  /* 2^200 - 2^0 */ mult(t1, t0, z2_100_0);//lst use z2_100_0
 
   /* 2^201 - 2^1 */ square(t0, t1);
   /* 2^202 - 2^2 */ square(t1, t0);
@@ -468,7 +468,7 @@ static void recip(unsigned int out[32], const unsigned int z[32]) {
     square(t0, t1);
     square(t1, t0);
   }
-  /* 2^250 - 2^0 */ mult(t0, t1, z2_50_0);
+  /* 2^250 - 2^0 */ mult(t0, t1, z2_50_0); //last use z2_50_0
 
   /* 2^251 - 2^1 */ square(t1, t0);
   /* 2^252 - 2^2 */ square(t0, t1);
@@ -476,6 +476,90 @@ static void recip(unsigned int out[32], const unsigned int z[32]) {
   /* 2^254 - 2^4 */ square(t0, t1);
   /* 2^255 - 2^5 */ square(t1, t0);
   /* 2^255 - 21 */ mult(out, t1, z11);
+}
+
+void recip226(unsigned int out[10], const unsigned int z[10]) {
+  unsigned int z2[10];
+  unsigned int z9[10];
+  unsigned int z11[10];
+  unsigned int z2_5_0[10];
+  unsigned int z2_10_0[10];
+  unsigned int z2_20_0[10];
+  unsigned int z2_50_0[10];
+  unsigned int z2_100_0[10];
+  unsigned int t0[10];
+  unsigned int t1[10];
+  int i;
+
+  /* 2 */ square226(z2, z);
+  /* 4 */ square226(t1, z2);
+  /* 8 */ square226(t0, t1);
+  /* 9 */ karatsuba226(z9, t0, z);
+  /* 11 */ karatsuba226(z11, z9, z2);
+  /* 22 */ square226(t0, z11);
+  /* 2^5 - 2^0 = 31 */ karatsuba226(z2_5_0, t0, z9);
+
+  /* 2^6 - 2^1 */ square226(t0, z2_5_0);
+  /* 2^7 - 2^2 */ square226(t1, t0);
+  /* 2^8 - 2^3 */ square226(t0, t1);
+  /* 2^9 - 2^4 */ square226(t1, t0);
+  /* 2^10 - 2^5 */ square226(t0, t1);
+  /* 2^10 - 2^0 */ karatsuba226(z2_10_0, t0, z2_5_0); //last use z2_5_0
+
+  /* 2^11 - 2^1 */ square226(t0, z2_10_0);
+  /* 2^12 - 2^2 */ square226(t1, t0);
+  /* 2^20 - 2^10 */ for (i = 2; i < 10; i += 2) {
+    square226(t0, t1);
+    square226(t1, t0);
+  }
+  /* 2^20 - 2^0 */ karatsuba226(z2_20_0, t1, z2_10_0);
+
+  /* 2^21 - 2^1 */ square226(t0, z2_20_0);
+  /* 2^22 - 2^2 */ square226(t1, t0);
+  /* 2^40 - 2^20 */ for (i = 2; i < 20; i += 2) {
+    square226(t0, t1);
+    square226(t1, t0);
+  }
+  /* 2^40 - 2^0 */ karatsuba226(t0, t1, z2_20_0); //last use of z2_20_0
+
+  /* 2^41 - 2^1 */ square226(t1, t0);
+  /* 2^42 - 2^2 */ square226(t0, t1);
+  /* 2^50 - 2^10 */ for (i = 2; i < 10; i += 2) {
+    square226(t1, t0);
+    square226(t0, t1);
+  }
+  /* 2^50 - 2^0 */ karatsuba226(z2_50_0, t0, z2_10_0); //last use z2_10_0
+
+  /* 2^51 - 2^1 */ square226(t0, z2_50_0);
+  /* 2^52 - 2^2 */ square226(t1, t0);
+  /* 2^100 - 2^50 */ for (i = 2; i < 50; i += 2) {
+    square226(t0, t1);
+    square226(t1, t0);
+  }
+  /* 2^100 - 2^0 */ karatsuba226(z2_100_0, t1, z2_50_0);
+
+  /* 2^101 - 2^1 */ square226(t1, z2_100_0);
+  /* 2^102 - 2^2 */ square226(t0, t1);
+  /* 2^200 - 2^100 */ for (i = 2; i < 100; i += 2) {
+    square226(t1, t0);
+    square226(t0, t1);
+  }
+  /* 2^200 - 2^0 */ karatsuba226(t1, t0, z2_100_0);//lst use z2_100_0
+
+  /* 2^201 - 2^1 */ square226(t0, t1);
+  /* 2^202 - 2^2 */ square226(t1, t0);
+  /* 2^250 - 2^50 */ for (i = 2; i < 50; i += 2) {
+    square226(t0, t1);
+    square226(t1, t0);
+  }
+  /* 2^250 - 2^0 */ karatsuba226(t0, t1, z2_50_0); //last use z2_50_0
+
+  /* 2^251 - 2^1 */ square226(t1, t0);
+  /* 2^252 - 2^2 */ square226(t0, t1);
+  /* 2^253 - 2^3 */ square226(t1, t0);
+  /* 2^254 - 2^4 */ square226(t0, t1);
+  /* 2^255 - 2^5 */ square226(t1, t0);
+  /* 2^255 - 21 */ karatsuba226(out, t1, z11);
 }
 
 void convert_to_radix226(unsigned int *r, unsigned char *k) {
@@ -490,6 +574,29 @@ void convert_to_radix226(unsigned int *r, unsigned char *k) {
   r[8] = k[26] + (k[27] << 8) + (k[28] << 16) + ((k[29] & 3) << 24);
   r[9] = (k[29] >> 2) + (k[30] << 6) + (k[31] << 14);
 }
+
+ void convert_to_radix226_test(unsigned int *r, unsigned int *k) {
+  r[0] = k[0] + (k[1] << 8) + (k[2] << 16) + ((k[3] & 3) << 24);
+  r[1] = (k[3] >> 2) + (k[4] << 6) + (k[5] << 14) + ((k[6] & 15) << 22);
+  r[2] = (k[6] >> 4) + (k[7] << 4) + (k[8] << 12) + ((k[9] & 63) << 20);
+  r[3] = (k[9] >> 6) + (k[10] << 2) + ((k[11]) << 10) + (k[12] << 18);
+  r[4] = k[13] + (k[14] << 8) + (k[15] << 16) + ((k[16]&3) << 24);
+  r[5] = (k[16] >> 2) + (k[17] << 6) + (k[18] << 14) + ((k[19] & 15) << 22);
+  r[6] = (k[19] >> 4) + (k[20] << 4) + (k[21] << 12) + ((k[22] & 63) << 20);
+  r[7] = (k[22] >> 6) + (k[23] << 2) + ((k[24]) << 10) + (k[25] << 18);
+  r[8] = k[26] + (k[27] << 8) + (k[28] << 16) + ((k[29]&3) << 24);
+  r[9] = (k[29] >> 2) + (k[30] << 6) + (k[31] << 14);
+  r[10] = k[32] + (k[33] << 8) + (k[34] << 16) + ((k[35] & 3) << 24);
+  r[11] = (k[35] >> 2) + (k[36] << 6) + (k[37] << 14) + ((k[38] & 15) << 22);
+  r[12] = (k[38] >> 4) + (k[39] << 4) + (k[40] << 12) + ((k[41] & 63) << 20);
+  r[13] = (k[41] >> 6) + (k[42] << 2) + ((k[43]) << 10) + (k[44] << 18);
+  r[14] = k[45] + (k[46] << 8) + (k[47] << 16) + ((k[48]&3) << 24);
+  r[15] = (k[48] >> 2) + (k[49] << 6) + (k[50] << 14) + ((k[51] & 15) << 22);
+  r[16] = (k[51] >> 4) + (k[52] << 4) + (k[53] << 12) + ((k[54] & 63) << 20);
+  r[17] = (k[54] >> 6) + (k[55] << 2) + ((k[56]) << 10) + (k[57] << 18);
+  r[18] = k[58] + (k[59] << 8) + (k[60] << 16) + ((k[61]&3) << 24);
+  r[19] = (k[61] >> 2) + (k[62] << 6) + (k[63] << 14);
+} 
 
 void convert_to_radix226_int(unsigned int *r, unsigned int *k) {
   r[0] = k[0] + (k[1] << 8) + (k[2] << 16) + ((k[3] & 3) << 24);
@@ -541,6 +648,73 @@ void toradix28(unsigned int h[32]) {
   h[0] = h[0] & 0xFF;
 }
 
+void toradix28_20(unsigned int out[32], unsigned int in[20]) {
+  out[63] = (in[19] >> 14);
+  out[62] = (in[19] >> 6) & 0xff;
+  out[61] = (in[18] >> 24) + ((in[19] & 0x3f) << 2);
+  out[60] = (in[18] >> 16) & 0xff;
+  out[59] = (in[18] >> 8) & 0xff;
+  out[58] = in[18] & 0xff;
+  out[57] = (in[17] >> 18) & 0xff;
+  out[56] = (in[17] >> 10) & 0xff;
+  out[55] = (in[17] >> 2) & 0xff;
+  out[54] = (in[16] >> 20) + ((in[17] & 0x3) << 6);
+  out[53] = (in[16] >> 12) & 0xff;
+  out[52] = (in[16] >> 4) & 0xff;
+  out[51] = (in[15] >> 22) + ((in[16] & 0x0f) << 4);
+  out[50] = (in[15] >> 14) & 0xff;
+  out[49] = (in[15] >> 6) & 0xff;
+  out[48] = (in[14] >> 24) + ((in[15] & 0x3f) << 2);
+  out[47] = (in[14] >> 16) & 0xFF;
+  out[46] = (in[14] >> 8) & 0xFF;
+  out[45] = in[14] & 0xFF;
+  out[44] = (in[13] >> 18) & 0xFF;
+  out[43] = (in[13] >> 10) & 0xFF;
+  out[42] = (in[13] >> 2) & 0xFF;
+  out[41] = (in[12] >> 20) + ((in[13] & 3) << 6);
+  out[40] = (in[12] >> 12) & 0xFF;
+  out[39] = (in[12] >> 4) & 0xFF;
+  out[38] = (in[11] >> 22) + ((in[12] & 0x0F) << 4);
+  out[37] = (in[11] >> 14) & 0xFF;
+  out[36] = (in[11] >> 6) & 0xFF;
+  out[35] = (in[10] >> 24) + ((in[11] & 0x3f) << 2);
+  out[34] = (in[10] >> 16) & 0xFF;
+  out[33] = (in[10] >> 8) & 0xFF;
+  out[32] = in[10] & 0xFF;
+  out[31] = (in[9] >> 14);
+  out[30] = (in[9] >> 6) & 0xff;
+  out[29] = (in[8] >> 24) + ((in[9] & 0x3f) << 2);
+  out[28] = (in[8] >> 16) & 0xff;
+  out[27] = (in[8] >> 8) & 0xff;
+  out[26] = in[8] & 0xff;
+  out[25] = (in[7] >> 18) & 0xff;
+  out[24] = (in[7] >> 10) & 0xff;
+  out[23] = (in[7] >> 2) & 0xff;
+  out[22] = (in[6] >> 20) + ((in[7] & 0x3) << 6);
+  out[21] = (in[6] >> 12) & 0xff;
+  out[20] = (in[6] >> 4) & 0xff;
+  out[19] = (in[5] >> 22) + ((in[6] & 0x0f) << 4);
+  out[18] = (in[5] >> 14) & 0xff;
+  out[17] = (in[5] >> 6) & 0xff;
+  out[16] = (in[4] >> 24) + ((in[5] & 0x3f) << 2);
+  out[15] = (in[4] >> 16) & 0xFF;
+  out[14] = (in[4] >> 8) & 0xFF;
+  out[13] = in[4] & 0xFF;
+  out[12] = (in[3] >> 18) & 0xFF;
+  out[11] = (in[3] >> 10) & 0xFF;
+  out[10] = (in[3] >> 2) & 0xFF;
+  out[9] = (in[2] >> 20) + ((in[3] & 3) << 6);
+  out[8] = (in[2] >> 12) & 0xFF;
+  out[7] = (in[2] >> 4) & 0xFF;
+  out[6] = (in[1] >> 22) + ((in[2] & 0x0F) << 4);
+  out[5] = (in[1] >> 14) & 0xFF;
+  out[4] = (in[1] >> 6) & 0xFF;
+  out[3] = (in[0] >> 24) + ((in[1] & 0x3f) << 2);
+  out[2] = (in[0] >> 16) & 0xFF;
+  out[1] = (in[0] >> 8) & 0xFF;
+  out[0] = in[0] & 0xFF;
+}
+
 int crypto_scalarmult(unsigned char *q, const unsigned char *n,
                       const unsigned char *p) {
   unsigned int work[96];
@@ -557,12 +731,14 @@ int crypto_scalarmult(unsigned char *q, const unsigned char *n,
 
   for (i = 0; i < 32; ++i)
     work[i] = p[i];
-  unsigned int work226[32];
-  convert_to_radix226_int(work226, work);
+  unsigned int work226[20];
+  convert_to_radix226_test(work226, work);
 
-  printf("before mainloop\n");
-  mainloop(work, e);
-  printf("passed mainloop\n");
+  mainloop226_asm(work226, e226);
+  printintarray(work226,20);
+
+  toradix28_20(work,work226);
+
   recip(work + 32, work + 32);
   mult(work + 64, work, work + 32);
   freeze(work + 64);

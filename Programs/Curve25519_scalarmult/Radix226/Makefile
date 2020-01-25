@@ -32,7 +32,7 @@ main.o: main.c
 	clang -O3 -c $< --target=riscv32 -march=rv32ia -I$(freedom-e-sdk)/freedom-metal
 
 %.o: %.c
-	clang -O0 -c $< --target=riscv32 -march=rv32ia -I$(freedom-e-sdk)/freedom-metal
+	clang -O3 -c $< --target=riscv32 -march=rv32ia -I$(freedom-e-sdk)/freedom-metal
 
 %.o: %.S
 	clang -O0 -c $< --target=riscv32 -march=rv32ia
