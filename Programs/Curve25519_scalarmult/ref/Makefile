@@ -26,13 +26,13 @@ lib: $(filter-out $(BENCHMARK), $(OBJS))
 	$(riscv64-unknown-elf-gcc)/bin/riscv64-unknown-elf-gcc-ar -target=elf32-elf32-littleriscv  lib.a $(OBJS) 
 
 main.o: main.c
-	clang -O0 -c $< --target=riscv32 -march=rv32ia -I$(freedom-e-sdk)/freedom-metal
+	clang -O3 -c $< --target=riscv32 -march=rv32ia -I$(freedom-e-sdk)/freedom-metal
 
 %.o: %.c
-	clang -O0 -c $< --target=riscv32 -march=rv32ia -I$(freedom-e-sdk)/freedom-metal
+	clang -O3 -c $< --target=riscv32 -march=rv32ia -I$(freedom-e-sdk)/freedom-metal
 
 %.o: %.S
-	clang -O0 -c $< --target=riscv32 -march=rv32ia
+	clang -O3 -c $< --target=riscv32 -march=rv32ia
 
 objdump:
 	$(riscv-gnu-toolchain)/build-binutils-newlib/binutils/objdump -D $(file) > $(file).objdump 
