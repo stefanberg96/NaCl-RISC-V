@@ -1,5 +1,4 @@
 #include "benchmark.h"
-#include "scalarmult.h"
 
 void printchararray(unsigned char * in, int inlen){
 

@@ -4,8 +4,6 @@ D. J. Bernstein
 Public domain.
 */
 
-#include "crypto_core.h"
-
 #define ROUNDS 20
 
 typedef unsigned int uint32;
