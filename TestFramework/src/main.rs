@@ -3,8 +3,8 @@ extern crate log;
 
 use std::sync::mpsc;
 use std::time::Duration;
-use crate::karatsuba::reader::{start_reader_thread, TIMEOUT};
-use crate::karatsuba::generator;
+use crate::scalarmult::reader::{start_reader_thread, TIMEOUT};
+use crate::scalarmult::generator;
 use simple_error::SimpleError;
 use env_logger::{Builder, WriteStyle};
 use log::{error, info, LevelFilter};
@@ -16,7 +16,7 @@ use std::fs::{create_dir, OpenOptions};
 use std::path::Path;
 use chrono::Local;
 use std::io::Write;
-use crate::karatsuba::generator::{generate_testcase, generator_name};
+use crate::scalarmult::generator::{generate_testcase, generator_name};
 use core::fmt;
 use std::process::exit;
 
@@ -80,18 +80,18 @@ fn main() -> Result<(), SimpleError> {
                     for line in result.raw_output{
                         let _ = writeln!(raw_output, "{}", line);
                     }
-                    let _ = writeln!(raw_output, "Expected result: {}", &testcase.expected_result);
-                    if result.result != testcase.expected_result{
+                    let _ = writeln!(raw_output, "Expected result: {}", HexSlice::new(&testcase.expected_result.0));
+                    if result.result != testcase.expected_result.0{
                         error!("multiplication not correct \n
                         Result: {}\n
-                        Expected: {}", &result.result, &testcase.expected_result);
+                        Expected: {}", HexSlice::new(&result.result), HexSlice::new(&testcase.expected_result.0));
                         exit(1);
                     }
                     break;
                 }
                 Err(_) => {
                     error!("Did not get the result within {} seconds rerunning make", TIMEOUT);
-                    error!("Expected: {}", &testcase.expected_result);
+                    error!("Expected: {}", HexSlice::new(&testcase.expected_result.0));
                     continue;
                 }
             }
