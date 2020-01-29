@@ -103,28 +103,6 @@ karatsuba226_5asm:
     addi  a2, sp, 76    # address |B0B1B2-B3B4|
     call   karatsuba226_3asm # (A0A1A2-A3A4)*(B0B1B2-B3B4)=m
     
-    #lw a0, 24(sp)
-    #call  printbyte
-    #lw a0, 28(sp)
-    #call  printbyte
-    #lw a0, 32(sp)
-    #call  printbyte
-    #lw a0, 36(sp)
-    #call  printbyte
-    #lw a0, 40(sp)
-    #call  printbyte
-    #lw a0, 44(sp)
-    #call printbyte
-    #
-    #lw a0, 48(sp)
-    #call  printbyte
-    #lw a0, 52(sp)
-    #call  printbyte
-    #lw a0, 56(sp)
-    #call  printbyte
-    #lw a0, 60(sp)
-    #call  printbyte
-    
     lw    t4, 24(sp)    # x_0
     lw    t5, 28(sp)    # x_1
     lw    t6, 32(sp)    # x_2

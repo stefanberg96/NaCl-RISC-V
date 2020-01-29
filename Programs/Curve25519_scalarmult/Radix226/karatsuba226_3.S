@@ -70,24 +70,6 @@ karatsuba226_3asm:
     addi a2, sp, 40     # B0B1-B2 stack location
     call  karatsuba226_2asm # Calculate (A0A1-A2)*(B0B1-B2) =m
 
-#    lw a0, 0(sp)
-#    call printbyte
-#    lw a0, 4(sp)
-#    call printbyte
-#    lw a0, 8(sp)
-#    call printbyte
-#    lw a0, 12(sp)
-#    call printbyte
-#
-#    lw  a0, 16(sp)
-#    call printbyte 
-#    lw a0, 20(sp)
-#    call printbyte
-#    lw a0, 24(sp)
-#    call printbyte
-#    lw a0, 28(sp)
-#    call printbyte
-
     lw   a0, 8(s1)      # A2
     lw   a1, 8(s2)      # B2
     call securemul226    # A2*B2 = y 

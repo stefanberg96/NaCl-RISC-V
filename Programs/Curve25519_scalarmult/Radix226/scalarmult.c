@@ -1,42 +1,8 @@
 #include "scalarmult.h"
-#include "stdint.h"
 extern void karatsuba226(unsigned int *, const unsigned int *,
                          const unsigned int *);
 extern void square226(unsigned int *, const unsigned int *);
 extern void mainloop226_asm(unsigned int *, const unsigned int *);
-extern void printintarray(unsigned int *, int);
-
-// addition of a and b
-// possible need to squeeze for the karatsuba
-void add(unsigned int out[32], const unsigned int a[32],
-         const unsigned int b[32]) {
-  unsigned int j;
-  unsigned int u;
-  u = 0;
-  for (j = 0; j < 31; ++j) {
-    u += a[j] + b[j];
-    out[j] = u & 255;
-    u >>= 8;
-  }
-  u += a[31] + b[31];
-  out[31] = u;
-}
-
-// subtraction of a and b (TODO check if negative numbers are expected, since
-// this could screw with my karatsuba mult)
-void sub(unsigned int out[32], const unsigned int a[32],
-         const unsigned int b[32]) {
-  unsigned int j;
-  unsigned int u;
-  u = 218;
-  for (j = 0; j < 31; ++j) {
-    u += a[j] + 65280 - b[j];
-    out[j] = u & 255;
-    u >>= 8;
-  }
-  u += a[31] - b[31];
-  out[31] = u;
-}
 
 // addition of a and b
 // possible need to squeeze for the karatsuba
@@ -85,28 +51,6 @@ void sub226(unsigned int out[10], const unsigned int a[10],
   squeeze226(out);
 }
 
-// handle overflow (TODO possibly use overflow from the karat=uba assembly)
-static void squeeze(unsigned int a[32]) {
-  unsigned int j;
-  unsigned int u;
-  u = 0;
-  for (j = 0; j < 31; ++j) {
-    u += a[j];
-    a[j] = u & 255;
-    u >>= 8;
-  }
-  u += a[31];
-  a[31] = u & 127;
-  u = 19 * (u >> 7);
-  for (j = 0; j < 31; ++j) {
-    u += a[j];
-    a[j] = u & 255;
-    u >>= 8;
-  }
-  u += a[31];
-  a[31] = u;
-}
-
 const unsigned int minusp[10] = {19, 0, 0, 0, 0, 0, 0, 0, 0, 0x200000};
 
 void freeze(unsigned int a[10]) {
@@ -141,47 +85,6 @@ void squeeze226(unsigned int a[10]) {
   }
   u += a[9];
   a[9] = u;
-}
-
-// multiplication of a and b with handling overflow
-void mult(unsigned int out[32], const unsigned int a[32],
-          const unsigned int b[32]) {
-  unsigned int i;
-  unsigned int j;
-  unsigned int u;
-
-  for (i = 0; i < 32; ++i) {
-    u = 0;
-    for (j = 0; j <= i; ++j)
-      u += a[j] * b[i - j];
-    for (j = i + 1; j < 32; ++j)
-      u += 38 * a[j] * b[i + 32 - j];
-    out[i] = u;
-  }
-  squeeze(out);
-}
-
-// square a with overflow handling
-// reuse karatsuba and find out why it does u*2 and on addition on even
-static void square(unsigned int out[32], const unsigned int a[32]) {
-  unsigned int i;
-  unsigned int j;
-  unsigned int u;
-
-  for (i = 0; i < 32; ++i) {
-    u = 0;
-    for (j = 0; j < i - j; ++j)
-      u += a[j] * a[i - j];
-    for (j = i + 1; j < i + 32 - j; ++j)
-      u += 38 * a[j] * a[i + 32 - j];
-    u *= 2;
-    if ((i & 1) == 0) {
-      u += a[i / 2] * a[i / 2];
-      u += 38 * a[i / 2 + 16] * a[i / 2 + 16];
-    }
-    out[i] = u;
-  }
-  squeeze(out);
 }
 
 void recip226(unsigned int out[10], const unsigned int z[10]) {
@@ -320,7 +223,6 @@ int crypto_scalarmult(unsigned char *q, const unsigned char *n,
   e226[9] |= 0x100000;
 
   convert_to_radix226(work226, p);
-  printintarray(work226, 10);
 
   mainloop226_asm(work226, e226);
 
@@ -332,59 +234,3 @@ int crypto_scalarmult(unsigned char *q, const unsigned char *n,
   return 0;
 }
 
-void fillstack() {
-  int i = 0;
-  char *sp = getsp();
-  void *stop= (void *) 0x80001760;
-  void *zeroend=(void*) 0x80001760;
-  sp -= 40;
-  while ((uintptr_t)sp > 0x800012c4) {
-    if ((uintptr_t)sp < 0x80001b80 && (uintptr_t)sp >0x80001b70) {
-      *sp = 42;
-    } else {
-      *sp = 42;
-    }
-    sp--;
-  }
-  return;
-}
-
-void printdebug() { printf("debug\n"); }
-
-void printstack() {
-  char *stack = 0x800019bc;
-  unsigned int i = 0;
-  while (stack > 0x800015e4) {
-    printf("%02X ", *stack);
-    stack--;
-    i++;
-    if (i % 8 == 0) {
-      printf("\n");
-      printf("%x	", stack);
-    }
-  }
-  return;
-}
-
-static unsigned int testval[250];
-
-void test() {
-  int *stack = getsp();
-  stack -= 100;
-  testval[0]=stack;
-  for (int i = 1; i < 247; i++) {
-    testval[i] = stack[i];
-  }
-}
-
-void testprint() {
-  int addr = testval[0];
-  for (int i = 1; i < 246; i++) {
-    if (i % 2 == 1) {
-      printf("\n");
-      printf("%x: ", addr);
-      addr += 8;
-    }
-    printf("%08X ", testval[i]);
-  }
-}

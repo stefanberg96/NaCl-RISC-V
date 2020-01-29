@@ -152,27 +152,6 @@ karatsuba226:
     addi  a2, sp, 100   # address |B0..B4-B5..B9| 
     call   karatsuba226_5asm # multiplication of a1 and a2=m
 
-    #lw a0, 0(sp)
-    #call printbyte
-    #lw a0, 4(sp)
-    #call printbyte
-    #lw a0, 8(sp)
-    #call printbyte
-    #lw a0, 12(sp)
-    #call printbyte
-    #lw a0, 16(sp)
-    #call printbyte
-    #lw a0, 20(sp)
-    #call printbyte
-    #lw a0, 24(sp)
-    #call printbyte
-    #lw a0, 28(sp)
-    #call printbyte
-    #lw a0, 32(sp)
-    #call printbyte
-    #lw a0, 36(sp)
-    #call printbyte
-
     addi  a0, sp, 80    # result address
     addi  a1, s1, 20    # address A5..A9
     addi  a2, s2, 20    # address B5..B9
