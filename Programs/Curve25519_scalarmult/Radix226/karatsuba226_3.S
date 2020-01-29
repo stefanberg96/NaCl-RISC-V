@@ -18,7 +18,7 @@ karatsuba226_3asm:
     mv   s2, a2         # store B pointer
 
     mv   a0, sp         # place to store A0A1*B0B1
-    jal  karatsuba226_2asm # calulate A0A1*B0B1=x
+    call  karatsuba226_2asm # calulate A0A1*B0B1=x
 
     lw   t0, 0(s1)      # load A0
     lw   t1, 4(s1)      # load A1
@@ -68,29 +68,29 @@ karatsuba226_3asm:
     addi a0, sp, 16     # space for result on stack
     addi a1, sp, 32     # A0A1-A2 stack location
     addi a2, sp, 40     # B0B1-B2 stack location
-    jal  karatsuba226_2asm # Calculate (A0A1-A2)*(B0B1-B2) =m
+    call  karatsuba226_2asm # Calculate (A0A1-A2)*(B0B1-B2) =m
 
 #    lw a0, 0(sp)
-#    jal printbyte
+#    call printbyte
 #    lw a0, 4(sp)
-#    jal printbyte
+#    call printbyte
 #    lw a0, 8(sp)
-#    jal printbyte
+#    call printbyte
 #    lw a0, 12(sp)
-#    jal printbyte
+#    call printbyte
 #
 #    lw  a0, 16(sp)
-#    jal printbyte 
+#    call printbyte 
 #    lw a0, 20(sp)
-#    jal printbyte
+#    call printbyte
 #    lw a0, 24(sp)
-#    jal printbyte
+#    call printbyte
 #    lw a0, 28(sp)
-#    jal printbyte
+#    call printbyte
 
     lw   a0, 8(s1)      # A2
     lw   a1, 8(s2)      # B2
-    jal securemul226    # A2*B2 = y 
+    call securemul226    # A2*B2 = y 
     lw   a4, 8(sp)      # x_2
     lw   a5, 12(sp)     # x_3
     lw   a2, 0(sp)      # x_0

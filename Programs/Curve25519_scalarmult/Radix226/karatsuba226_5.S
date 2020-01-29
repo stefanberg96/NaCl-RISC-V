@@ -20,12 +20,12 @@ karatsuba226_5asm:
     addi  a0, sp, 48    # y_result
     addi  a1, a1, 12    # address A3
     addi  a2, a2, 12    # address B3
-    jal karatsuba226_2asm # A3A4*B3B4=y
+    call karatsuba226_2asm # A3A4*B3B4=y
 
     addi  a0, sp, 24    # x_result
     mv    a1, s1        # A0
     mv    a2, s2        # B0
-    jal karatsuba226_3asm # A0A1A2*B0B1B2=x
+    call karatsuba226_3asm # A0A1A2*B0B1B2=x
 
 
     lw    t0, 0(s1)     # A0
@@ -101,29 +101,29 @@ karatsuba226_5asm:
     addi  a0, sp, 0     # result address
     addi  a1, sp, 64    # address |A0A1A2-A3A4|
     addi  a2, sp, 76    # address |B0B1B2-B3B4|
-    jal   karatsuba226_3asm # (A0A1A2-A3A4)*(B0B1B2-B3B4)=m
+    call   karatsuba226_3asm # (A0A1A2-A3A4)*(B0B1B2-B3B4)=m
     
     #lw a0, 24(sp)
-    #jal  printbyte
+    #call  printbyte
     #lw a0, 28(sp)
-    #jal  printbyte
+    #call  printbyte
     #lw a0, 32(sp)
-    #jal  printbyte
+    #call  printbyte
     #lw a0, 36(sp)
-    #jal  printbyte
+    #call  printbyte
     #lw a0, 40(sp)
-    #jal  printbyte
+    #call  printbyte
     #lw a0, 44(sp)
-    #jal printbyte
+    #call printbyte
     #
     #lw a0, 48(sp)
-    #jal  printbyte
+    #call  printbyte
     #lw a0, 52(sp)
-    #jal  printbyte
+    #call  printbyte
     #lw a0, 56(sp)
-    #jal  printbyte
+    #call  printbyte
     #lw a0, 60(sp)
-    #jal  printbyte
+    #call  printbyte
     
     lw    t4, 24(sp)    # x_0
     lw    t5, 28(sp)    # x_1

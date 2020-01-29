@@ -17,7 +17,7 @@ square226:
     mv    s1, a1        # A address
 
     addi  a0, sp, 40    # result x
-    jal square226_5asm # A0..A4 *B0..B4 = x
+    call square226_5asm # A0..A4 *B0..B4 = x
 
     lw    t0, 0(s1)     # A0
     lw    t5, 20(s1)    # A5
@@ -84,11 +84,11 @@ square226:
 
     mv    a0, sp        # result address
     addi  a1, sp, 80    # address |A0..A4-A5..A9|
-    jal   square226_5asm # multiplication of a1 and a2=m
+    call   square226_5asm # multiplication of a1 and a2=m
 
     addi  a0, sp, 80    # result address
     addi  a1, s1, 20    # address A5..A9
-    jal   square226_5asm # (A5..A9)*(B5..B9) = y
+    call   square226_5asm # (A5..A9)*(B5..B9) = y
 
     lw    t4, 60(sp)    # x_5
     lw    t5, 64(sp)    # x_6

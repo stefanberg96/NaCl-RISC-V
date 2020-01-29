@@ -18,11 +18,11 @@ square226_5asm:
 
     addi  a0, sp, 48    # y_result
     addi  a1, a1, 12    # address A3
-    jal square226_2asm # A3A4*B3B4=y
+    call square226_2asm # A3A4*B3B4=y
 
     addi  a0, sp, 24    # x_result
     mv    a1, s1        # A0
-    jal square226_3asm # A0A1A2*B0B1B2=x
+    call square226_3asm # A0A1A2*B0B1B2=x
 
 
     lw    t0, 0(s1)     # A0
@@ -62,7 +62,7 @@ square226_5asm:
 
     addi  a0, sp, 0     # result address
     addi  a1, sp, 64    # address |A0A1A2-A3A4|
-    jal   square226_3asm # (A0A1A2-A3A4)*(B0B1B2-B3B4)=m
+    call   square226_3asm # (A0A1A2-A3A4)*(B0B1B2-B3B4)=m
     
     lw    t4, 24(sp)    # x_0
     lw    t5, 28(sp)    # x_1

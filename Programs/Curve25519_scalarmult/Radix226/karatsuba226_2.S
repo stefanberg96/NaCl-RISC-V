@@ -19,7 +19,7 @@ karatsuba226_2asm:
 
     lw      a0, 0(s1)   # load A0
     lw      a1, 0(s2)   # load B0
-    jal     securemul226 # mul A0*B0
+    call     securemul226 # mul A0*B0
 
     sw      a0, 0(s0)   # res[0]=A0*B0_l
     add     s3, a0, a1  # res[1]=A0*B0_l + A0*B0_h
@@ -27,7 +27,7 @@ karatsuba226_2asm:
     mv      s4, a1      # res[2]=A0*B0_h
 
     lw      a1, 4(s2)   # load B1
-    jal     securemul226 # mul A1*B1
+    call     securemul226 # mul A1*B1
 
     add     s3, s3, a0  # res[1]+= A1*B1_l
     lw      t0, 0(s1)   # load A0 preloading to prevent load-use interlock
@@ -49,7 +49,7 @@ karatsuba226_2asm:
     xor     a1, t2, s6  #
     xor     s5, s5, s6  # sign of the multiplication
     mv      s6, t6
-    jal     securemul226 # |A0-A1|*|B0-B1|
+    call     securemul226 # |A0-A1|*|B0-B1|
 
     add     a0, a0, s5  # if sign is negative make the value negative
     xor     a0, a0, s5  # otherwise keep it the same

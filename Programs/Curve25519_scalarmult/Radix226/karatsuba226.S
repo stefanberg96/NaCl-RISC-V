@@ -18,7 +18,7 @@ karatsuba226:
     mv    s2, a2        # B address
 
     addi  a0, sp, 40    # result x
-    jal karatsuba226_5asm # A0..A4 *B0..B4 = x
+    call karatsuba226_5asm # A0..A4 *B0..B4 = x
 
     lw    t0, 0(s1)     # A0
     lw    t5, 20(s1)    # A5
@@ -150,33 +150,33 @@ karatsuba226:
     mv    a0, sp        # result address
     addi  a1, sp, 80    # address |A0..A4-A5..A9|
     addi  a2, sp, 100   # address |B0..B4-B5..B9| 
-    jal   karatsuba226_5asm # multiplication of a1 and a2=m
+    call   karatsuba226_5asm # multiplication of a1 and a2=m
 
     #lw a0, 0(sp)
-    #jal printbyte
+    #call printbyte
     #lw a0, 4(sp)
-    #jal printbyte
+    #call printbyte
     #lw a0, 8(sp)
-    #jal printbyte
+    #call printbyte
     #lw a0, 12(sp)
-    #jal printbyte
+    #call printbyte
     #lw a0, 16(sp)
-    #jal printbyte
+    #call printbyte
     #lw a0, 20(sp)
-    #jal printbyte
+    #call printbyte
     #lw a0, 24(sp)
-    #jal printbyte
+    #call printbyte
     #lw a0, 28(sp)
-    #jal printbyte
+    #call printbyte
     #lw a0, 32(sp)
-    #jal printbyte
+    #call printbyte
     #lw a0, 36(sp)
-    #jal printbyte
+    #call printbyte
 
     addi  a0, sp, 80    # result address
     addi  a1, s1, 20    # address A5..A9
     addi  a2, s2, 20    # address B5..B9
-    jal   karatsuba226_5asm # (A5..A9)*(B5..B9) = y
+    call   karatsuba226_5asm # (A5..A9)*(B5..B9) = y
 
     lw    t4, 60(sp)    # x_5
     lw    t5, 64(sp)    # x_6

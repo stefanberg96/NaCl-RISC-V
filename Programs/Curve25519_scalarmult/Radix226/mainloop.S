@@ -12,26 +12,26 @@ mainloop226_asm:
     sw    s5, 408(sp)  # 
     sw    ra, 404(sp)  # 
 
-    lw    t0, 0(a0)     # preload work[0]
-    lw    t1, 4(a0)     # preload work[1]
-
     mv    s0, a0        # store work pointer
     mv    s1, a1        # store e pointer
 
-    lw    t2, 8(a0)     # work[2]
-    lw    t3, 12(a0)    # work[3]
+    lw    t0, 0(s0)     # preload work[0]
+    lw    t1, 4(s0)     # preload work[1]
+
+    lw    t2, 8(s0)     # work[2]
+    lw    t3, 12(s0)    # work[3]
     sw    t0, 0(sp)     # xzm1[0]=work[0]
     sw    t1, 4(sp)     # xzm1[1]
-    lw    t0, 16(a0)    # work[4]
-    lw    t1, 20(a0)    # work[5]
+    lw    t0, 16(s0)    # work[4]
+    lw    t1, 20(s0)    # work[5]
     sw    t2, 8(sp)     # xzm1[2]
     sw    t3, 12(sp)    # xzm1[3]
-    lw    t2, 24(a0)    # work[6]
-    lw    t3, 28(a0)    # work[7]
+    lw    t2, 24(s0)    # work[6]
+    lw    t3, 28(s0)    # work[7]
     sw    t0, 16(sp)    # xzm1[4]
     sw    t1, 20(sp)    # xzm1[5]
-    lw    t0, 32(a0)    # work[8]
-    lw    t1, 36(a0)    # work[9]
+    lw    t0, 32(s0)    # work[8]
+    lw    t1, 36(s0)    # work[9]
     sw    t2, 24(sp)    # xzm1[6]
     sw    t3, 28(sp)    # xzm1[7]
     sw    t0, 32(sp)    # xzm1[8]
@@ -50,6 +50,7 @@ mainloop226_asm:
     sw    zero, 76(sp)  # xzm1[19]=0
 
     sw    zero, 84(sp)  # xzm[1..19]=0
+    sw    zero, 88(sp)  #
     sw    zero, 92(sp)  #
     sw    zero, 96(sp)  #
     sw    zero, 100(sp) #
@@ -67,7 +68,6 @@ mainloop226_asm:
     sw    zero, 148(sp) #
     sw    zero, 152(sp) #
     sw    zero, 156(sp) #
-    sw    zero, 160(sp) #
 
     lw    s5, 36(s1)    # e[9]
     li    s3, 20        # loop variable

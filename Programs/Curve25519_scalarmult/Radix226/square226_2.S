@@ -18,7 +18,7 @@ square226_2asm:
 
     lw      a0, 0(a1)   # load A0
     mv      a1, a0
-    jal     securemul226 # mul A0*B0
+    call     securemul226 # mul A0*B0
 
     sw      a0, 0(s0)   # res[0]=A0*B0_l
     add     s3, a0, a1  # res[1]=A0*B0_l + A0*B0_h
@@ -26,7 +26,7 @@ square226_2asm:
     mv      s4, a1      # res[2]=A0*B0_h
 
     mv      a1, a0      # square so B1=A1
-    jal     securemul226 # mul A1*B1
+    call     securemul226 # mul A1*B1
 
     add     s3, s3, a0  # res[1]+= A1*B1_l
     lw      t0, 0(s1)   # load A0 preloading to prevent load-use interlock
@@ -41,7 +41,7 @@ square226_2asm:
     add     t0, t0, s5  # make absolute value of A0-A1
     xor     a0, t0, s5  #
     mv      a1, a0      # B0-B1=A0-A1
-    jal     securemul226 # |A0-A1|*|B0-B1|
+    call     securemul226 # |A0-A1|*|B0-B1|
 
     sub     s3, s3, a0  # res[1]-=(A0-A1)*(B0-B1)_l
     sub     s4, s4, a1  # res[2]-=(A0-A1)*(B0-B1)_l

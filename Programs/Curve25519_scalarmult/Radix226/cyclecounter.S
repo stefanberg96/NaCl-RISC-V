@@ -21,7 +21,6 @@ icachemisses:
     ret
 
 .globl getsp
-.align 2
 getsp:
     mv a0, sp
     ret
