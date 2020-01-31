@@ -19,7 +19,7 @@ pub struct KaratsubaResult {
     pub result: BigUint,
 }
 
-pub const TIMEOUT: u64 = 10;
+pub const TIMEOUT: u64 = 15;
 
 impl fmt::Display for KaratsubaResult {
     fn fmt(&self, f: &mut Formatter) -> fmt::Result {
@@ -54,7 +54,7 @@ impl Iterator for Reader {
     fn next(&mut self) -> Option<KaratsubaResult> {
 
         let cycle_regex = Regex::new("(?:([0-9]+), )").expect("Cycle regex is invalid");
-        let result_regex = Regex::new("(?:[0-9a-z]{34})").expect("Result regex is invalid");
+        let result_regex = Regex::new("(?:[0-9a-z]{64})").expect("Result regex is invalid");
 
         let mut result = KaratsubaResult {  cycle_counts: Vec::new(), raw_output:Vec::new(), result: One::one()};
         for line in self.reader.by_ref().lines() {

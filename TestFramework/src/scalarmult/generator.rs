@@ -98,17 +98,6 @@ fn generate_testcasefile(variables: Vec<String>) {
         printf(\"\\n\");
     }}
 
-    void convert_to_radix226(unsigned int* r, unsigned char *k){{
-        r[0] = k[0] + (k[1] << 8) + (k[2] << 16) + ((k[3]&3)  << 24);
-        r[1] = (k[3] >> 2)  + (k[4]  << 6) + (k[5] << 14) +
-            ((k[6] & 15) << 22);
-        r[2] = (k[6] >> 4) + (k[7] << 4) + (k[8] << 12) +
-            ((k[9] & 63) << 20);
-        r[3] =
-            (k[9] >> 6) + (k[10] << 2) + ((k[11] ) << 10) + (k[12] << 18);
-        r[4] = k[13] + (k[14] << 8) + (k[15]  << 16 )+ (k[16]<<24);
-    }}
-
     void dobenchmark() {{
 
     ").expect("write failed");
@@ -124,9 +113,9 @@ fn generate_testcasefile(variables: Vec<String>) {
         icachemisses();
 
         unsigned char q[32];
-        for(int i =0;i<2;i++){{
+        for(int i =0;i<21;i++){{
             getcycles(&counters[i*3]);
-            crypto_scalarmult(q, n_bytes, g_bytes);
+            crypto_scalarmult_asm(q, n_bytes, g_bytes);
         }}
 
         printf(\"Cycle counts:          \");

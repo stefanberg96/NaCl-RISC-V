@@ -80,18 +80,18 @@ fn main() -> Result<(), SimpleError> {
                     for line in result.raw_output{
                         let _ = writeln!(raw_output, "{}", line);
                     }
-                    let _ = writeln!(raw_output, "Expected result: {}", &HexSlice::new(&testcase.expected_result.0));
+                    let _ = writeln!(raw_output, "Expected result: {}", HexSlice::new(&testcase.expected_result.0));
                     if result.result != testcase.expected_result.0{
                         error!("multiplication not correct \n
                         Result: {}\n
-                        Expected: {}", &HexSlice::new(&result.result), &HexSlice::new(&testcase.expected_result.0));
+                        Expected: {}", HexSlice::new(&result.result), HexSlice::new(&testcase.expected_result.0));
                         exit(1);
                     }
                     break;
                 }
                 Err(_) => {
                     error!("Did not get the result within {} seconds rerunning make", TIMEOUT);
-                    error!("Expected: {}", &HexSlice::new(&testcase.expected_result.0));
+                    error!("Expected: {}", HexSlice::new(&testcase.expected_result.0));
                     continue;
                 }
             }
