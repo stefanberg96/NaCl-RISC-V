@@ -12,57 +12,85 @@ onetimeauth_loop:
     sw     s5,  8(sp)    #
     sw     s6,  4(sp)    #
     sw     ra,  0(sp)    #
-    li     t1, 0xfffffffc# make sure in is aligned correctly
-    and    a0, a0, t1    #
     mv     s0, a0        # in 
     mv     s1, a1        # inlen
     mv     s2, a2        # h
     mv     s3, a3        # r
     mv     s4, a4        # c
-    lw     a3, 0(s0)     # load 32 bytes from in[0]
     li     s5, 0x3FFFFFF #
     li     s6, 16        # loop value
     blt    s1, s6, end_loop
 loop:
-    and    t3, a3, s5    # get first 26 bits
-    lw     a2, 4(s0)     # in[4..7]
-    sw     t3, 0(s4)     # c[0] = in[0..3] & 0x3FFFFFF
-    srli   t2, a3, 26    # in[3] >> 2
-    slli   t4, a2, 6     # in[4..7] << 6
-    or     t2, t2, t4    # in[3] >> 2 + in[4..7]<<6
-    lw     a1, 8(s0)     # in[8..11]
-    and    t2, t2, s5    # get first 26 bits
-    sw     t2, 4(s4)     # store value
-    srli   t2, a2, 20    # in[4..7]>>20
-    slli   t4, a1, 12    # in[8..11]<<12
-    or     t2, t2, t4    # in[4..7]>>20 + in[8..11]<<12
-    lw     a0, 12(s0)    # in[12..15]
-    and    t2, t2, s5    #
-    sw     t2, 8(s4)     # 
-    srli   t2, a1, 14    # in[8..11]>>14
-    slli   t4, a0, 18    # in[12..15]<<8
-    or     t2, t2, t4    # in[8..11]>>14 + in[12..15]<<8
-    and    t2, t2, s5    #
-    sw     t2, 12(s4)    #
-    srli   t2, a0, 8     # in[13..15]
-    li     t3, 0x1000000 # 1<<24
-    or     t2, t2, t3    #
-    sw     t2, 16(s4)    # 
- 
+    lbu    t2, 3(s0)     # in[3]
+    lbu    t1, 2(s0)     # in[2]
+    lbu    t0, 1(s0)     # in[1]
+    andi   a0, t2, 3     # c[0] = in[3] & 3
+    slli   a0, a0, 6     #
+    or     a0, a0, t1    # c[0] << 6 +in[2]
+    lbu    t1, 0(s0)     # in[0]
+    slli   a0, a0, 8     #
+    or     a0, a0, t0    # c[0] << 8 + in[1]
+    slli   a0, a0, 8     # 
+    or     a0, a0, t1    # c[0] << 8 + in[0]
+    sw     a0, 0(s4)     # store c[0]
+    lw     a0, 0(s4)
+
+    lbu    t3, 6(s0)     # in[6]
+    lbu    t1, 5(s0)     # in[5]
+    lbu    t0, 4(s0)     # in[4]
+    andi   a0, t3, 15    # c[1] = in[6] & 15
+    slli   a0, a0, 4     # c[1] << 4
+    or     a0, a0, t1    # c[1] += in[5]
+    slli   a0, a0, 8     # c[1] << 8
+    or     a0, a0, t0    # c[1] += in[4]
+    slli   a0, a0, 6     # c[1] << 6 
+    srli   t2, t2, 2     # in[3] >> 2
+    or     a0, a0, t2    # c[1] += in[3]
+    sw     a0, 4(s4)     # store c[1]
+
+    lbu    t2, 9(s0)     # in[9]
+    lbu    t1, 8(s0)     # in[8]
+    lbu    t0, 7(s0)     # in[7]
+    andi   a0, t2, 63    # c[2] = in[9] & 63
+    slli   a0, a0, 2     # c[2] <<= 2
+    or     a0, a0, t1    # c[2] += in[8]
+    slli   a0, a0, 8     # c[2] <<= 8
+    or     a0, a0, t0    # c[2] += in[7]
+    slli   a0, a0, 4     # c[2] <<= 2 
+    srli   t3, t3, 4     # in[6] >> 4
+    or     a0, a0, t3    # c[2] += in[6] 
+    sw     a0, 8(s4)     # store c[2]
+
+    lbu    a0, 12(s0)    # in[12]
+    lbu    t1, 11(s0)    # in[11]
+    lbu    t0, 10(s0)    # in[10]
+    slli   a0, a0, 8     # c[3] <<= 8
+    or     a0, a0, t1    # c[3] += in[11]
+    slli   a0, a0, 8     # c[3] <<= 8
+    or     a0, a0, t0    # c[3] += in[10]
+    slli   a0, a0, 2     # c[3] <<= 2
+    srli   t2, t2, 6     # in[9] >> 6
+    or     a0, a0, t2    # c[3] += in[9]
+    sw     a0, 12(s4)    # store c[3]
+
+    lbu    a0, 15(s0)    # in[15]
+    lbu    t1, 14(s0)    # in[14]
+    lbu    t2, 13(s0)    # in[13]
+    addi   a0, a0, 0x100 # append the 1 bit at the end
+    slli   a0, a0, 8     # c[4] <<= 8
+    or     a0, a0, t1    # c[4] += in[14]
+    slli   a0, a0, 8     # c[4] <<= 8
+    or     a0, a0, t2    # c[4] += in[13]
+    sw     a0, 16(s4)    # store c[4]
+    
     mv     a0, s2        #
     mv     a1, s4        #
     jal    add226asm     #
-    mv     a0, s2
-    jal    squeeze226asm
     mv     a0, s2        #
     mv     a1, s3        #
     jal    karatsuba226asm_inplace
-    mv     a0, s2        #
-    jal    squeeze226asm #
-    mv     a0, s2
-    jal    squeeze226asm
+
     addi   s0, s0, 16    #
-    lw     a3, 0(s0)     # load in[0] 32 bytes
     addi   s1, s1, -16   # update loop variables
     bgt    s1, s6, loop
     

@@ -12,11 +12,11 @@ squeeze226asm:
     sw     zero, 16(sp)   #
     sw     zero, 12(sp)   #
     sw     zero,  8(sp)   #
-    lw     a3, 16(a0)     # load h[5]  CHANGED
+    lw     a3, 16(a0)     # load h[4]  
     srli   t1, a3, 26     #
     slli   t2, t1, 2      #
-    add    t3, t1, t2     # h[5]*5
-    sw     t3, 4(sp)      # c[0]=h[5]*5
+    add    t3, t1, t2     # h[4]*5
+    sw     t3, 4(sp)      # c[0]=h[4]*5
     li     t3, 0x3ffffff  # ADDED
     and    t1, a3, t3     #
     sw     t1, 16(a0)
