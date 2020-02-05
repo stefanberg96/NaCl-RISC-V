@@ -19,14 +19,15 @@ onetimeauth_loop:
     mv     s4, a4        # c
     li     s5, 0x3FFFFFF #
     li     s6, 16        # loop value
+
     blt    s1, s6, end_loop
 loop:
     lbu    t2, 3(s0)     # in[3]
     lbu    t1, 2(s0)     # in[2]
     lbu    t0, 1(s0)     # in[1]
     andi   a0, t2, 3     # c[0] = in[3] & 3
-    slli   a0, a0, 6     #
-    or     a0, a0, t1    # c[0] << 6 +in[2]
+    slli   a0, a0, 8     #
+    or     a0, a0, t1    # c[0] << 2 +in[2]
     lbu    t1, 0(s0)     # in[0]
     slli   a0, a0, 8     #
     or     a0, a0, t0    # c[0] << 8 + in[1]
@@ -39,7 +40,7 @@ loop:
     lbu    t1, 5(s0)     # in[5]
     lbu    t0, 4(s0)     # in[4]
     andi   a0, t3, 15    # c[1] = in[6] & 15
-    slli   a0, a0, 4     # c[1] << 4
+    slli   a0, a0, 8     # c[1] << 4
     or     a0, a0, t1    # c[1] += in[5]
     slli   a0, a0, 8     # c[1] << 8
     or     a0, a0, t0    # c[1] += in[4]
@@ -52,7 +53,7 @@ loop:
     lbu    t1, 8(s0)     # in[8]
     lbu    t0, 7(s0)     # in[7]
     andi   a0, t2, 63    # c[2] = in[9] & 63
-    slli   a0, a0, 2     # c[2] <<= 2
+    slli   a0, a0, 8     # c[2] <<= 2
     or     a0, a0, t1    # c[2] += in[8]
     slli   a0, a0, 8     # c[2] <<= 8
     or     a0, a0, t0    # c[2] += in[7]
@@ -82,13 +83,14 @@ loop:
     slli   a0, a0, 8     # c[4] <<= 8
     or     a0, a0, t2    # c[4] += in[13]
     sw     a0, 16(s4)    # store c[4]
-    
+
     mv     a0, s2        #
     mv     a1, s4        #
-    jal    add226asm     #
+    call   add226asm     #
+
     mv     a0, s2        #
     mv     a1, s3        #
-    jal    karatsuba226asm_inplace
+    call   karatsuba226asm_inplace
 
     addi   s0, s0, 16    #
     addi   s1, s1, -16   # update loop variables

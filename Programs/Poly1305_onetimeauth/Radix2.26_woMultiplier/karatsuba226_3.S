@@ -25,7 +25,7 @@ karatsuba226_3asm:
 
     lw   a0, 8(s1)      # A2
     lw   a1, 8(s2)      # B2
-    jal securemul226    # A2*B2 = y 
+    call securemul226    # A2*B2 = y 
 
     mv   s5, a0         # result[2] += y_0
     mv   s7, a0         # result[4] += y_0
@@ -80,12 +80,12 @@ karatsuba226_3asm:
     addi a0, sp, 16     # space for result on stack
     addi a1, sp, 0      # A0A1-A2 stack location
     addi a2, sp, 8      # B0B1-B2 stack location
-    jal  karatsuba226_2asm # Calculate (A0A1-A2)*(B0B1-B2) =m
+    call  karatsuba226_2asm # Calculate (A0A1-A2)*(B0B1-B2) =m
 
     addi a0, sp, 0      # result for x
     mv   a1, s1         # A0A1
     mv   a2, s2         # B0B1
-    jal  karatsuba226_2asm # Calculate A0A1*B0B1 = x
+    call  karatsuba226_2asm # Calculate A0A1*B0B1 = x
 
     lw   t6, 0(sp)      # x_0
     lw   a1, 4(sp)      # x_1
@@ -157,7 +157,7 @@ karatsuba226_3asm:
     mv   a0, s3         #
     mv   a1, s4         #
 
-    jal squeeze226param
+    call squeeze226param
 
     sw   a0, 0(s0)      # store results
     sw   a1, 4(s0)      #

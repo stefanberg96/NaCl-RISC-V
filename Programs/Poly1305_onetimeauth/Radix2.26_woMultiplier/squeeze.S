@@ -10,7 +10,7 @@ squeeze226asm:
     lw    a3, 12(t6)      # in[3]
     lw    a4, 16(t6)      # in[4]
 
-    jal   squeeze226param
+    call  squeeze226param
     
     sw    a0, 0(t6)       # store result
     sw    a1, 4(t6)       #
