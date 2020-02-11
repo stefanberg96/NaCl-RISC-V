@@ -61,6 +61,9 @@ copy_loop:
     mv     a0, s4        # prepare mulmodasm call
     mv     a1, s5        #
     jal    mulmodasm    
+    mv a0, s4
+    li a1, 17
+    jal printintarray
     bgtz   s3, outer_loop
 
     

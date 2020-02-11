@@ -39,5 +39,6 @@ int main() {
 }
 
 void printdebug(){
+  test(4);
   printf("debug\n");
 }

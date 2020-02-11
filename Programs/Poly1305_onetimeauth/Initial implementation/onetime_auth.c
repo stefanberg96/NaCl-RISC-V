@@ -7,8 +7,25 @@ extern void onetime_authloop(const unsigned char *in, int inlen,
                              unsigned int *h, unsigned int *r, unsigned int *c);
 extern void addasm(unsigned int h[17], const unsigned int c[17]);
 
-static const unsigned int minusp[17] = {5, 0, 0, 0, 0, 0, 0, 0,  0,
-                                        0, 0, 0, 0, 0, 0, 0, 252};
+static const unsigned int minusp[17] = {5, 0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0, 0, 252};
+
+
+ void printintarray(unsigned int * in, int inlen){
+  for(int i =0;i<inlen;i++){
+    printf("%x, ",in[i]);
+  }
+  printf("\n");
+
+}
+
+                                      
+void printarray(unsigned char * in, int inlen){
+  for(int i =0;i<inlen;i++){
+    printf("%x, ",in[i]);
+  }
+  printf("\n");
+
+}
 
 // reduce the number from 2^133 to 2^130-5
 static void freeze(unsigned int h[17]) {
@@ -92,6 +109,7 @@ void dobenchmark(uint64_t *timings) {
   oldcount = getcycles();
   crypto_onetimeauth(a, c, 131, rs);
   newcount = getcycles();
+  printarray(a,16);
   timings[0] =  newcount - oldcount;
 }
 
@@ -99,8 +117,8 @@ int main() {
   uint64_t timing[3];
 
   dobenchmark(&timing[0]);
-  dobenchmark(&timing[1]);
-  dobenchmark(&timing[2]);
+//  dobenchmark(&timing[1]);
+ // dobenchmark(&timing[2]);
   for (int i = 0; i < 3; i++) {
     printf("This took %llu cycles\n", timing[i]);
   }
