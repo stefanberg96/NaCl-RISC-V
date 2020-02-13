@@ -196,3 +196,28 @@ plot_ly(combined, x=combined$Branch.direction.mis, y=combined$Load.use.interlock
 
 ```
 
+```{r}
+poly1305_rewrite<-read.csv("/home/stefan/Documents/Graduation/RISC-V-toolchain/riscv/Programs/Poly1305_onetimeauth/Radix2.26_woMultiplier/results/poly1305_2020-02-03 19:16/raw_output.csv", colClasses = c("Correct"="logical"))
+nrow(subset(poly1305_rewrite, Correct==FALSE))
+poly1305_rewrite$Branch.direction.mis = as.factor(poly1305_rewrite$Branch.direction.mis)
+
+z<- dplyr::filter(poly1305_rewrite, id>5)
+ggplot(z, aes(x=Branch.target.mis, y=cycles, color=Branch.direction.mis)) + geom_count() + scale_size_area(max_size = 1)
+```
+
+```{r}
+
+curve25519<-read.csv("/home/stefan/Documents/Graduation/RISC-V-toolchain/riscv/Programs/Curve25519_scalarmult/Radix226/results/scalarmult_2020-01-29 16:35/raw_output.csv", colClasses = c("Correct"="logical"))
+nrow(subset(curve25519, Correct==FALSE))
+curve25519$sum <- curve25519$Branch.direction.mis + curve25519$Branch.target.mis*10000000
+curve25519$sum= as.factor(curve25519$sum)
+
+z<- dplyr::filter(curve25519, id>5)
+ggplot(z, aes(x=Branch.target.mis, y=cycles, color=sum)) + geom_count() + scale_size_area(max_size = 1)
+test <- unique(curve25519[c("Branch.target.mis", "Branch.direction.mis", "cycles")])
+names(test) <- c("target", "dir", "cycles")
+fasd<- sqldf('SELECT test.target, test.dir, test.cycles , test2.cycles
+        FROM test INNER JOIN test as test2
+        WHERE test.target == test2.target AND test.dir == test2.dir AND test.cycles != test2.cycles
+      ')
+```
