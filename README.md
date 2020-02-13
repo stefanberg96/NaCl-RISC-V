@@ -24,7 +24,7 @@ Below the list of implemented components can be found.
 - Poly1305
 - Salsa20 (same as without multiplication)
 - HSalsa20 (same as without multiplication)
-- Curve25519 scalar multiplication (needs modification, still using securemul.S)
+- Curve25519 scalar multiplication 
 
 ## Correctness
 
