@@ -4,44 +4,33 @@
 .type karatsuba226_3asm, @function
 
 karatsuba226_3asm:
-    addi sp, sp, -96    #
-    sw   s0, 92(sp)     #
-    sw   s1, 88(sp)     #
-    sw   s2, 84(sp)     #
-    sw   s3, 80(sp)     # result[0]
-    sw   s4, 76(sp)     # result[2]
-    sw   s5, 72(sp)     # result[3]
-    sw   s6, 68(sp)     # result[4]
-    sw   s7, 64(sp)     # negative flag
-    sw   s8, 60(sp)     # x_0
-    sw   s9, 56(sp)     # result[1]
-    sw   s10, 52(sp)    # 
-    sw   ra, 52(sp)     #
+    addi sp, sp, -80    #
+    sw   s0, 76(sp)     #
+    sw   s1, 72(sp)     #
+    sw   s2, 68(sp)     #
+    sw   s3, 64(sp)     # result[0]
+    sw   s4, 60(sp)     # result[1]
+    sw   s5, 56(sp)     # result[2]
+    sw   s6, 52(sp)     # result[3]
+    sw   s7, 48(sp)     # result[4]
+    sw   s8, 44(sp)     # negative flag
+    sw   s9, 40(sp)     # 
+    sw   s10, 36(sp)    # 2^26-1
+    sw   ra, 32(sp)     #
+
     li   s10, 0x3ffffff # 2^26-1
     mv   s0, a0         # store result pointer
     mv   s1, a1         # store A pointer 
     mv   s2, a2         # store B pointer
 
-    mv   a0, sp         # place to store A0A1*B0B1
-    jal  karatsuba226_2asm # calulate A0A1*B0B1=x
-
-    lw   s8, 0(sp)      # x_0
-    lw   s9, 4(sp)      # x_1=result[1]
-    lw   s4, 8(sp)      # x_2
-    lw   s5, 12(sp)     # x_3
-    mv   s3, s5         # result[0] = x_3
-    mv   s6, s4         # result[4] = x_2
-    add  s4, s4, s8     # result[2] = x_2 + x_0
-    add  s5, s5, s9     # result[3] = x_3 + x_1
- 
     lw   a0, 8(s1)      # A2
     lw   a1, 8(s2)      # B2
-    jal securemul226    # A2*B2 = y 
+    call securemul226    # A2*B2 = y 
 
-    add  s4, s4, a0     # result[2] += y_0
-    add  s6, s6, a0     # result[4] += y_0
-    add  s5, s5, a1     # result[3] += y_1
-    add  s3, s3, a1     # result[0] += y_1
+    mv   s5, a0         # result[2] += y_0
+    mv   s7, a0         # result[4] += y_0
+    mv   s6, a1         # result[3] += y_1
+    mv   s3, a1         # result[0] += y_1
     
     lw   t0, 0(s1)      # load A0
     lw   t1, 4(s1)      # load A1
@@ -53,11 +42,11 @@ karatsuba226_3asm:
     add  t0, t0, a0     # apply borrow from A1
     andi t2, t3, 1      # possible borrow from A1
     sub  t1, t1, t2     # 
-    srai s7, t1, 31     # sign of A1
-    and  t2, s7, s10    # cut mask to 26 bits length
-    xor  t1, t1, s7     # absolute value of A0A1-A2
+    srai s8, t1, 31     # sign of A1
+    and  t2, s8, s10    # cut mask to 26 bits length
+    xor  t1, t1, s8     # absolute value of A0A1-A2
     xor  t0, t0, t2     # 
-    neg  t3, s7         #
+    neg  t3, s8         #
     add  t0, t0, t3     #    
     srli t3, t0, 26     # handle carry
     add  t1, t1, t3     #
@@ -86,34 +75,51 @@ karatsuba226_3asm:
     and  t0, t0, s10    #
     sw   t0, 8(sp)      # store B0B1-B2 on the stack
     sw   t1, 12(sp)     #
-    xor  s7, s7, t3     # sign of (A0A1-A2)*(B0B1-B2)
+    xor  s8, s8, t3     # sign of (A0A1-A2)*(B0B1-B2)
 
-    addi a0, sp, 20     # space for result on stack
+    addi a0, sp, 16     # space for result on stack
     addi a1, sp, 0      # A0A1-A2 stack location
     addi a2, sp, 8      # B0B1-B2 stack location
-    jal  karatsuba226_2asm # Calculate (A0A1-A2)*(B0B1-B2) =m
+    call  karatsuba226_2asm # Calculate (A0A1-A2)*(B0B1-B2) =m
 
-    lw   a0, 20(sp)     # m_0
-    lw   a1, 24(sp)     # m_1
-    lw   a2, 28(sp)     # m_2
-    lw   a3, 32(sp)     # m_3
-    add  a0, a0, s7     # for each m make it negative if multiplication flag is 0xffffff
-    xor  a0, a0, s7     # otherwise leave it
-    add  a1, a1, s7     # m_1
-    xor  a1, a1, s7     #
-    add  a2, a2, s7     # m_2
-    xor  a2, a2, s7     #
-    add  a3, a3, s7     # m_3
-    xor  a3, a3, s7     #
+    addi a0, sp, 0      # result for x
+    mv   a1, s1         # A0A1
+    mv   a2, s2         # B0B1
+    call  karatsuba226_2asm # Calculate A0A1*B0B1 = x
 
-    sub  s4, s4, a0     # result[2] -= m_0
-    sub  s5, s5, a1     # result[3] -= m_1
-    sub  s6, s6, a2     # result[4] -= m_2
+    lw   t6, 0(sp)      # x_0
+    lw   a1, 4(sp)      # x_1
+    lw   a2, 8(sp)      # x_2
+    lw   a3, 12(sp)     # x_3
+    
+    add  s3, s3, a3     # res[0] += x_3
+    mv   s4, a1         # res[1] = x_1
+    add  s5, s5, a2     # res[2] += x_2
+    add  s5, s5, t6     # res[2] += x_0
+    add  s6, s6, a3     # res[3] += x_3
+    add  s6, s6, a1     # res[3] += x_1
+    add  s7, s7, a2     # res[4] += x_2
+
+    lw   a0, 16(sp)     # m_0
+    lw   a1, 20(sp)     # m_1
+    lw   a2, 24(sp)     # m_2
+    lw   a3, 28(sp)     # m_3
+    add  a0, a0, s8     # for each m make it negative if multiplication flag is 0xffffff
+    xor  a0, a0, s8     # otherwise leave it
+    add  a1, a1, s8     # m_1
+    xor  a1, a1, s8     #
+    add  a2, a2, s8     # m_2
+    xor  a2, a2, s8     #
+    add  a3, a3, s8     # m_3
+    xor  a3, a3, s8     #
+
+    sub  s5, s5, a0     # result[2] -= m_0
+    sub  s6, s6, a1     # result[3] -= m_1
+    sub  s7, s7, a2     # result[4] -= m_2
     sub  s3, s3, a3     # result[0] -= m_3
 
     sltz a0, s3         # underflow in result[0]
-    andi t1, a0, 5      #
-    sub  s9, s9, a0     # borrow from result[1]
+    sub  s4, s4, a0     # borrow from result[1]
     addi a1, s10, 1     # 2^26
     neg  a0, a0         # generate mask
     and  a0, a1, a0     # 
@@ -121,43 +127,37 @@ karatsuba226_3asm:
 
     slli t0, s3, 2      # result[0] * 4
     add  s3, s3, t0     # result[0] *= 5
-    add  s3, s3, s8     # result[0] += x_0
+    add  s3, s3, t6     # result[0] += x_0
     
-    sltz t0, s3         # underflow in result[0]
-    sub  s9, s9, t0     # borrow from result[1]
-    addi a0, s10, 1     # 2^26
+    sltz t0, s4         # underflow in result[1]
+    sub  s5, s5, t0     # borrow from result[2]
     neg  t0, t0         # generate mask
-    and  t0, a0, t0     # 
-    add  s3, t0, s3     #
+    and  t0, a1, t0     # 
+    add  s4, t0, s4     #
 
-    sltz t0, s9         # underflow in result[1]
-    sub  s4, s4, t0     # borrow from result[2]
+    sltz t0, s5         # underflow in result[2]
+    sub  s6, s6, t0     # borrow from result[3]
     neg  t0, t0         # generate mask
-    and  t0, a0, t0     # 
-    add  a1, t0, s9     #
+    and  t0, a1, t0     # 
+    add  a2, t0, s5     #
 
-    sltz t0, s4         # underflow in result[2]
-    sub  s5, s5, t0     # borrow from result[3]
+    sltz t0, s6         # underflow in result[3]
+    sub  s7, s7, t0     # borrow from result[4]
     neg  t0, t0         # generate mask
-    and  t0, a0, t0     # 
-    add  a2, t0, s4     #
+    and  t0, a1, t0     # 
+    add  a3, t0, s6     #
 
-    sltz t0, s5         # underflow in result[3]
-    sub  s6, s6, t0     # borrow from result[4]
+    sltz t0, s7         # underflow in result[4]
     neg  t0, t0         # generate mask
-    and  t0, a0, t0     # 
-    add  a3, t0, s5     #
-
-    sltz t0, s6         # underflow in result[4]
-    li   t1, 5          #
-    neg  t0, t0         # generate mask
-    and  t1, t0, t1     # 
+    andi t1, t0, 5      # 
     sub  s3, s3, t1     # borrow 5 from result[0]
-    and  t0, a0, t0     #
-    add  a4, t0, s6     #
+    and  t0, a1, t0     #
+    add  a4, t0, s7     #
 
     mv   a0, s3         #
-    jal squeeze226param
+    mv   a1, s4         #
+
+    call squeeze226param
 
     sw   a0, 0(s0)      # store results
     sw   a1, 4(s0)      #
@@ -165,17 +165,18 @@ karatsuba226_3asm:
     sw   a3, 12(s0)     #
     sw   a4, 16(s0)     #
 
-    lw   s0, 92(sp)     # restore variables
-    lw   s1, 88(sp)     #
-    lw   s2, 84(sp)     #
-    lw   s3, 80(sp)     #
-    lw   s4, 76(sp)     #
-    lw   s5, 72(sp)     #
-    lw   s6, 68(sp)     #
-    lw   s7, 64(sp)     #
-    lw   s8, 60(sp)     #
-    lw   s9, 56(sp)     #
-    lw   ra, 52(sp)     #
-    addi sp, sp, 96     #
+    lw   s0, 76(sp)     # restore variables
+    lw   s1, 72(sp)     #
+    lw   s2, 68(sp)     #
+    lw   s3, 64(sp)     #
+    lw   s4, 60(sp)     #
+    lw   s5, 56(sp)     #
+    lw   s6, 52(sp)     #
+    lw   s7, 48(sp)     #
+    lw   s8, 44(sp)     #
+    lw   s9, 40(sp)     #
+    lw   s10, 36(sp)    #
+    lw   ra, 32(sp)     #
+    addi sp, sp, 80     #
     ret
 

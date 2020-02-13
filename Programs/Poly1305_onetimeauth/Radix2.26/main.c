@@ -68,7 +68,9 @@ void checkCorrectness() {
 }
 int main() {
 
-//  checkCorrectness();
-  dobenchmark( );
+  checkCorrectness();
+  unsigned char a[16];
+//  dobenchmark(a );
+  printchararray(a,16);
   return 0;
 }

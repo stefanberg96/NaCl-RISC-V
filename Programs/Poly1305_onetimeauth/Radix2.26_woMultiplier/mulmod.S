@@ -27,7 +27,7 @@ outer_loop:
 inner_loop:
     lw     a0, 0(t4)     # h[i]
     lw     a1, 0(t5)     # r[i-j]
-    jal    securemul226  
+    call   securemul226  
     add    s5, s5, a1    # u+= r[i-j] *h[j]
     add    s4, s4, a0    #
     sltu   t1, s4, a0    # handle carry
@@ -43,7 +43,7 @@ inner_loop:
 inner_loop2:
     lw     a0, 0(t4)     # h[i]
     lw     a1, 0(t5)     # r[i-j+5]
-    jal    securemul226  
+    call   securemul226  
     slli   t1, a1, 2     #
     add    a1, a1, t1    # high *5
     srli   t1, a0, 30    # low *5
@@ -85,7 +85,7 @@ postloop:
     lw    a0, 12(sp)     #
     sw    a0, 16(s1)     # h[i]=hr[i]
     mv    a0, s1
-    jal   squeeze226asm
+    call  squeeze226asm
 
     lw    s1, 60(sp)     # restore pushed values
     lw    s2, 56(sp)     #

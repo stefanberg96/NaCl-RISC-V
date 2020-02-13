@@ -15,7 +15,7 @@ upload_only: hex
 	echo -e "\nloadfile program.hex\nexit" | timeout 15 JLinkExe -device FE310 -if JTAG -speed 4000 -jtagconf -1,-1 -autoconnect 1
 
 reset:
-	echo -e "\nr\nexit" | timeout 10 JLinkExe -device FE310 -if JTAG -speed 4000 -jtagconf -1,-1 -autoconnect 1
+	echo -e "\nr\nexit" | timeout 20 JLinkExe -device FE310 -if JTAG -speed 4000 -jtagconf -1,-1 -autoconnect 1
 
 
 hex: $(OBJS)
@@ -26,10 +26,10 @@ lib: $(filter-out $(BENCHMARK), $(OBJS))
 	$(riscv64-unknown-elf-gcc)/bin/riscv64-unknown-elf-gcc-ar -target=elf32-elf32-littleriscv  lib.a $(OBJS) 
 
 main.o: main.c
-	clang -O0 -c $< --target=riscv32 -march=rv32ia -I$(freedom-e-sdk)/freedom-metal
+	clang -O3 -c $< --target=riscv32 -march=rv32ia -I$(freedom-e-sdk)/freedom-metal
 
 %.o: %.c
-	clang -O0 -c $< --target=riscv32 -march=rv32ia -I$(freedom-e-sdk)/freedom-metal
+	clang -O3 -c $< --target=riscv32 -march=rv32ia -I$(freedom-e-sdk)/freedom-metal
 
 %.o: %.S
 	clang -O0 -c $< --target=riscv32 -march=rv32ia

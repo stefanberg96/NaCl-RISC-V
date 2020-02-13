@@ -55,6 +55,11 @@ loop:
     mv     a0, s2        #
     mv     a1, s3        #
     jal    mulmod226asm
+
+    mv a0, s2
+    li a1, 5
+    jal printarray
+
     addi   s1, s1, -16   # update loop variables
     addi   s0, s0, 16    #
     bgt    s1, s6, loop

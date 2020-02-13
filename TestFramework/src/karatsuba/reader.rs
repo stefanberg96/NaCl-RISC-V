@@ -24,6 +24,7 @@ pub const TIMEOUT: u64 = 15;
 impl fmt::Display for KaratsubaResult {
     fn fmt(&self, f: &mut Formatter) -> fmt::Result {
         writeln!(f, "Cycle counts:{:?}", self.cycle_counts).expect("write failed");
+
         writeln!(f, "{}", self.result);
         Ok(())
     }
@@ -54,19 +55,19 @@ impl Iterator for Reader {
     fn next(&mut self) -> Option<KaratsubaResult> {
 
         let cycle_regex = Regex::new("(?:([0-9]+), )").expect("Cycle regex is invalid");
-        let result_regex = Regex::new("(?:[0-9a-z]{64})").expect("Result regex is invalid");
+        let result_regex = Regex::new("(?:[0-9a-z]{34})").expect("Result regex is invalid");
 
         let mut result = KaratsubaResult {  cycle_counts: Vec::new(), raw_output:Vec::new(), result: One::one()};
         for line in self.reader.by_ref().lines() {
             let line = line.unwrap_or_default();
             add_to_raw(&mut result, line.clone());
-            if cycle_regex.is_match(line.as_str()) {
+            if line.starts_with("Cycle counts:") {
                 let z: Vec<f64> = cycle_regex.captures_iter(line.as_str())
                     .map(|c| c[1].parse::<f64>())
                     .filter_map(Result::ok)
                     .collect();
                 result.cycle_counts = z;
-            }else if result_regex.is_match(line.as_str()){
+            }else if line.starts_with("Result:"){
                 let hex = result_regex.captures(line.as_str()).unwrap();
                 let bytes = hex::decode(&hex[0]).expect("Failed to decode output result from hex to bytes");
                 result.result = BigUint::from_bytes_be(bytes.as_slice());

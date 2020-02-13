@@ -56,7 +56,7 @@ karatsuba226asm:
     mv    a0, sp        # y_result
     addi  a1, a1, 12    # address A3
     addi  a2, a2, 12    # address B3
-    jal   karatsuba226_2asm # A3A4*B3B4=y
+    call  karatsuba226_2asm # A3A4*B3B4=y
 
     lw    s6, 0(sp)     # y_0
     lw    s5, 4(sp)     # y_1=res[2]
@@ -143,12 +143,12 @@ karatsuba226asm:
     addi  a0, sp, 0     # result address
     addi  a1, sp, 20    # address |A0A1A2-A3A4|
     addi  a2, sp, 32    # address |B0B1B2-B3B4|
-    jal   karatsuba226_3asm # (A0A1A2-A3A4)*(B0B1B2-B3B4)=m
+    call  karatsuba226_3asm # (A0A1A2-A3A4)*(B0B1B2-B3B4)=m
 
     addi  a0, sp, 20    # result address
     addi  a1, s1, 0     # address A0A1A2
     addi  a2, s2, 0     # address B0B1B2
-    jal   karatsuba226_3asm # A0A1A2*B0B1B2 = x
+    call  karatsuba226_3asm # A0A1A2*B0B1B2 = x
 
     lw    t0, 20(sp)    # x_0
     lw    t1, 24(sp)    # x_1
@@ -239,7 +239,7 @@ karatsuba226asm:
     mv   a0, s3         #
     mv   a1, s4         #
     mv   a2, s5         #
-    jal squeeze226param 
+    call squeeze226param 
 
     sw    a0, 0(s0)     # store result
     sw    a1, 4(s0)     #
