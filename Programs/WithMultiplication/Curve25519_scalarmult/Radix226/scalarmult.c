@@ -66,27 +66,6 @@ void freeze(unsigned int a[10]) {
     a[j] ^= negative & (aorig[j] ^ a[j]);
 }
 
-void squeeze226(unsigned int a[10]) {
-  unsigned int j;
-  unsigned int u;
-  u = 0;
-  for (j = 0; j < 9; ++j) {
-    u += a[j];
-    a[j] = u & 0x3ffffff;
-    u >>= 26;
-  }
-  u += a[9];
-  a[9] = u & 0x1fffff;
-  u = 19 * (u >> 21);
-  for (j = 0; j < 9; ++j) {
-    u += a[j];
-    a[j] = u & 0x3ffffff;
-    u >>= 26;
-  }
-  u += a[9];
-  a[9] = u;
-}
-
 void recip226(unsigned int out[10], const unsigned int z[10]) {
   unsigned int z11[10];
   unsigned int t0[10];
