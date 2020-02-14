@@ -16,15 +16,15 @@ void printchararray(unsigned char * in, int inlen){
 }
 
 void printbyte(unsigned int x){
-  printf("%x",x);
+  printf("%x\n",x);
 }
 
 void printintarray(const unsigned int * in,const int inlen){
-
-    for(int i =0;i< inlen;i++){
-        printf("%02x, ", in[i]);
+    printf("[");
+    for(int i =0;i< inlen-1;i++){
+        printf("0x%02x, ", in[i]);
     }
-    printf("\n");
+    printf("0x%02x]\n", in[inlen-1]);
 }
 
 int main() {

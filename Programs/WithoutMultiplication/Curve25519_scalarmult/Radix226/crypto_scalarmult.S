@@ -42,12 +42,17 @@ crypto_scalarmult_asm:
     addi  a2, sp, 80     # work226[10]
     call karatsuba226
 
-    addi  a0, sp, 40     # work226
-    call freeze
-
     mv    a0, s0         # q
     addi  a1, sp, 40     # work226
     call toradix28
+
+
+//    addi  a0, s0,0     # work226
+//    call freeze
+
+#    mv    a0, s0         # q
+#    addi  a1, sp, 40     # work226
+#    call toradix28
 
     lw    ra, 140(sp)    # restore variables
     lw    s0, 136(sp)    #

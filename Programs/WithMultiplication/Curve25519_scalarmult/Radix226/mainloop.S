@@ -215,23 +215,51 @@ innerloop:
     addi  a2, sp, 40    # xzm1[10]
     call sub226
 
+    addi a0, sp, 160
+    addi a1, sp, 160
+    call printkarparams
+
     addi  a0, sp, 320   # b0
     addi  a1, sp, 160   # a0
     call square226
 
+    addi a0, sp, 320
+    call printkarresult
+
+    addi a0, sp, 200
+    addi a1, sp, 200
+    call printkarparams
+
     addi  a0, sp, 360   # b0[10]
     addi  a1, sp, 200   # a0[10]
     call square226
+
+    addi a0, sp, 360
+    call printkarresult
+
+    addi a0, sp, 280
+    addi a1, sp, 160
+    call printkarparams
 
     addi  a0, sp, 160   # a0
     addi  a1, sp, 280   # a1[10]
     addi  a2, sp, 160   # a0
     call karatsuba226
 
+    addi a0, sp,160
+    call printkarresult
+
+    addi a0, sp, 240
+    addi a1, sp, 200
+    call printkarparams
+
     addi  a0, sp, 200   # a0[10]
     addi  a1, sp, 240   # a1
     addi  a2, sp, 200   # a0[10]
     call karatsuba226
+
+    addi a0, sp, 200
+    call printkarresult
 
     addi  a0, sp, 240   # a1
     addi  a1, sp, 160   # a0
@@ -243,18 +271,39 @@ innerloop:
     addi  a2, sp, 160   # a0
     call sub226
 
+    addi a0, sp, 280
+    addi a1,sp,280
+    call printkarparams
+
     addi  a0, sp, 160   # a0
     addi  a1, sp, 280   # a1[10]
     call square226
+
+    addi a0, sp, 160
+    call printkarresult
+
+    addi a0, sp, 160
+    addi a1, sp, 0
+    call printkarparams
 
     addi  a0, sp, 40    # xzm1[10]
     addi  a1, sp, 160   # a0
     addi  a2, s0, 0     # work
     call karatsuba226
 
+    addi a0, sp, 40
+    call printkarresult
+
+    addi a0, sp, 240
+    addi a1, sp, 240
+    call printkarparams
+
     addi  a0, sp, 0     # xzm1
     addi  a1, sp, 240   # a1
     call square226
+
+    addi a0, sp, 0
+    call printkarresult
 
     addi  a0, sp, 240   # a1
     addi  a1, sp, 320   # b0
@@ -270,15 +319,29 @@ innerloop:
     addi  a2, sp, 320   # b0
     call add226
 
+    addi a0, sp, 320
+    addi a1, sp, 360
+    call printkarparams
+
     addi  a0, sp, 80    # xzm
     addi  a1, sp, 320   # b0
     addi  a2, sp, 360   # b0[10]
     call karatsuba226
 
+    addi a0, sp, 80
+    call printkarresult
+
+    addi a0, sp, 240
+    addi a1, sp, 280
+    call printkarparams
+
     addi  a0, sp, 120   # xzm[10]
     addi  a1, sp, 240   # a1
     addi  a2, sp, 280   # a1[10]
     call karatsuba226
+
+    addi a0, sp, 120
+    call printkarresult
 
     addi  a0, sp, 80    # xzm
     addi  a1, sp, 0     # xzm1

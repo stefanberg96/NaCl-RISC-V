@@ -50,7 +50,6 @@ void sub226(unsigned int out[10], const unsigned int a[10],
   out[9] = u;
   squeeze226(out);
 }
-
 const unsigned int minusp[10] = {19, 0, 0, 0, 0, 0, 0, 0, 0, 0x200000};
 
 void freeze(unsigned int a[10]) {
@@ -204,6 +203,8 @@ int crypto_scalarmult(unsigned char *q, const unsigned char *n,
   convert_to_radix226(work226, p);
 
   mainloop226_asm(work226, e226);
+  printintarray(work226,10);
+  printintarray(work226+10,10);
 
   recip226(work226 + 10, work226 + 10);
   karatsuba226(work226, work226, work226 + 10);

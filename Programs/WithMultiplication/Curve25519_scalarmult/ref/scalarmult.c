@@ -197,6 +197,8 @@ static void mainloop(unsigned int work[64], const unsigned char e[32]) {
     b = e[pos / 8] >> (pos & 7);
     b &= 1;
     crypto_select(xzmb, xzm1b, xzm, xzm1, b);
+    printintarray(xzmb,32);
+    printintarray(xzm1b,32);
     add(a0, xzmb, xzmb + 32);
     sub(a0 + 32, xzmb, xzmb + 32);
     add(a1, xzm1b, xzm1b + 32);
