@@ -56,6 +56,7 @@ squeeze226:
     and   t0, a4, a6    #
     srli  a4, a4, 26    #
     add   a4, a4, t1    #
+    and   t1, a4, a6    #
     srli  a4, a4, 26    #
     add   a4, a4, t2    #
     and   t2, a4, a6    #
