@@ -73,7 +73,6 @@ postloop:
     addi  s3, s3, 1      #
     blt   s3, s6, outer_loop
 
-    sw    s4, 20(s1)     # h[5]=u
     lw    a0, 28(sp)     #
     sw    a0, 0(s1)      # h[i]=hr[i]
     lw    a0, 24(sp)     #              
@@ -83,6 +82,7 @@ postloop:
     lw    a0, 16(sp)     #              
     sw    a0, 12(s1)     # h[i]=hr[i]
     lw    a0, 12(sp)     #
+    add   a0, a0, s4
     sw    a0, 16(s1)     # h[i]=hr[i]
     mv    a0, s1
     call  squeeze226asm
