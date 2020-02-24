@@ -3,12 +3,9 @@
 .globl securemul226
 .type securemul226, @function
 securemul226:
-   li      a2, 0         # x_h
-   li      a3, 0         # r_l
    andi    t1, a1, 1     # create mask 
    sub     t1, zero, t1  #
-   and     t1, a0, t1    # apply mask
-   add     a3, a3, t1    # increase result
+   and     a3, a0, t1    # apply mask
    slli    a0, a0, 1     # shift 1
    srli    a1, a1, 1     #
    andi    t1, a1, 1     # create mask 
@@ -43,8 +40,7 @@ securemul226:
    mv      a4, t1
 
    srli    a1, a1, 1     # shift 6
-   srli    t1, a0, 31    #
-   mv      a2, t1        # x_h
+   srli    a2, a0, 31    # x_h
    slli    a0, a0, 1     #
    andi    t1, a1, 1     # create mask
    sub     t1, zero, t1  #
