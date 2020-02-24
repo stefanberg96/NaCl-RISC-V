@@ -3,77 +3,286 @@
 .globl securemul226
 .type securemul226, @function
 securemul226:
-   andi    t1, a1, 1     # create mask 
-   sub     t1, zero, t1  #
-   and     a3, a0, t1    # apply mask
-   slli    a0, a0, 1     # shift 1
-   srli    a1, a1, 1     #
-   andi    t1, a1, 1     # create mask 
-   sub     t1, zero, t1  #
-   and     t1, a0, t1    # apply mask
-   add     a3, a3, t1    # increase result
-   slli    a0, a0, 1     # shift 2
-   srli    a1, a1, 1     #
-   andi    t1, a1, 1     # create mask 
-   sub     t1, zero, t1  #
-   and     t1, a0, t1    # apply mask
-   add     a3, a3, t1    # increase result
-   slli    a0, a0, 1     # shift 3
-   srli    a1, a1, 1     #
-   andi    t1, a1, 1     # create mask      
-   sub     t1, zero, t1  #
-   and     t1, a0, t1    # apply mask
-   add     a3, a3, t1    # increase result
-   slli    a0, a0, 1     # shift 4
-   srli    a1, a1, 1     #
-   andi    t1, a1, 1     # create mask      
-   sub     t1, zero, t1  #
-   and     t1, a0, t1    # apply mask
-   add     a3, a3, t1    # increase result
-   slli    a0, a0, 1     # shift 5
-   srli    a1, a1, 1     #
-   andi    t1, a1, 1     # create mask      
-   sub     t1, zero, t1  #
-   and     t1, a0, t1    # apply mask
-   add     a3, a3, t1    # increase result
-   sltu    t1, a3, t1
-   mv      a4, t1
+    li    a4, 0x3ffffff # 2^26-1
+    andi  t1, a1, 1     # get the last bit
+    neg   t1, t1        # create mask
+    and   a2, a0, t1    # r_l
+    srli  a1, a1, 1     # update multiplier
+    andi  t1, a1, 1     # get the last bit 
+    neg   t1, t1        # create mask
+    srli  t2, a0, 25    # shift multiplicand for the high part
+    and   a3, t2, t1    # r_h, apply the mask
+    slli  t2, a0, 1     # shift multiplicand for the low part
+    and   t2, t2, a4    # only get the low 26 bits
+    and   t2, t2, t1    # apply the mask
+    add   a2, a2, t2    # add to r_l
 
-   srli    a1, a1, 1     # shift 6
-   srli    a2, a0, 31    # x_h
-   slli    a0, a0, 1     #
-   andi    t1, a1, 1     # create mask
-   sub     t1, zero, t1  #
-   and     t2, a2, t1    # apply mask
-   and     t1, a0, t1    #
-   add     a3, t1, a3    # increase result
-   sltu    t1, a3, t1    # handle carry
-   add     a4, a4, t1    # r_h
-   add     a4, a4, t2    #
+    srli  a1, a1, 1     # update multiplier
+    andi  t1, a1, 1     # get the last bit
+    neg   t1, t1        # create mask
+    srli  t2, a0, 24    # shift multiplicand for the high part
+    and   t2, t2, t1    # apply the mask
+    add   a3, a3, t2    # add to r_h
+    slli  t2, a0, 2     # shift multiplicand for the low part
+    and   t2, t2, a4    # only get the low 26 bits
+    and   t2, t2, t1    # apply the mask
+    add   a2, a2, t2    # add to r_l
 
-   li      a5, 20
-loop:
-   srli    a1, a1, 1     # shift 
-   slli    a2, a2, 1     #
-   srli    t1, a0, 31    #
-   add     a2, a2, t1    # x_h
-   slli    a0, a0, 1     #
-   andi    t1, a1, 1     # create mask
-   sub     t1, zero, t1  #
-   and     t2, a2, t1    # apply mask
-   and     t1, a0, t1    #
-   add     a3, t1, a3    # increase result
-   sltu    t1, a3, t1    # handle carry
-   add     a4, a4, t1    # 
-   add     a4, a4, t2    #
-   addi    a5, a5, -1    # update loop variables
-   bnez    a5, loop
+    srli  a1, a1, 1     # update multiplier
+    andi  t1, a1, 1     # get the last bit
+    neg   t1, t1        # create mask
+    srli  t2, a0, 23    # shift multiplicand for the high part
+    and   t2, t2, t1    # apply the mask
+    add   a3, a3, t2    # add to r_h
+    slli  t2, a0, 3     # shift multiplicand for the low part
+    and   t2, t2, a4    # only get the low 26 bits
+    and   t2, t2, t1    # apply the mask
+    add   a2, a2, t2    # add to r_l
 
-   srli    t0, a3, 26    # handle overflow
-   slli    a1, a4, 6     #
-   or      a1, a1, t0
-   li      t0, 0x3ffffff # 2^26-1
-   and     a0, a3, t0    #
+    srli  a1, a1, 1     # 
+    andi  t1, a1, 1     # 
+    neg   t1, t1        # 
+    srli  t2, a0, 22    # 
+    and   t2, t2, t1    # 
+    add   a3, a3, t2    # 
+    slli  t2, a0, 4     # 
+    and   t2, t2, a4    # 
+    and   t2, t2, t1    # 
+    add   a2, a2, t2    # 
 
-   ret
+    srli  a1, a1, 1     # 
+    andi  t1, a1, 1     # 
+    neg   t1, t1        # 
+    srli  t2, a0, 21    # 
+    and   t2, t2, t1    # 
+    add   a3, a3, t2    # 
+    slli  t2, a0, 5     # 
+    and   t2, t2, a4    # 
+    and   t2, t2, t1    # 
+    add   a2, a2, t2    # 
+
+    srli  a1, a1, 1     # 
+    andi  t1, a1, 1     # 
+    neg   t1, t1        # 
+    srli  t2, a0, 20    # 
+    and   t2, t2, t1    # 
+    add   a3, a3, t2    # 
+    slli  t2, a0, 6     # 
+    and   t2, t2, a4    # 
+    and   t2, t2, t1    # 
+    add   a2, a2, t2    # 
+
+    srli  a1, a1, 1     # 
+    andi  t1, a1, 1     # 
+    neg   t1, t1        # 
+    srli  t2, a0, 19    # 
+    and   t2, t2, t1    # 
+    add   a3, a3, t2    # 
+    slli  t2, a0, 7     # 
+    and   t2, t2, a4    # 
+    and   t2, t2, t1    # 
+    add   a2, a2, t2    # 
+
+    srli  a1, a1, 1     # 
+    andi  t1, a1, 1     # 
+    neg   t1, t1        # 
+    srli  t2, a0, 18    # 
+    and   t2, t2, t1    # 
+    add   a3, a3, t2    # 
+    slli  t2, a0, 8     # 
+    and   t2, t2, a4    # 
+    and   t2, t2, t1    # 
+    add   a2, a2, t2    # 
+
+    srli  a1, a1, 1     # 
+    andi  t1, a1, 1     # 
+    neg   t1, t1        # 
+    srli  t2, a0, 17    # 
+    and   t2, t2, t1    # 
+    add   a3, a3, t2    # 
+    slli  t2, a0, 9     # 
+    and   t2, t2, a4    # 
+    and   t2, t2, t1    # 
+    add   a2, a2, t2    # 
+
+    srli  a1, a1, 1     # 
+    andi  t1, a1, 1     # 
+    neg   t1, t1        # 
+    srli  t2, a0, 16    # 
+    and   t2, t2, t1    # 
+    add   a3, a3, t2    # 
+    slli  t2, a0, 10    # 
+    and   t2, t2, a4    # 
+    and   t2, t2, t1    # 
+    add   a2, a2, t2    # 
+
+    srli  a1, a1, 1     # 
+    andi  t1, a1, 1     # 
+    neg   t1, t1        # 
+    srli  t2, a0, 15    # 
+    and   t2, t2, t1    # 
+    add   a3, a3, t2    # 
+    slli  t2, a0, 11    # 
+    and   t2, t2, a4    # 
+    and   t2, t2, t1    # 
+    add   a2, a2, t2    # 
+
+    srli  a1, a1, 1     # 
+    andi  t1, a1, 1     # 
+    neg   t1, t1        # 
+    srli  t2, a0, 14    # 
+    and   t2, t2, t1    # 
+    add   a3, a3, t2    # 
+    slli  t2, a0, 12    # 
+    and   t2, t2, a4    # 
+    and   t2, t2, t1    # 
+    add   a2, a2, t2    # 
+
+    srli  a1, a1, 1     # 
+    andi  t1, a1, 1     # 
+    neg   t1, t1        # 
+    srli  t2, a0, 13    # 
+    and   t2, t2, t1    # 
+    add   a3, a3, t2    # 
+    slli  t2, a0, 13    # 
+    and   t2, t2, a4    # 
+    and   t2, t2, t1    # 
+    add   a2, a2, t2    # 
+
+    srli  a1, a1, 1     # 
+    andi  t1, a1, 1     # 
+    neg   t1, t1        # 
+    srli  t2, a0, 12    # 
+    and   t2, t2, t1    # 
+    add   a3, a3, t2    # 
+    slli  t2, a0, 14    # 
+    and   t2, t2, a4    # 
+    and   t2, t2, t1    # 
+    add   a2, a2, t2    # 
+
+    srli  a1, a1, 1     # 
+    andi  t1, a1, 1     # 
+    neg   t1, t1        # 
+    srli  t2, a0, 11    # 
+    and   t2, t2, t1    # 
+    add   a3, a3, t2    # 
+    slli  t2, a0, 15    # 
+    and   t2, t2, a4    # 
+    and   t2, t2, t1    # 
+    add   a2, a2, t2    # 
+
+    srli  a1, a1, 1     # 
+    andi  t1, a1, 1     # 
+    neg   t1, t1        # 
+    srli  t2, a0, 10    # 
+    and   t2, t2, t1    # 
+    add   a3, a3, t2    # 
+    slli  t2, a0, 16    # 
+    and   t2, t2, a4    # 
+    and   t2, t2, t1    # 
+    add   a2, a2, t2    # 
+
+    srli  a1, a1, 1     # 
+    andi  t1, a1, 1     # 
+    neg   t1, t1        # 
+    srli  t2, a0, 9     # 
+    and   t2, t2, t1    # 
+    add   a3, a3, t2    # 
+    slli  t2, a0, 17    # 
+    and   t2, t2, a4    # 
+    and   t2, t2, t1    # 
+    add   a2, a2, t2    # 
+
+    srli  a1, a1, 1     # 
+    andi  t1, a1, 1     # 
+    neg   t1, t1        # 
+    srli  t2, a0, 8     # 
+    and   t2, t2, t1    # 
+    add   a3, a3, t2    # 
+    slli  t2, a0, 18    # 
+    and   t2, t2, a4    # 
+    and   t2, t2, t1    # 
+    add   a2, a2, t2    # 
+
+    srli  a1, a1, 1     # 
+    andi  t1, a1, 1     # 
+    neg   t1, t1        # 
+    srli  t2, a0, 7     # 
+    and   t2, t2, t1    # 
+    add   a3, a3, t2    # 
+    slli  t2, a0, 19    # 
+    and   t2, t2, a4    # 
+    and   t2, t2, t1    # 
+    add   a2, a2, t2    # 
+
+    srli  a1, a1, 1     # 
+    andi  t1, a1, 1     # 
+    neg   t1, t1        # 
+    srli  t2, a0, 6     # 
+    and   t2, t2, t1    # 
+    add   a3, a3, t2    # 
+    slli  t2, a0, 20    # 
+    and   t2, t2, a4    # 
+    and   t2, t2, t1    # 
+    add   a2, a2, t2    # 
+
+    srli  a1, a1, 1     # 
+    andi  t1, a1, 1     # 
+    neg   t1, t1        # 
+    srli  t2, a0, 5     # 
+    and   t2, t2, t1    # 
+    add   a3, a3, t2    # 
+    slli  t2, a0, 21    # 
+    and   t2, t2, a4    # 
+    and   t2, t2, t1    # 
+    add   a2, a2, t2    # 
+
+    srli  a1, a1, 1     # 
+    andi  t1, a1, 1     # 
+    neg   t1, t1        # 
+    srli  t2, a0, 4     # 
+    and   t2, t2, t1    # 
+    add   a3, a3, t2    # 
+    slli  t2, a0, 22    # 
+    and   t2, t2, a4    # 
+    and   t2, t2, t1    # 
+    add   a2, a2, t2    # 
+
+    srli  a1, a1, 1     # 
+    andi  t1, a1, 1     # 
+    neg   t1, t1        # 
+    srli  t2, a0, 3     # 
+    and   t2, t2, t1    # 
+    add   a3, a3, t2    # 
+    slli  t2, a0, 23    # 
+    and   t2, t2, a4    # 
+    and   t2, t2, t1    # 
+    add   a2, a2, t2    # 
+
+    srli  a1, a1, 1     # 
+    andi  t1, a1, 1     # 
+    neg   t1, t1        # 
+    srli  t2, a0, 2     # 
+    and   t2, t2, t1    # 
+    add   a3, a3, t2    # 
+    slli  t2, a0, 24    # 
+    and   t2, t2, a4    # 
+    and   t2, t2, t1    # 
+    add   a2, a2, t2    # 
+
+    srli  a1, a1, 1     # 
+    andi  t1, a1, 1     # 
+    neg   t1, t1        # 
+    srli  t2, a0, 1     # 
+    and   t2, t2, t1    # 
+    add   a3, a3, t2    # 
+    slli  t2, a0, 25    # 
+    and   t2, t2, a4    # 
+    and   t2, t2, t1    # 
+    add   a2, a2, t2    # 
+
+    srli  t0, a2, 26    # handle overflow
+    add   a1, a3, t0    # r_h
+    and   a0, a2, a4    # r_l
+    ret
 
