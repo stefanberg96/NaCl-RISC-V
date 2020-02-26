@@ -1,4 +1,7 @@
 #include "onetime_auth.h"
+extern void karatsuba226asm_inplace(unsigned int *, unsigned int *);
+
+void printbytes(unsigned int x, unsigned int y) { printf("%x, %x\n", x, y); }
 
 static const unsigned int minusp[17] = {5, 0, 0, 0, 0, 0, 0, 0,  0,
                                         0, 0, 0, 0, 0, 0, 0, 252};
@@ -43,7 +46,6 @@ int crypto_onetimeauth(unsigned char *out, const unsigned char *in,
   unsigned int h[17];
   unsigned int c[17];
 
-
   // create R from the first 16 bytes of the key
   r[0] = k[0] + (k[1] << 8) + (k[2] << 16) + ((k[3] & 3) << 24);
   r[1] = ((k[3] >> 2) & 3) + ((k[4] & 252) << 6) + (k[5] << 14) +
@@ -57,39 +59,46 @@ int crypto_onetimeauth(unsigned char *out, const unsigned char *in,
   // set the state to 0
   for (j = 0; j < 17; ++j)
     h[j] = 0;
-  
+
   // do the bulk of the authloop
   int newinlen = onetimeauth_loop(in, inlen, h, r, c);
-  
+
   // calculate how much work is left (always less than 16 bytes)
-  in += inlen-newinlen;
+  in += inlen - newinlen;
   inlen = newinlen;
+  unsigned long long zero = 0l;
 
-  // do the remaining work
-  for (j = 0; j < 5; ++j)
-    c[j] = 0; // set c to 0
-  int index = 0;
-  int bitleft = 26;
-  for (j = 0; (j < 16) && (j < inlen); ++j) {
-    if (bitleft < 8) {
-      int tmp = ((1 << bitleft) - 1);
-      c[index] += (in[j] & tmp) << (26 - bitleft);
-      index++;
-      c[index] += in[j] >> bitleft;
-      bitleft = 26 - (8 - bitleft);
-    } else {
-      c[index] += in[j] << (26 - bitleft); // fill c with a chunk of 16 bytes from the in param
-      bitleft -= 8;
+  if (newinlen != 0) {
+
+    // do the remaining work
+    for (j = 0; j < 5; ++j)
+      c[j] = 0; // set c to 0
+    int index = 0;
+    int bitleft = 26;
+    for (j = 0; (j < 16) && (j < newinlen); ++j) {
+      if (bitleft < 8) {
+        int tmp = ((1 << bitleft) - 1);
+        c[index] += (in[j] & tmp) << (26 - bitleft);
+        index++;
+        c[index] += in[j] >> bitleft;
+        bitleft = 26 - (8 - bitleft);
+      } else {
+        c[index] +=
+            in[j]
+            << (26 -
+                bitleft); // fill c with a chunk of 16 bytes from the in param
+        bitleft -= 8;
+      }
     }
-  }
-  if (bitleft == 0) {
-    index++;
-    bitleft = 26;
-  }
-  c[index] += 1 << (26 - bitleft);
+    if (bitleft == 0) {
+      index++;
+      bitleft = 26;
+    }
+    c[index] += 1 << (26 - bitleft);
 
-  add226asm(h, c);    // c to the state
-  mulmod226asm(h, r); // multiply state with the secret key modulo 2^130-5
+    add226asm(h, c);    // c to the state
+    mulmod226asm(h, r); // multiply state with the secret key modulo 2^130-5
+  }
 
   // go back to radix 2.8
   toradix28(h);
