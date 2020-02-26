@@ -12,5 +12,5 @@ extern int onetimeauth_loop(const unsigned char *in , int inlen, unsigned int *h
 extern uint64_t securemul226(unsigned int y, unsigned int x);
 void toradix28(unsigned int h[17]);
 int crypto_onetimeauth(unsigned char *out, const unsigned char *in,
-                       unsigned long long inlen, const unsigned char *k); 
+                       unsigned long long inlen, const unsigned char *ki); 
 extern unsigned int testasm();

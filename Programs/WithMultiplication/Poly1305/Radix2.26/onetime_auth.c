@@ -3,18 +3,19 @@ extern void karatsuba226asm_inplace(unsigned int *, unsigned int *);
 
 void printbytes(unsigned int x, unsigned int y) { printf("%x, %x\n", x, y); }
 
-static const unsigned int minusp[17] = {5, 0, 0, 0, 0, 0, 0, 0,  0,
-                                        0, 0, 0, 0, 0, 0, 0, 252};
+static const unsigned int minusp[5] = {5, 0, 0, 0, 0x4000000};
 
-static void freeze(unsigned int h[17]) {
-  unsigned int horig[17];
+//static const unsigned int minusp[17] = {5, 0, 0, 0, 0, 0, 0, 0,  0,                                        0, 0, 0, 0, 0, 0, 0, 252};
+
+static void freeze(unsigned int h[5]) {
+  unsigned int horig[5];
   unsigned int j;
   unsigned int negative;
-  for (j = 0; j < 17; ++j)
+  for (j = 0; j < 5; ++j)
     horig[j] = h[j];
-  addasm(h, minusp);
-  negative = -(h[16] >> 7);
-  for (j = 0; j < 17; ++j)
+  add226asm_wo_squeeze(h, minusp);
+  negative = -(h[4] >> 26);
+  for (j = 0; j < 5; ++j)
     h[j] ^= negative & (horig[j] ^ h[j]);
 }
 
@@ -101,9 +102,9 @@ int crypto_onetimeauth(unsigned char *out, const unsigned char *in,
   }
 
   // go back to radix 2.8
-  toradix28(h);
 
   freeze(h); // calculate mod 2^130-5
+  toradix28(h);
 
   for (j = 0; j < 16; ++j)
     c[j] = k[j + 16];

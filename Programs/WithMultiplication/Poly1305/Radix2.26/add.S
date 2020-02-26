@@ -74,3 +74,57 @@ add226asm:
     lw    ra, 8(sp)     #
     add   sp, sp, 16
     ret
+
+.globl add226asm_wo_squeeze
+.type add226asm_wo_squeeze, @function
+add226asm_wo_squeeze:
+    addi  sp, sp, -16   # store variables
+    sw    s0, 0(sp)     #
+    sw    s1, 4(sp)     #
+
+    mv    s0, a0        # store a0
+    mv    s1, a1        # store a1
+
+    li    t4, 0x3FFFFFF # load constant
+    lw    a0, 0(s0)     # load h[0]
+    lw    t2, 0(s1)     # load c[0]
+    add   t3, a0, t2    # u= h[0]+c[0]
+    and   a0, t3, t4    # u & 0x3FFFFFF
+
+    srli  t3, t3, 26    # u >>= 26
+    lw    a1, 4(s0)     # load h[1]
+    lw    t2, 4(s1)     # load c[1]
+    add   a1, a1, t2    # t1= h[1]+c[1]
+    add   t3, t3, a1    # u+= h[1]+c[1]
+    and   a1, t3, t4    # u & 0x3FFFFFF
+
+    srli  t3, t3, 26    # u >>= 26
+    lw    a2, 8(s0)     # load h[2]
+    lw    t2, 8(s1)     # load c[0]
+    add   a2, a2, t2    # t1= h[2]+c[2]
+    add   t3, t3, a2    # u+= h[2]+c[2]
+    and   a2, t3, t4    # u & 0x3FFFFFF
+
+    srli  t3, t3, 26    # u >>= 26
+    lw    a3, 12(s0)    # load h[3]
+    lw    t2, 12(s1)    # load c[3]
+    add   a3, a3, t2    # t1= h[3]+c[3]
+    add   t3, t3, a3    # u+= h[3]+c[3]
+    and   a3, t3, t4    # u & 0x3FFFFFF
+
+    srli  t3, t3, 26    # u >>= 26
+    lw    a4, 16(s0)    # load h[4]
+    lw    t2, 16(s1)    # load c[4]
+    add   a4, a4, t2    # t1= h[4]+c[4]
+    add   a4, t3, a4    # u+= h[4]+c[4]
+
+    sw    a0, 0(s0)     #
+    sw    a1, 4(s0)     #
+    sw    a2, 8(s0)     #
+    sw    a3, 12(s0)    #
+    sw    a4, 16(s0)    #
+
+    lw    s0, 0(sp)     # restore variables
+    lw    s1, 4(sp)     #
+    add   sp, sp, 16
+    ret
