@@ -33,218 +33,219 @@ mulmod226asm:
     mulh  t1, a0, a5   #
     li    t6, 0x3ffffff # 2^26-1
     li    t5, 5        # constant c
-    srli  t2, t0, 26   #
-    slli  t1, t1, 6    #
 
     mul   t3, a0, a6   # A_0*B_1
     mulh  t4, a0, a6   #
+    srli  t2, t0, 26   #
+    slli  t1, t1, 6    #
     or    s4, t1, t2   # r_1
     and   s3, t0, t6   # r_0
+    
+    mul   t0, a1, a5   # A_1*B_0
+    mulh  t1, a1, a5   #
     srli  t2, t3, 26   #
     slli  t4, t4, 6    #
     and   t3, t3, t6   #
-
-    mul   t0, a1, a5   # A_1*B_0
-    mulh  t1, a1, a5   #
     or    s5, t4, t2   # r_2
     add   s4, s4, t3   # r_1 += A_0*B_1
-    srli  t2, t0, 26   #
-    slli  t1, t1, 6    #
-    or    t1, t1, t2   #
-    and   t0, t0, t6   #
 
     mul   t3, a0, s0   # A_0*B_2
     mulh  t4, a0, s0   #
+    srli  t2, t0, 26   #
+    slli  t1, t1, 6    #
+    or    t1, t1, t2   #
+    and   t0, t0, t6   #
     add   s4, s4, t0   # r_1 += A_1*B_0
     add   s5, s5, t1   # r_2 += A_1*B_0
-    srli  t2, t3, 26   #
-    slli  t4, t4, 6    #
-    and   t3, t3, t6   #
 
     mul   t0, a1, a6   # A_1*B_1
     mulh  t1, a1, a6   # 
+    srli  t2, t3, 26   #
+    slli  t4, t4, 6    #
+    and   t3, t3, t6   #
     or    s6, t4, t2   # r_3
     add   s5, s5, t3   # r_2 += A_0*B_2
-    srli  t2, t0, 26   #
-    slli  t1, t1, 6    #
-    or    t1, t1, t2   #
-    and   t0, t0, t6   #
 
     mul   t3, a2, a5   # A_2*B_0
     mulh  t4, a2, a5   #
+    srli  t2, t0, 26   #
+    slli  t1, t1, 6    #
+    or    t1, t1, t2   #
+    and   t0, t0, t6   #
     add   s6, s6, t1   # r_3 += A_1*B_1
     add   s5, s5, t0   # r_2 += A_1*B_1
-    srli  t2, t3, 26   #
-    slli  t4, t4, 6    #
-    or    t4, t4, t2   #
-    and   t3, t3, t6   #
 
     mul   t0, a0, s1   # A_0 * B_3
     mulh  t1, a0, s1   #
+    srli  t2, t3, 26   #
+    slli  t4, t4, 6    #
+    or    t4, t4, t2   #
+    and   t3, t3, t6   #
     add   s6, s6, t4   # r_3 += A_2*B_0
     add   s5, s5, t3   # r_2 += A_2*B_0
-    srli  t2, t0, 26   # 
-    slli  t1, t1, 6    #
-    and   t0, t0, t6   #
 
     mul   t3, a1, s0   # A_1*B_2
     mulh  t4, a1, s0   #
+    srli  t2, t0, 26   # 
+    slli  t1, t1, 6    #
+    and   t0, t0, t6   #
     or    s7, t1, t2   # r_4
     add   s6, s6, t0   # r_3 += A_0*B_3
-    srli  t2, t3, 26   #
-    slli  t4, t4, 6    #
-    or    t4, t4, t2   #
-    and   t3, t3, t6   #
 
     mul   t0, a2, a6   # A_2*B_1
     mulh  t1, a2, a6   #
+    srli  t2, t3, 26   #
+    slli  t4, t4, 6    #
+    or    t4, t4, t2   #
+    and   t3, t3, t6   #
     add   s7, s7, t4   # r_4 += A_1*B_2
     add   s6, s6, t3   # r_3 += A_1*B_2
-    srli  t2, t0, 26   #
-    slli  t1, t1, 6    #
-    or    t1, t1, t2   #
-    and   t0, t0, t6   #
 
     mul   t3, a3, a5   # A_3*B_0
     mulh  t4, a3, a5   #
+    srli  t2, t0, 26   #
+    slli  t1, t1, 6    #
+    or    t1, t1, t2   #
+    and   t0, t0, t6   #
     add   s7, s7, t1   # r_4 += A_2*B_1
     add   s6, s6, t0   # r_3 += A_2*B_1
-    srli  t2, t3, 26   #
-    slli  t4, t4, 6    #
-    or    t4, t4, t2   #
-    and   t3, t3, t6   #
 
     mul   t0, a0, s2   # A_0*B_4
     mulh  t1, a0, s2   #
+    srli  t2, t3, 26   #
+    slli  t4, t4, 6    #
+    or    t4, t4, t2   #
+    and   t3, t3, t6   #
     add   s7, s7, t4   # r_4 += A_3*B_0
     add   s6, s6, t3   # r_3 += A_3*B_0
-    srli  t2, t0, 26   #
-    slli  t1, t1, 6    #
-    and   t0, t0, t6   #
 
     mul   t3, a1, s1   # A_1*B_3
     mulh  t4, a1, s1   #
+    srli  t2, t0, 26   #
+    slli  t1, t1, 6    #
+    and   t0, t0, t6   #
     or    s9, t1, t2   # overflow
     add   s7, s7, t0   # r_4 += A_0*B_4
-    srli  t2, t3, 26   #
-    slli  t4, t4, 6    #
-    or    t4, t4, t2   #
-    and   t3, t3, t6   #
 
     mul   t0, a2, s0   # A_2*B_2
     mulh  t1, a2, s0   #
+    srli  t2, t3, 26   #
+    slli  t4, t4, 6    #
+    or    t4, t4, t2   #
+    and   t3, t3, t6   #
     add   s9, s9, t4   # overflow
     add   s7, s7, t3   # r_4 += A_1*B_3
-    srli  t2, t0, 26   #
-    slli  t1, t1, 6    #
-    or    t1, t1, t2   #
-    and   t0, t0, t6   #
 
     mul   t3, a3, a6   # A_3*B_1
     mulh  t4, a3, a6   #
+    srli  t2, t0, 26   #
+    slli  t1, t1, 6    #
+    or    t1, t1, t2   #
+    and   t0, t0, t6   #
     add   s9, s9, t1   # overflow
     add   s7, s7, t0   # r_4 += A_2*B_2
-    srli  t2, t3, 26   #
-    slli  t4, t4, 6    #
-    or    t4, t4, t2   #
-    and   t3, t3, t6   #
 
     mul   t0, a4, a5   # A_4*B_0
     mulh  t1, a4, a5   #
-    add   s9, s9, t4   # overflow
-    add   s7, s7, t3   # r_4 += A_3*B_1
-    srli  t2, t0, 26   #
-    slli  t1, t1, 6    #
-    or    t1, t1, t2   #
-    and   t0, t0, t6   #
-
-    mul   t3, a1, s2   # A_1*B_4
-    mulh  t4, a1, s2   #
-    add   s9, s9, t1   # overflow
-    add   s7, s7, t0   # r_4 += A_4*B_0
-    srli  t2, t3, 26   # 
-    slli  t4, t4, 6    #
-    and   t3, t3, t6   #
-
-    mul   t0, a2, s1   # A_2*B_3
-    mulh  t1, a2, s1   #
-    or    a7, t4, t2   # r_1*c(variable name)
-    add   s9, s9, t3   # overflow
-    srli  t2, t0, 26   #
-    slli  t1, t1, 6    #
-    or    t1, t1, t2   #
-    and   t0, t0, t6   #
-
-    mul   t3, a3, s0   # A_3*B_2
-    mulh  t4, a3, s0   #
-    add   a7, a7, t1   # r_1*c += A_2*B_3
-    add   s9, s9, t0   # overflow
     srli  t2, t3, 26   #
     slli  t4, t4, 6    #
     or    t4, t4, t2   #
     and   t3, t3, t6   #
+    add   s9, s9, t4   # overflow
+    add   s7, s7, t3   # r_4 += A_3*B_1
 
-    mul   t0, a4, a6   # A_4*B_1
-    mulh  t1, a4, a6   # 
-    add   a7, a7, t4   # r_1*c += A_3*B_2
-    add   s9, s9, t3   # overflow
+    mul   t3, a1, s2   # A_1*B_4
+    mulh  t4, a1, s2   #
     srli  t2, t0, 26   #
     slli  t1, t1, 6    #
     or    t1, t1, t2   #
     and   t0, t0, t6   #
+    add   s9, s9, t1   # overflow
+    add   s7, s7, t0   # r_4 += A_4*B_0
+
+    mul   t0, a2, s1   # A_2*B_3
+    mulh  t1, a2, s1   #
+    srli  t2, t3, 26   # 
+    slli  t4, t4, 6    #
+    and   t3, t3, t6   #
+    or    a7, t4, t2   # r_1*c(variable name)
+    add   s9, s9, t3   # overflow
+
+    mul   t3, a3, s0   # A_3*B_2
+    mulh  t4, a3, s0   #
+    srli  t2, t0, 26   #
+    slli  t1, t1, 6    #
+    or    t1, t1, t2   #
+    and   t0, t0, t6   #
+    add   a7, a7, t1   # r_1*c += A_2*B_3
     add   s9, s9, t0   # overflow
 
+    mul   t0, a4, a6   # A_4*B_1
+    mulh  t1, a4, a6   # 
+    srli  t2, t3, 26   #
+    slli  t4, t4, 6    #
+    or    t4, t4, t2   #
+    and   t3, t3, t6   #
+    add   a7, a7, t4   # r_1*c += A_3*B_2
+    add   s9, s9, t3   # overflow
+    and   t3, t0, t6   #
+    add   s9, s9, t3   # overflow
+
     mul   t4, s9, t5   # 5*overflow
+    srli  t2, t0, 26   #
+    slli  t1, t1, 6    #
+    or    t1, t1, t2   #
     mul   a5, a2, s2   # A_2*B_4, a5(B_0) is not needed anymore and used as general register
     mulh  a6, a2, s2   # a6(B_1) is not needed anymore and used as gerenal register
 
     add   a7, a7, t1   # r_1*c += A_4*B_1
+    mul   t0, a3, s1   # A_3*B_3
+    mulh  t1, a3, s1   #
+
     add   a0, s3, t4   # 
     srli  t2, a5, 26   #
     slli  a6, a6, 6    #
     and   a5, a5, t6   #
 
-    mul   t0, a3, s1   # A_3*B_3
-    mulh  t1, a3, s1   #
     or    s9, a6, t2   # r_2*c(variable name)
     add   a7, a7, a5   # r_1*c += A_2*B_4
+
+    mul   t3, a4, s0   # A_4*B_2
+    mulh  t4, a4, s0   #
     srli  t2, t0, 26   #
     slli  t1, t1, 6    #
     or    t1, t1, t2   #
     and   t0, t0, t6   #
-
-    mul   t3, a4, s0   # A_4*B_2
-    mulh  t4, a4, s0   #
     add   s9, s9, t1   # r_2*c += A_3*B_3
     add   a7, a7, t0   # r_1*c += A_3*B_3
     srli  t2, t3, 26   #
-    slli  t4, t4, 6    #
-    or    t4, t4, t2   #
     and   t3, t3, t6   #
     add   a7, a7, t3   # r_1*c += A_4*B_2
 
     mul   a5, a7, t5   # r_1*c *= 5
     mul   t0, a3, s2   # A_3*B_4
     mulh  t1, a3, s2   #
+    slli  t4, t4, 6    #
+    or    t4, t4, t2   #
     add   s9, s9, t4   # r_2*c += A_4*B_2
     add   a1, s4, a5   # r_1 += r_1*c 
-    srli  t2, t0, 26   # 
-    slli  t1, t1, 6    #
-    and   t0, t0, t6   #
 
     mul   t3, a4, s1   # A_4*B_3
     mulh  t4, a4, s1   #
+    srli  t2, t0, 26   # 
+    slli  t1, t1, 6    #
+    and   t0, t0, t6   #
     or    a7, t1, t2   # r_3*c(variable name)
     add   s9, s9, t0   # r_2*c += A_3*B_4
-    srli  t2, t3, 26   #
-    slli  t4, t4, 6    #
-    or    t4, t4, t2   #
-    and   t3, t3, t6   #
-    add   s9, s9, t3   # r_2*c += A_4*B_3
+    and   t2, t3, t6   #
+    add   s9, s9, t2   # r_2*c += A_4*B_3
 
     mul   a5, s9, t5   # r_2*c *= 5
     mul   t0, a4, s2   # A_4*B_4
     mulh  t1, a4, s2   #
+    srli  t2, t3, 26   #
+    slli  t4, t4, 6    #
+    or    t4, t4, t2   #
     add   a2, s5, a5   # r_2 += r_2*c
     add   a7, a7, t4   # r_3*c += A_4*B_3
     srli  t2, t0, 26   #
