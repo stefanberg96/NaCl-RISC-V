@@ -2,98 +2,99 @@
 
 .globl karatsuba226_2asm
 .type karatsuba226_2asm, @function
+
+# a0 a1 A
+# a2 a3 B
+# a4..a7 R
+# t6 2^26-1
 karatsuba226_2asm:
-    addi    sp, sp, -32
-    sw      s0, 28(sp)
-    sw      s1, 24(sp)
-    sw      s2, 20(sp)
-    sw      s3, 16(sp)
-    sw      s4, 12(sp)
-    sw      s5, 8(sp)
-    sw      s6, 4(sp)
-    sw      ra, 0(sp)
+    addi    sp, sp, -16
+    sw      s0, 12(sp)
+    sw      s1, 8(sp)
 
-    mv      s0, a0      # Result pointer
-    mv      s1, a1      # A pointer
-    mv      s2, a2      # B pointer
+    mv      s0, a0
+    mv      s1, a1
+    lw      a0, 0(a2)
+    lw      a1, 4(a2)
+    lw      a2, 0(s1)
+    lw      a3, 4(s1)
 
-    lw      a0, 0(s1)   # load A0
-    lw      a1, 0(s2)   # load B0
-    call     securemul226 # mul A0*B0
+    li      t6, 0x3ffffff# 2^26-1
 
-    sw      a0, 0(s0)   # res[0]=A0*B0_l
-    add     s3, a0, a1  # res[1]=A0*B0_l + A0*B0_h
-    lw      a0, 4(s1)   # load A1
-    mv      s4, a1      # res[2]=A0*B0_h
-
-    lw      a1, 4(s2)   # load B1
-    call     securemul226 # mul A1*B1
-
-    add     s3, s3, a0  # res[1]+= A1*B1_l
-    lw      t0, 0(s1)   # load A0 preloading to prevent load-use interlock
-    lw      t1, 4(s1)   # load A1
-    lw      t2, 0(s2)   # load B0
-    lw      t3, 4(s2)   # load B1
-    add     s4, s4, a0  # res[2]+= A1*B1_l
-    add     s4, s4, a1  # res[2]+= A1*B1_h
-    mv      t6, a1      # res[3]=A1*B1_h temporarily store it in t6 (not used by securemul226)
+    mul     a4, a0, a2  # A0*B0_l
+    mulh    a5, a0, a2  # A0*B0_h
+    mul     t5, a1, a3  # A1*B1_l
+    mulh    a7, a1, a3  # A1*B1_h
 
     
-    sub     t0, t0, t1  # A0-A1
-    srai    s5, t0, 31  # get the sign of the subtraction
-    sub     t2, t2, t3  # B0-B1
-    srai    s6, t2, 31  # get the sign of the subtraction
-    add     t0, t0, s5  # make absolute value of A0-A1
-    xor     a0, t0, s5  #
-    add     t2, t2, s6  # absolute value of B0-B1
-    xor     a1, t2, s6  #
-    xor     s5, s5, s6  # sign of the multiplication
-    mv      s6, t6
-    call     securemul226 # |A0-A1|*|B0-B1|
+    sub     t0, a0, a1  # A0-A1
+    srai    t4, t0, 31  # get the sign of the subtraction
+    sub     t1, a2, a3  # B0-B1
+    srai    t3, t1, 31  # get the sign of the subtraction
+    add     t0, t0, t4  # make absolute value of A0-A1
+    xor     t0, t0, t4  #
+    add     t1, t1, t3  # absolute value of B0-B1
+    xor     t1, t1, t3  #
+    xor     t4, t4, t3  # sign of the multiplication
 
-    add     a0, a0, s5  # if sign is negative make the value negative
-    xor     a0, a0, s5  # otherwise keep it the same
-    sub     s3, s3, a0  # res[1]-=(A0-A1)*(B0-B1)_l
-    add     a1, a1, s5  # if sign is negative make the value negative
-    xor     a1, a1, s5  # otherwise keep it the same
-    sub     s4, s4, a1  # res[2]-=(A0-A1)*(B0-B1)_l
+    mul     t2, t1, t0  #
+    mulh    t3, t1, t0  #
 
-    li      t1, 0x3ffffff # 2^26-1
-    sltz    t0, s3      # handle underflow
-    sub     s4, s4, t0  #
-    addi    t2, t1, 1   # 2^26
-    neg     t0, t0      # mask
-    and     t0, t2, t0  # mask 2^26
-    add     s3, s3, t0  #
+    srli    t0, a4, 26  # base change to 2^26
+    slli    a5, a5, 6   #
+    or      a5, a5, t0  #
+    and     a0, a4, t6  #
+
+    srli    t0, t5, 26  #
+    slli    a7, a7, 6   #
+    or      a7, t0, a7  #
+    and     t5, t5, t6  #
+
+    add     a5, a5, t5  # A0*B0_h + A1*B1_l
+    add     a6, a7, a5  # A0*B0_h + A1*B1
+    add     a5, a5, a0  # A0*B0 + A1*B1
+
+
+    srli   t0, t2, 26   # base change to 2^26
+    slli   t3, t3, 6    #
+    or     t3, t3, t0   #
+    and    t2, t2, t6   #
     
-    sltz    t0, s4      # handle underflow
-    sub     s6, s6, t0  #
+
+    add     t2, t2, t4  # if sign is negative make the value negative
+    xor     t2, t2, t4  # otherwise keep it the same
+    sub     a5, a5, t2  # res[1]-=(A0-A1)*(B0-B1)_l
+    add     t3, t3, t4  # if sign is negative make the value negative
+    xor     t3, t3, t4  # otherwise keep it the same
+    sub     a6, a6, t3  # res[2]-=(A0-A1)*(B0-B1)_l
+
+    sltz    t0, a5      # handle underflow
+    sub     a6, a6, t0  #
+    addi    t2, t6, 1   # 2^26
     neg     t0, t0      # mask
     and     t0, t2, t0  # mask 2^26
-    add     s4, s4, t0
+    add     a5, a5, t0  #
+    
+    sltz    t0, a6      # handle underflow
+    sub     a7, a7, t0  #
+    neg     t0, t0      # mask
+    and     t0, t2, t0  # mask 2^26
+    add     a6, a6, t0
 
-    srli    t0, s3, 26  # handle overflow
-    add     s4, s4, t0  #
-    and     s3, s3, t1  #
-    srli    t0, s4, 26  #
-    add     s6, s6, t0  #
-    and     s4, s4, t1  #
-    sw      s3, 4(s0)   # store res[1]
-    sw      s4, 8(s0)   # store res[2]
-    sw      s6, 12(s0)  # store res[3]
+    srli    t0, a5, 26  # handle overflow
+    add     a6, a6, t0  #
+    and     a1, a5, t6  #
+    srli    t0, a6, 26  #
+    add     a3, a7, t0  #
+    and     a2, a6, t6  #
+    
+    sw      a0, 0(s0)   # store res[0]
+    sw      a1, 4(s0)   # store res[1]
+    sw      a2, 8(s0)   # store res[2]
+    sw      a3, 12(s0)  # store res[3]
 
-    lw      s0, 28(sp)  # restore variables and stack
-    lw      s1, 24(sp)
-    lw      s2, 20(sp)
-    lw      s3, 16(sp)
-    lw      s4, 12(sp)
-    lw      s5, 8(sp)
-    lw      s6, 4(sp)
-    lw      ra, 0(sp)
-    addi    sp, sp, 32
+    lw      s0, 12(sp)  # restore variables and stack
+    lw      s1, 8(sp)   #
+    addi    sp, sp, 16
 
     ret
-
-
-
-
