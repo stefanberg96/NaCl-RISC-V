@@ -8,17 +8,6 @@
 # a4..a7 R
 # t6 2^26-1
 karatsuba226_2asm:
-    addi    sp, sp, -16
-    sw      s0, 12(sp)
-    sw      s1, 8(sp)
-
-    mv      s0, a0
-    mv      s1, a1
-    lw      a0, 0(a2)
-    lw      a1, 4(a2)
-    lw      a2, 0(s1)
-    lw      a3, 4(s1)
-
     li      t6, 0x3ffffff# 2^26-1
 
     mul     a4, a0, a2  # A0*B0_l
@@ -88,13 +77,4 @@ karatsuba226_2asm:
     add     a3, a7, t0  #
     and     a2, a6, t6  #
     
-    sw      a0, 0(s0)   # store res[0]
-    sw      a1, 4(s0)   # store res[1]
-    sw      a2, 8(s0)   # store res[2]
-    sw      a3, 12(s0)  # store res[3]
-
-    lw      s0, 12(sp)  # restore variables and stack
-    lw      s1, 8(sp)   #
-    addi    sp, sp, 16
-
     ret
