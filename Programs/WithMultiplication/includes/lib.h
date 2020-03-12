@@ -22,8 +22,8 @@ int crypto_stream_salsa2012_xor(unsigned char *c, const unsigned char *m,unsigne
 int crypto_stream_xsalsa20(unsigned char *c, unsigned long long clen, const unsigned char *n, const unsigned char *k);
 int crypto_stream_xsalsa20_xor(unsigned char *c, const unsigned char *m,unsigned long long mlen, const unsigned char *n, const unsigned char *k);
 
-extern int crypto_verify_32(unsigned char*, unsigned char*);
-extern int crypto_verify_16(unsigned char*, unsigned char*);
+extern int crypto_verify_32(const unsigned char*, const unsigned char*);
+extern int crypto_verify_16(const unsigned char*, const unsigned char*);
 
 int crypto_secretbox(unsigned char *c, const unsigned char *m, unsigned long long mlen, const unsigned char *n, const unsigned char *k);
 int crypto_secretbox_open(unsigned char *m, const unsigned char *c,unsigned long long clen, const unsigned char *n, const unsigned char *k);

@@ -1,7 +1,7 @@
 .text
 
 .globl crypto_verify_32
-.type crypto_verify_32, @type function
+.type crypto_verify_32, @function
 crypto_verify_32:
 
     lbu   t1, 0(a0)     # Load 3 from each value
