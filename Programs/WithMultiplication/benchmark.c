@@ -1,5 +1,4 @@
 #include "benchmark.h"
-extern void crypto_core_hsalsa20(unsigned char *, unsigned char *, unsigned char *, unsigned char *);
 
 void printarray(unsigned char *in, int inlen) {
   for (int i = 0; i < inlen; i++) {

@@ -1,8 +1,8 @@
-#include "scalarmult.h"
+#include <stdio.h>
 extern void karatsuba226_255(unsigned int *, const unsigned int *,
                          const unsigned int *);
-extern void square226(unsigned int *, const unsigned int *);
 extern void mainloop226_asm(unsigned int *, const unsigned int *);
+void squeeze226(unsigned int *);
 
 // addition of a and b
 // possible need to squeeze for the karatsuba
@@ -143,7 +143,7 @@ void recip226(unsigned int out[10], const unsigned int z[10]) {
   /* 2^255 - 21 */ karatsuba226_255(out, t0, z11);
 }
 
-void convert_to_radix226(unsigned int *r, const unsigned char *k) {
+void convert_to_radix226_255(unsigned int *r, const unsigned char *k) {
   r[0] = k[0] + (k[1] << 8) + (k[2] << 16) + ((k[3] & 3) << 24);
   r[1] = (k[3] >> 2) + (k[4] << 6) + (k[5] << 14) + ((k[6] & 15) << 22);
   r[2] = (k[6] >> 4) + (k[7] << 4) + (k[8] << 12) + ((k[9] & 63) << 20);
@@ -156,7 +156,7 @@ void convert_to_radix226(unsigned int *r, const unsigned char *k) {
   r[9] = (k[29] >> 2) + (k[30] << 6) + (k[31] << 14);
 }
 
-void toradix28(unsigned char out[32], unsigned int in[10]) {
+void toradix28_255(unsigned char out[32], unsigned int in[10]) {
   out[31] = (in[9] >> 14);
   out[30] = (in[9] >> 6) & 0xff;
   out[29] = (in[8] >> 24) + ((in[9] & 0x3f) << 2);
@@ -195,12 +195,12 @@ int crypto_scalarmult(unsigned char *q, const unsigned char *n,
                       const unsigned char *p) {
   unsigned int work226[20];
   unsigned int e226[10];
-  convert_to_radix226(e226, n);
+  convert_to_radix226_255(e226, n);
   e226[0] &= 0x3fffff8;
   e226[9] &= 0x1fffff;
   e226[9] |= 0x100000;
 
-  convert_to_radix226(work226, p);
+  convert_to_radix226_255(work226, p);
 
   mainloop226_asm(work226, e226);
 
@@ -208,7 +208,7 @@ int crypto_scalarmult(unsigned char *q, const unsigned char *n,
   karatsuba226_255(work226, work226, work226 + 10);
 
   freeze(work226);
-  toradix28(q, work226);
+  toradix28_255(q, work226);
   return 0;
 }
 

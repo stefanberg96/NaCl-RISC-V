@@ -4,14 +4,14 @@ D. J. Bernstein
 Public domain.
 */
 
-#include "crypto_core_salsa2012.h"
-#include "crypto_stream.h"
+
+#include "../../includes/lib.h"
 
 typedef unsigned int uint32;
 
 static const unsigned char sigma[16] = "expand 32-byte k";
 
-int crypto_stream_xor(
+int crypto_stream_salsa2012_xor(
         unsigned char *c,
   const unsigned char *m,unsigned long long mlen,
   const unsigned char *n,

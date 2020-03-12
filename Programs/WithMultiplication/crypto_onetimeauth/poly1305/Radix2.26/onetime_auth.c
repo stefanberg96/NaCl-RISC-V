@@ -1,7 +1,13 @@
-#include "onetime_auth.h"
-extern void karatsuba226asm_inplace(unsigned int *, unsigned int *);
+#include "stdint.h"
+extern void addasm(unsigned int h[17], const unsigned int c[17]);
+extern void add226asm(unsigned int h[5], const unsigned int c[5]);
+extern void add226asm_wo_squeeze(unsigned int h[5], const unsigned int c[5]);
+extern void toradix28asm(unsigned int h[17]);
+extern void squeeze226asm(unsigned int h[5]);
+extern void mulmod226asm(unsigned int h[5], unsigned int r[5]);
+extern int onetimeauth_loop(const unsigned char *in , int inlen, unsigned int *h,
+                      unsigned int *r, unsigned int *c);
 
-void printbytes(unsigned int x, unsigned int y) { printf("%x, %x\n", x, y); }
 
 static const unsigned int minusp[5] = {5, 0, 0, 0, 0x4000000};
 
@@ -19,7 +25,7 @@ static void freeze(unsigned int h[5]) {
     h[j] ^= negative & (horig[j] ^ h[j]);
 }
 
-void toradix28(unsigned int h[17]) {
+void toradix28_130(unsigned int h[17]) {
   h[16] = (h[4] >> 24);
   h[15] = (h[4] >> 16) & 0xFF;
   h[14] = (h[4] >> 8) & 0xFF;
@@ -103,7 +109,7 @@ int crypto_onetimeauth(unsigned char *out, const unsigned char *in,
   // go back to radix 2.8
 
   freeze(h); // calculate mod 2^130-5
-  toradix28(h);
+  toradix28_130(h);
 
   for (j = 0; j < 16; ++j)
     c[j] = k[j + 16];
