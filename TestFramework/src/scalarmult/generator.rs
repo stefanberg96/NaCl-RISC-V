@@ -1,136 +1,118 @@
 use rand::Rng;
-use std::fs::{remove_file, OpenOptions};
-use std::path::Path;
-use std::env;
 use std::io::Write;
-use log::info;
 use std::str::FromStr;
-use num_bigint::BigUint;
-use std::ops::{MulAssign, Rem, BitAndAssign, Mul};
-use num_traits::One;
 use sodiumoxide::crypto::scalarmult::*;
+use std::fmt::{Display, Formatter, Error};
+use crate::utils::*;
+use crate::traits::*;
+use crate::{ScalarmultGenerator, TestcaseEnum};
 
-#[derive(Debug)]
-pub struct ScalarMultTestCase {
-    pub variables: Vec<String>,
-    pub expected_result: GroupElement,
-    pub n: Scalar,
-    pub G: GroupElement,
+pub struct ScalarMultTestcase {
+    n: Scalar,
+    G: GroupElement,
+    expected_result: GroupElement,
+    result: GroupElement,
+    cycle_counts: Vec<f64>,
+    raw_output: Vec<String>,
 }
 
-pub fn generator_name() -> String {
-    String::from_str("scalarmult").unwrap()
-}
-
-pub fn generate_testcase() -> ScalarMultTestCase {
-    let mut rng = rand::thread_rng();
-    // 32 byte scalar
-    let mut n_bytes: [u8; 32] = rng.gen();
-    n_bytes[0] &=248;
-    n_bytes[31] &= 127;
-    n_bytes[31] |= 64;
-    let n = Scalar::from_slice(&n_bytes).unwrap();
-    n_bytes = n.0;
-    // 32 byte groupelement
-    let mut g_bytes: [u8; 32] = rng.gen();
-    g_bytes[0] &=248;
-    g_bytes[31] &= 127;
-    g_bytes[31] |= 64;
-    let G = GroupElement::from_slice(&g_bytes).unwrap();
-    g_bytes = G.0;
-
-
-    //print variables
-    let mut variables = Vec::new();
-
-    let mut var = String::with_capacity(200);
-    var.push_str(format!("        static unsigned char g_bytes[32] = {{").as_str());
-
-    for i in 0..31 {
-        var.push_str(format!("0x{:x}, ", g_bytes[i as usize]).as_str());
+impl Default for ScalarMultTestcase {
+    fn default() -> Self {
+        let zero_byte = [0; 32];
+        ScalarMultTestcase {
+            n: Scalar::from_slice(&zero_byte).unwrap(),
+            G: GroupElement::from_slice(&zero_byte).unwrap(),
+            expected_result: GroupElement::from_slice(&zero_byte).unwrap(),
+            result: GroupElement::from_slice(&zero_byte).unwrap(),
+            cycle_counts: vec!(),
+            raw_output: vec!(),
+        }
     }
-    var.push_str(format!("0x{:x}}};", g_bytes[31]).as_str());
-    variables.push(var);
-
-    var = String::with_capacity(200);
-    var.push_str(format!("        static unsigned char n_bytes[32] = {{").as_str());
-    for i in 0..31 {
-        var.push_str(format!("0x{:x}, ", n_bytes[i as usize]).as_str());
-    }
-    var.push_str(format!("0x{:x}}};", n_bytes[31]).as_str());
-    variables.push(var);
-
-
-    generate_testcasefile(variables.clone());
-
-    let expected_result = scalarmult(&n, &G).expect("couldn't do scalar multiplication");
-
-    ScalarMultTestCase{variables, expected_result, n, G}
 }
 
+impl Display for ScalarMultTestcase {
+    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
+        writeln!(f, "n: {}", u8_to_string(&self.n.0))?;
+        writeln!(f, "G: {}", u8_to_string(&self.G.0))?;
+        writeln!(f, "Expected result: {}", u8_to_string(&self.expected_result.0))?;
+        writeln!(f, "Result: {}", u8_to_string(&self.result.0))?;
+        writeln!(f, "Cycle counts: {:?}", &self.cycle_counts)?;
+        Ok(())
+    }
+}
 
-fn generate_testcasefile(variables: Vec<String>) {
-    let buf_path = env::current_dir().expect("Failed to get current path");
-    let current_path = buf_path.as_path();
-    let benchmark_path = current_path.join(Path::new("benchmark.c"));
-    remove_file(benchmark_path.clone()).expect("Can not remove benchmark.c");
-
-    let mut file = OpenOptions::new()
-        .create(true)
-        .write(true)
-        .read(true)
-        .open(benchmark_path).expect("Couldn't create benchmark.c file");
-    //print header stuff
-    writeln!(file, "#include \"benchmark.h\"
-
-    void printarray(unsigned char *in, int inlen){{
-        for(int i =0;i<inlen;i++){{
-            printf(\"%02x\", in[i]);
-        }}
-        printf(\"\\n\");
-    }}
-
-    void printcounters(unsigned int *a, int initialoffset){{
-
-           for(int i = initialoffset+3; i < 21*3;i+=3){{
-               printf(\"%6u, \", a[i]-a[i-3]);
-        }}
-        printf(\"\\n\");
-    }}
-
-    void dobenchmark() {{
-
-    ").expect("write failed");
-
-    for var in variables {
-        writeln!(file, "{}", var).expect("write failed");
+impl Testcase for ScalarMultTestcase {
+    fn print_raw_output(&self, file: &mut impl Write) {
+        for line in &self.raw_output {
+            let _ = writeln!(file, "{}", line);
+        }
+        let _ = writeln!(file, "Expected result: {}", self.get_expected());
     }
 
-    //print rest of the code
-    writeln!(file, "
+    fn print_result(&self, file: &mut impl Write) {
+        let _ = writeln!(file, "{}", &self);
+    }
 
-        unsigned int counters[3*21];
-        icachemisses();
+    fn is_correct(&self) -> bool {
+        &self.result == &self.expected_result
+    }
 
-        unsigned char q[32];
-        for(int i =0;i<21;i++){{
-            getcycles(&counters[i*3]);
-            crypto_scalarmult_asm(q, n_bytes, g_bytes);
-        }}
+    fn get_expected(&self) -> String {
+        format!("{}", u8_to_string(&self.expected_result.0))
+    }
 
-        printf(\"Cycle counts:          \");
-        printcounters(counters, 0);
-
-        printf(\"Branch dir mis:        \");
-        printcounters(counters, 1);
-
-        printf(\"Branch target mis:    \");
-        printcounters(counters, 2);
-
-        printf(\"Result: \");
-        printarray(q, 32);
-        printf(\"\\n\\n\");
-    }}").expect("write failed");
-    file.flush().expect("Couldn't flush benchmark file");
-    info!("written benchmark.c");
+    fn copy_result_variables(&mut self, read_result: impl ReadResult) {
+        self.cycle_counts = read_result.get_cycle_count().clone();
+        self.raw_output = read_result.get_raw_output().clone();
+        let result = GroupElement::from_slice(&read_result.get_result()).unwrap();
+        self.result = result;
+    }
 }
+
+impl Generator for ScalarmultGenerator {
+    fn get_generator_name(&self) -> String {
+        String::from_str("scalarmult").unwrap()
+    }
+
+    fn generate_testcase(&self) -> TestcaseEnum {
+        let mut rng = rand::thread_rng();
+        // 32 byte scalar
+        let mut n_bytes: [u8; 32] = rng.gen();
+        n_bytes[0] &= 248;
+        n_bytes[31] &= 127;
+        n_bytes[31] |= 64;
+        let n = Scalar::from_slice(&n_bytes).unwrap();
+        n_bytes = n.0;
+        // 32 byte groupelement
+        let mut g_bytes: [u8; 32] = rng.gen();
+        g_bytes[0] &= 248;
+        g_bytes[31] &= 127;
+        g_bytes[31] |= 64;
+        let G = GroupElement::from_slice(&g_bytes).unwrap();
+        g_bytes = G.0;
+
+
+        let mut variables = Vec::new();
+        let n_bytes_string = u8_to_string_variable(&n_bytes, "n_bytes");
+        variables.push(n_bytes_string);
+        let g_bytes_string = u8_to_string_variable(&g_bytes, "g_bytes");
+        variables.push(g_bytes_string);
+        variables.push(String::from("unsigned char q[32];"));
+
+
+        generate_testcasefile(variables.clone(), "crypto_scalarmult_asm(q, n_bytes, g_bytes);", "printresult(q, 32);");
+
+        let expected_result = scalarmult(&n, &G).expect("couldn't do scalar multiplication");
+
+        TestcaseEnum::scalarmult(ScalarMultTestcase { expected_result, n, G, ..Default::default() })
+    }
+
+    fn get_timeout(&self) -> u64 {
+        180
+    }
+
+    fn get_outputlen(&self) -> usize {
+        32
+    }
+}
+
