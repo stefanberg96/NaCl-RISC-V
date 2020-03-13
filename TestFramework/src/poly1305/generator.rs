@@ -55,7 +55,7 @@ impl Testcase for TestcasePoly1305 {
     }
 
 
-    fn print_result(&self, file: &mut (impl Write + std::io::Write)) {
+    fn print_result(&self, file: &mut impl Write) {
         let _ = writeln!(file, "{}", &self);
     }
 

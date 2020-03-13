@@ -2,6 +2,8 @@ use std::path::Path;
 use std::fs::{OpenOptions, remove_file};
 use std::io::Write;
 use std::env;
+use structopt::StructOpt;
+use crate::cli::Opt;
 
 pub fn u8_to_string_variable(input: &[u8], varname: &str) -> String {
     let mut var = String::with_capacity((input.len() * 8) as usize);
@@ -39,9 +41,14 @@ pub fn generate_testcasefile(variables: Vec<String>, functioncall: &str, resultp
         .write(true)
         .read(true)
         .open(benchmark_path).expect("Couldn't create benchmark.c file");
+
+    let args: Opt = Opt::from_args();
+
+
     //print header stuff
     writeln!(file, "#include \"benchmark.h\"
     extern void icachemisses();
+    static int runs={};
 
     void printresult(unsigned char *in, int inlen){{
         for(int i =0;i<inlen;i++){{
@@ -74,7 +81,7 @@ pub fn generate_testcasefile(variables: Vec<String>, functioncall: &str, resultp
 
     void printcounters(unsigned int *a, int initialoffset){{
 
-           for(int i = initialoffset+3; i < 50*3;i+=3){{
+           for(int i = initialoffset+3; i < runs*3;i+=3){{
                printf(\"%6u, \", a[i]-a[i-3]);
         }}
         printf(\"\\n\");
@@ -82,7 +89,7 @@ pub fn generate_testcasefile(variables: Vec<String>, functioncall: &str, resultp
 
     void dobenchmark() {{
 
-    ").expect("write failed");
+    ", args.runs+1).expect("write failed");
 
     //print the variables
     for var in variables {
@@ -92,11 +99,11 @@ pub fn generate_testcasefile(variables: Vec<String>, functioncall: &str, resultp
     //print rest of the code
     writeln!(file, "
 
-        unsigned int counters[3*50];
+        unsigned int counters[3*runs];
         icachemisses();
 
         uint32_t timings[21];
-        for(int i =0;i<50;i++){{
+        for(int i =0;i<runs;i++){{
             getcycles(&counters[i*3]);
             {}
         }}

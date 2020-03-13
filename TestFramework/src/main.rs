@@ -102,7 +102,11 @@ fn run_test(reader: impl Reader, generator: &impl Generator, attempts: u64, test
     }
 
     let dir = Path::new(&x);
-    let _ = create_dir(dir);
+    if create_dir(dir).is_err(){
+        error!("Could not create directory for the output")
+    }
+    info!("{}", dir.display());
+
 
     let mut output = OpenOptions::new()
         .create(true)
