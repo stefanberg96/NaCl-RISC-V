@@ -7,6 +7,7 @@ use crate::utils::*;
 use crate::traits::*;
 use crate::{ScalarmultGenerator, TestcaseEnum};
 
+#[allow(non_snake_case)]
 pub struct ScalarMultTestcase {
     n: Scalar,
     G: GroupElement,
@@ -88,8 +89,8 @@ impl Generator for ScalarmultGenerator {
         g_bytes[0] &= 248;
         g_bytes[31] &= 127;
         g_bytes[31] |= 64;
-        let G = GroupElement::from_slice(&g_bytes).unwrap();
-        g_bytes = G.0;
+        let g = GroupElement::from_slice(&g_bytes).unwrap();
+        g_bytes = g.0;
 
 
         let mut variables = Vec::new();
@@ -102,9 +103,9 @@ impl Generator for ScalarmultGenerator {
 
         generate_testcasefile(variables.clone(), "crypto_scalarmult_asm(q, n_bytes, g_bytes);", "printresult(q, 32);");
 
-        let expected_result = scalarmult(&n, &G).expect("couldn't do scalar multiplication");
+        let expected_result = scalarmult(&n, &g).expect("couldn't do scalar multiplication");
 
-        TestcaseEnum::scalarmult(ScalarMultTestcase { expected_result, n, G, ..Default::default() })
+        TestcaseEnum::scalarmult(ScalarMultTestcase { expected_result, n, G:g, ..Default::default() })
     }
 
     fn get_timeout(&self) -> u64 {
