@@ -1,119 +1,122 @@
-use rand::Rng;
-use sodiumoxide::crypto::onetimeauth;
-use std::fs::{remove_file, OpenOptions};
-use std::path::{Path};
-use std::env;
+use std::fmt::{Display, Error, Formatter};
 use std::io::Write;
-use log::{info};
 use std::str::FromStr;
 
-#[derive(Debug)]
-pub struct TestcasePoly1305{
-    pub variables: Vec<String>,
-    pub messagelen: usize,
-    pub expected_result: [u8;16],
+use rand::prelude::*;
+use sodiumoxide::crypto::onetimeauth;
+
+use crate::traits::{Generator, ReadResult, Testcase};
+use crate::utils::{generate_testcasefile, u8_to_string_variable, u8_to_string};
+
+const MESSAGELEN: usize = 132;
+
+pub struct TestcasePoly1305 {
+    message: [u8; MESSAGELEN],
+    key: [u8; 32],
+    expected_result: [u8; 16],
+    result: [u8; 16],
+    cycle_counts: Vec<f64>,
+    raw_output: Vec<String>,
 }
 
-pub fn generator_name() -> String {
-    String::from_str("poly1305").unwrap()
-}
+impl Display for TestcasePoly1305 {
+    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
 
-pub fn generate_testcase(messagelen : usize) -> TestcasePoly1305{
-    let mut rng = rand::thread_rng();
-
-    let mut message: [u8; 256] = [0; 256];
-    rng.fill(&mut message);
-
-    let poly1305_key = onetimeauth::gen_key();
-    let key = poly1305_key.0;
-
-    //print variables
-    let mut variables = Vec::new();
-
-    let mut var = String::with_capacity((messagelen*2) as usize);
-    var.push_str(format!("        static unsigned char c[{}] = {{", messagelen).as_str());
-
-    for i in 0..messagelen - 1 {
-        var.push_str(format!("0x{:x}, ", message[i as usize]).as_str());
+        writeln!(f, "Message: {:x?}", u8_to_string(&self.message))?;
+        writeln!(f, "Key: {:02x?}", u8_to_string(&self.key))?;
+        writeln!(f, "Expected result: {:02x?}", u8_to_string(&self.expected_result))?;
+        if self.cycle_counts.len() != 0 {
+            writeln!(f, "Result: {:02x?}", u8_to_string(&self.result))?;
+            writeln!(f, "Cycle counts: {:?}", &self.cycle_counts)?;
+        } else {
+            writeln!(f, "No result returned yet")?;
+        }
+        Ok(())
     }
-    var.push_str(format!("0x{:x}}};", message[(messagelen - 1) as usize]).as_str());
-    variables.push(var);
-
-    var = String::with_capacity((messagelen*2) as usize);
-    var.push_str(format!("        static unsigned char rs[32] = {{").as_str());
-    for i in 0..31 {
-        var.push_str(format!("0x{:x}, ", key[i as usize]).as_str());
-    }
-    var.push_str(format!("0x{:x}}};", key[31 as usize]).as_str());
-    variables.push(var);
-
-    let message_slice = &message[0..messagelen];
-
-    let expected_result = onetimeauth::authenticate(&message_slice, &poly1305_key).0;
-    generate_testcasefile(variables.clone(), messagelen);
-    TestcasePoly1305 {variables,  expected_result, messagelen}
 }
 
+impl Default for TestcasePoly1305 {
+    fn default() -> Self {
+        TestcasePoly1305 {
+            message: [0; MESSAGELEN],
+            key: [0; 32],
+            expected_result: [0; 16],
+            result: [0; 16],
+            cycle_counts: Vec::new(),
+            raw_output: Vec::new(),
+        }
+    }
+}
 
-fn generate_testcasefile(variables: Vec<String>, inlen: usize){
-    let buf_path = env::current_dir().expect("Failed to get current path");
-    let current_path = buf_path.as_path();
-    let benchmark_path = current_path.join(Path::new("benchmark.c"));
-    remove_file(benchmark_path.clone()).expect("Can not remove benchmark.c");
-
-    let mut file = OpenOptions::new()
-        .create(true)
-        .write(true)
-        .read(true)
-        .open(benchmark_path).expect("Couldn't create benchmark.c file");
-    //print header stuff
-    writeln!(file, "#include \"benchmark.h\"
-    extern void icachemisses();
-
-    void printintarray(unsigned int *a, int initialoffset){{
-
-           for(int i = initialoffset+3; i < 21*3;i+=3){{
-               printf(\"%6u, \", a[i]-a[i-3]);
-        }}
-        printf(\"\\n\");
-    }}
-
-
-    void dobenchmark() {{
-
-    unsigned char a[16];").expect("write failed");
-
-    for var in variables {
-        writeln!(file, "{}", var).expect("write failed");
+impl Testcase for TestcasePoly1305 {
+    type ExpectedItem = String;
+    fn print_raw_output(&self, file: &mut impl Write) {
+        for line in &self.raw_output {
+            let _ = writeln!(file, "{}", line);
+        }
+        let _ = writeln!(file, "Expected result: {}", self.get_expected());
     }
 
-    //print rest of the code
-    writeln!(file, "
+    fn print_result(&self, file: &mut impl Write) {
+        let _ = writeln!(file, "{}", &self);
+    }
 
-        unsigned int counters[3*21];
-        icachemisses();
+    fn is_correct(&self) -> bool {
+        self.result == self.expected_result
+    }
 
-        uint32_t timings[21];
-        for(int i =0;i<21;i++){{
-            getcycles(&counters[i*3]);
-            crypto_onetimeauth(a,c,{},rs);
-        }}
+    fn get_expected(&self) -> Self::ExpectedItem {
+        format!("{:x?}",&self.expected_result)
+    }
 
-        printf(\"Cycle counts:          \");
-        printintarray(counters, 0);
-
-        printf(\"Branch dir mis:        \");
-        printintarray(counters, 1);
-
-        printf(\"Branch target mis:    \");
-        printintarray(counters, 2);
-
-        printf(\"Result: \");
-        printchararray(a,16);
-        printf(\"\\n\\n\");
-
-    }}", inlen).expect("write failed");
-    file.flush().expect("Couldn't flush benchmark file");
-    info!("written benchmark.c");
-
+    fn copy_result_variables(&mut self, read_result: impl ReadResult) {
+        self.cycle_counts = read_result.get_cycle_count().clone();
+        self.result.copy_from_slice(&read_result.get_result());
+        self.raw_output = read_result.get_raw_output().clone();
+    }
 }
+
+pub struct Poly1305Generator {}
+
+
+
+impl Generator for Poly1305Generator {
+    type Item = TestcasePoly1305;
+
+    fn get_generator_name(&self) -> String {
+        String::from_str("poly1305").unwrap()
+    }
+
+    fn generate_testcase(&self) -> TestcasePoly1305 {
+        let mut rng = rand::thread_rng();
+        let mut message:[u8;MESSAGELEN] = [0;MESSAGELEN];
+        rng.fill_bytes(&mut message);
+
+        let poly1305_key = onetimeauth::gen_key();
+        let key = poly1305_key.0;
+
+        //print variables
+        let mut variables: Vec<String> = Vec::new();
+        variables.push(String::from_str("unsigned char a[16];").unwrap());
+
+        let message_string = u8_to_string_variable(&message, "c");
+        variables.push(message_string);
+
+        let rc_string = u8_to_string_variable(&key, "rs");
+        variables.push(rc_string);
+
+        let expected_result = onetimeauth::authenticate(&message, &poly1305_key).0;
+        generate_testcasefile(variables.clone(), "crypto_onetimeauth(a,c,132,rs);", "printresult(a, 16);");
+        TestcasePoly1305 { message, key, expected_result, ..Default::default() }
+    }
+
+    fn get_timeout(&self) -> u64 {
+        15
+    }
+
+    fn get_outputlen(&self) -> usize {
+        16
+    }
+}
+
+

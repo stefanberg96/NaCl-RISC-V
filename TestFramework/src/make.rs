@@ -6,13 +6,6 @@ use std::env;
 
 
 pub fn run_make() -> Result<(), SimpleError> {
-    let dir_path = env::current_dir().expect("Couldn't get current path");
-    let _ = Command::new("rm")
-        .arg("benchmark.o")
-        .current_dir(dir_path.as_path())
-        .spawn().expect("Couldn't rm benchmark.o")
-        .wait();
-
     run_make_hex()?;
     run_make_upload_only()?;
     run_make_reset()?;
@@ -31,7 +24,7 @@ fn run_make_hex() -> Result<(), SimpleError> {
 
     let x = child.wait_with_output().expect("Could not run make hex");
 
-    let keyword = "riscv64-unknown-elf-objcopy -O ihex program.elf program.hex";
+    let keyword = "riscv64-unknown-elf-objcopy -O ihex build/program.elf build/program.hex";
     let error_message = "Make hex did not finish successfull";
     match check_for_keyword(x.stdout, keyword, error_message) {
         Ok(_) => {
