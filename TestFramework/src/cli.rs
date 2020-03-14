@@ -13,8 +13,11 @@ pub struct Opt {
     ///Provide which functions to check
     ///
     /// The acceptable values are:
-    ///     poly1305
-    ///     scalarmult
+    ///     poly1305,
+    ///     scalarmult,
+    ///     cryptobox,
+    ///     secretbox,
+    ///     stream
     #[structopt(short, long, help = "Which of the functions to check")]
     pub functions: Vec<Function>,
 
@@ -22,7 +25,7 @@ pub struct Opt {
     pub tests: u64,
 
     #[structopt(long, help = "The number of attempts before a test is skipped", default_value = "4")]
-    pub attempts: u64,
+    pub attempts: i64,
 
     #[structopt(short, long, help = "The amount of runs per test function", default_value = "21")]
     pub runs: u64,

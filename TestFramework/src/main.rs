@@ -20,34 +20,43 @@ use flexi_logger::{Logger, opt_format};
 use indicatif::{ProgressBar, ProgressStyle};
 use structopt::StructOpt;
 use cli::Opt;
-
-use crate::poly1305::generator::TestcasePoly1305;
-use crate::scalarmult::generator::ScalarMultTestcase;
+use crate::generators::poly1305::generator::TestcasePoly1305;
+use crate::generators::scalarmult::generator::ScalarMultTestcase;
+use crate::generators::crypto_box::generator::CryptoBoxTestcase;
+use crate::generators::crypto_stream::generator::TestcaseStream;
+use crate::generators::crypto_secretbox::generator::SecretboxTestcase;
 
 mod cli;
 mod make;
-mod poly1305;
-mod scalarmult;
+mod generators;
 mod traits;
 mod utils;
 mod reader;
 mod functions_and_testcases;
 
 pub struct Poly1305Generator {}
-
 pub struct ScalarmultGenerator {}
+pub struct CryptoboxGenerator {}
+pub struct StreamGenerator {}
+pub struct SecretBoxGenerator {}
 
 
 #[allow(non_camel_case_types)]
 pub enum Function {
     poly1305(Poly1305Generator),
     scalarmult(ScalarmultGenerator),
+    cryptobox(CryptoboxGenerator),
+    salsa20(StreamGenerator),
+    secretbox(SecretBoxGenerator),
 }
 
 #[allow(non_camel_case_types)]
 pub enum TestcaseEnum {
     poly130(TestcasePoly1305),
     scalarmult(ScalarMultTestcase),
+    cryptobox(CryptoBoxTestcase),
+    salsa20(TestcaseStream),
+    secretbox(SecretboxTestcase),
 }
 
 fn main() -> Result<(), SimpleError> {
@@ -75,10 +84,10 @@ fn main() -> Result<(), SimpleError> {
         let generator = function;
         let reader = ReaderObj::new(generator.get_outputlen());
         let bar = ProgressBar::new(args.tests);
-        bar.set_message("Testing Poly1305");
+        bar.set_message(format!("Testing {}", generator.get_generator_name()).as_str());
 
         bar.set_style(ProgressStyle::default_bar()
-            .template("{msg} {wide_bar:.cyan/blue} {pos}/{len} {elapsed}")
+            .template("{msg} {wide_bar:.cyan/blue} {pos}/{len} {elapsed_precise}")
         );
 
         run_test(reader, generator, args.attempts, args.tests, &bar)?;
@@ -91,7 +100,7 @@ fn main() -> Result<(), SimpleError> {
 }
 
 
-fn run_test(reader: impl Reader, generator: &impl Generator, attempts: u64, tests: u64, bar: &ProgressBar) -> Result<(), SimpleError> {
+fn run_test(reader: impl Reader, generator: &impl Generator, attempts: i64, tests: u64, bar: &ProgressBar) -> Result<(), SimpleError> {
     let dt = Local::now();
     let opt = Opt::from_args();
     let x;
@@ -127,8 +136,8 @@ fn run_test(reader: impl Reader, generator: &impl Generator, attempts: u64, test
         let mut testcase = generator.generate_testcase();
         for _attempt in 0..attempts {
             if _attempt == attempts - 1 {
-                error!("Too many failed attempt on this input:\n {}", testcase);
-                return Err(SimpleError::new("Too many failed commands please do a manual check"));
+                //error!("Too many failed attempt on this input:\n {}", testcase);
+                return Err(SimpleError::new("Too many failed make commands please do a manual check"));
             }
 
             if run_make().is_err() {
