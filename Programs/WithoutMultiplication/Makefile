@@ -2,7 +2,7 @@ riscv64-unknown-elf-gcc=/home/stefan/Documents/Graduation/RISC-V-toolchain/riscv
 freedom-e-sdk=/home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk
 riscv-gnu-toolchain=/home/stefan/Documents/Graduation/RISC-V-toolchain/riscv-gnu-toolchain
 
-LIB_MODULES=crypto_core/hsalsa20/opt crypto_core/salsa20/opt crypto_core/salsa208/opt crypto_core/salsa2012/opt crypto_box/curve25519xsalsa20poly1305 crypto_onetimeauth/poly1305/Radix2.26 crypto_onetimeauth/poly1305/Verify crypto_scalarmult/curve25519/Radix2.26 crypto_secretbox/xsalsa20poly1305 crypto_stream/salsa20 crypto_stream/salsa208 crypto_stream/salsa2012 crypto_stream/xsalsa20 crypto_verify/16 crypto_verify/32
+LIB_MODULES=crypto_core/hsalsa20/ref crypto_core/salsa20/ref crypto_core/salsa208/opt crypto_core/salsa2012/opt crypto_box/curve25519xsalsa20poly1305 crypto_onetimeauth/poly1305/Radix2.26 crypto_onetimeauth/poly1305/Verify crypto_scalarmult/curve25519/Radix2.26 crypto_secretbox/xsalsa20poly1305 crypto_stream/salsa20 crypto_stream/salsa208 crypto_stream/salsa2012 crypto_stream/xsalsa20 crypto_verify/16 crypto_verify/32
 
 LIB_SRCS_S=$(foreach subdir, $(LIB_MODULES), $(wildcard $(subdir)/*.S))
 LIB_SRCS_C=$(foreach subdir, $(LIB_MODULES), $(wildcard $(subdir)/*.c)) 

@@ -408,66 +408,163 @@ loop:
     lw    t0, 32(sp)    # j0
     lw    t1, 36(sp)    # j1
     add   t2, t2, t0    # x0
-    sw    t2, 0(a0)     # store x0
+    sb    t2, 0(a0)     # store x0
+    srli  t2, t2, 8     #
+    sb    t2, 1(a0)     #
+    srli  t2, t2, 8     #
+    sb    t2, 2(a0)     #
+    srli  t2, t2, 8     #
+    sb    t2, 3(a0)     #
 
     lw    t0, 40(sp)    # j2
-    add   t3, t3, t1    # x1
-    sw    t3, 4(a0)     # store x1
+    add   t2, t3, t1    # x1
+    sb    t2, 4(a0)     # store x1
+    srli  t2, t2, 8     #
+    sb    t2, 5(a0)     #
+    srli  t2, t2, 8     #
+    sb    t2, 6(a0)     #
+    srli  t2, t2, 8     #
+    sb    t2, 7(a0)     #
 
     lw    t1, 44(sp)    # j3
-    add   t4, t4, t0    # x2
-    sw    t4, 8(a0)     # store x2
-    
+    add   t2, t4, t0    # x2
+    sb    t2, 8(a0)     # store x2
+    srli  t2, t2, 8     #
+    sb    t2, 9(a0)     #
+    srli  t2, t2, 8     #
+    sb    t2, 10(a0)    #
+    srli  t2, t2, 8     #
+    sb    t2, 11(a0)    #
+
     lw    t0, 48(sp)    # j4
-    add   t5, t5, t1    # x3
-    sw    t5, 12(a0)    # store x3
-    
-    lw    t1, 52(sp)     # j5
-    add   t6, t6, t0    # x4
-    sw    t6, 16(a0)    # store x4
+    add   t2, t5, t1    # x3
+    sb    t2, 12(a0)    # store x3
+    srli  t2, t2, 8     #
+    sb    t2, 13(a0)    #
+    srli  t2, t2, 8     #
+    sb    t2, 14(a0)    #
+    srli  t2, t2, 8     #
+    sb    t2, 15(a0)    #
+
+    lw    t1, 52(sp)    # j5
+    add   t2, t6, t0    # x4
+    sb    t2, 16(a0)    # store x4
+    srli  t2, t2, 8     #
+    sb    t2, 17(a0)    #
+    srli  t2, t2, 8     #
+    sb    t2, 18(a0)    #
+    srli  t2, t2, 8     #
+    sb    t2, 19(a0)    #
 
     lw    t0, 56(sp)    # j6
-    add   a4, a4, t1    # x5
-    sw    a4, 20(a0)    # store x5
+    add   t2, a4, t1    # x5
+    sb    t2, 20(a0)    # store x5
+    srli  t2, t2, 8     #
+    sb    t2, 21(a0)    #
+    srli  t2, t2, 8     #
+    sb    t2, 22(a0)    #
+    srli  t2, t2, 8     #
+    sb    t2, 23(a0)    #
 
     lw    t1, 60(sp)    # j7
-    add   a5, a5, t0    # x6
-    sw    a5, 24(a0)    # store x6
+    add   t2, a5, t0    # x6
+    sb    t2, 24(a0)    # store x6
+    srli  t2, t2, 8     #
+    sb    t2, 25(a0)    #
+    srli  t2, t2, 8     #
+    sb    t2, 26(a0)    #
+    srli  t2, t2, 8     #
+    sb    t2, 27(a0)    #
 
     lw    t0, 64(sp)    # j8
-    add   a6, a6, t1    # x7
-    sw    a6, 28(a0)    # store x7
+    add   t2, a6, t1    # x7
+    sb    t2, 28(a0)    # store x7
+    srli  t2, t2, 8     #
+    sb    t2, 29(a0)    #
+    srli  t2, t2, 8     #
+    sb    t2, 30(a0)    #
+    srli  t2, t2, 8     #
+    sb    t2, 31(a0)    #
 
     lw    t1, 68(sp)    # j9
-    add   a7, a7, t0    # x8
-    sw    a7, 32(a0)    # store x8
+    add   t2, a7, t0    # x8
+    sb    t2, 32(a0)    # store x8
+    srli  t2, t2, 8     #
+    sb    t2, 33(a0)    #
+    srli  t2, t2, 8     #
+    sb    t2, 34(a0)    #
+    srli  t2, t2, 8     #
+    sb    t2, 35(a0)    #
 
     lw    t0, 72(sp)    # j10
-    add   s0, s0, t1    # x9
-    sw    s0, 36(a0)    # store x9
+    add   t2, s0, t1    # x9
+    sb    t2, 36(a0)    # store x9
+    srli  t2, t2, 8     #
+    sb    t2, 37(a0)    #
+    srli  t2, t2, 8     #
+    sb    t2, 38(a0)    #
+    srli  t2, t2, 8     #
+    sb    t2, 39(a0)    #
 
     lw    t1, 76(sp)    # j11
-    add   s1, s1, t0    # x10
-    sw    s1, 40(a0)    # store x10
+    add   t2, s1, t0    # x10
+    sb    t2, 40(a0)    # store x10
+    srli  t2, t2, 8     #
+    sb    t2, 41(a0)    #
+    srli  t2, t2, 8     #
+    sb    t2, 42(a0)    #
+    srli  t2, t2, 8     #
+    sb    t2, 43(a0)    #
 
     lw    t0, 80(sp)    # j12
-    add   s2, s2, t1    # x11
-    sw    s2, 44(a0)    # store x11
+    add   t2, s2, t1    # x11
+    sb    t2, 44(a0)    # store x11
+    srli  t2, t2, 8     #
+    sb    t2, 45(a0)    #
+    srli  t2, t2, 8     #
+    sb    t2, 46(a0)    #
+    srli  t2, t2, 8     #
+    sb    t2, 47(a0)    #
 
     lw    t1, 84(sp)    # j13
-    add   s3, s3, t0    # x12
-    sw    s3, 48(a0)    # store x12
+    add   t2, s3, t0    # x12
+    sb    t2, 48(a0)    # store x12
+    srli  t2, t2, 8     #
+    sb    t2, 49(a0)    #
+    srli  t2, t2, 8     #
+    sb    t2, 50(a0)    #
+    srli  t2, t2, 8     #
+    sb    t2, 51(a0)    #
 
     lw    t0, 88(sp)    # j14
-    add   s4, s4, t1    # x13
-    sw    s4, 52(a0)    # store x13
+    add   t2, s4, t1    # x13
+    sb    t2, 52(a0)    # store x13
+    srli  t2, t2, 8     #
+    sb    t2, 53(a0)    #
+    srli  t2, t2, 8     #
+    sb    t2, 54(a0)    #
+    srli  t2, t2, 8     #
+    sb    t2, 55(a0)    #
 
     lw    t1, 92(sp)    # j15
-    add   s5, s5, t0    # x14
-    sw    s5, 56(a0)    # store x14
+    add   t2, s5, t0    # x14
+    sb    t2, 56(a0)    # store x14
+    srli  t2, t2, 8     #
+    sb    t2, 57(a0)    #
+    srli  t2, t2, 8     #
+    sb    t2, 58(a0)    #
+    srli  t2, t2, 8     #
+    sb    t2, 59(a0)    #
 
-    add   s6, s6, t1    # x15
-    sw    s6, 60(a0)    # store x15
+    add   t2, s6, t1    # x15
+    sb    t2, 60(a0)    # store x15
+    srli  t2, t2, 8     #
+    sb    t2, 61(a0)    #
+    srli  t2, t2, 8     #
+    sb    t2, 62(a0)    #
+    srli  t2, t2, 8     #
+    sb    t2, 63(a0)    #
+
 
     lw    s0, 28(sp)    # restore variables
     lw    s1, 24(sp)    #

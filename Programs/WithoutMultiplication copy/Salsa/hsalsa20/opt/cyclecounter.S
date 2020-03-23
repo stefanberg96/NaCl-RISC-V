@@ -1,6 +1,7 @@
 .text
 
 .globl getcycles
+.align 2
 getcycles:
     csrr t0, mcycle
     sw   t0, 0(a0)

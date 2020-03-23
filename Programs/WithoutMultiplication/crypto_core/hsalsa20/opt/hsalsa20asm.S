@@ -386,16 +386,71 @@ loop:
     xor   s6, s6, t0    # x15 ^= rot18(x14+x13)
 
     addi  s7, s7, -2    # update loop counter
-    bgtz  s7,  loop
+    bgtz  s7, loop
 
-    sw    t2, 0(a0)     # x0
-    sw    a4, 4(a0)     # x5
-    sw    s1, 8(a0)     # x10
-    sw    s6, 12(a0)    # x15
-    sw    a5, 16(a0)    # x6
-    sw    a6, 20(a0)    # x7
-    sw    a7, 24(a0)    # x8
-    sw    s0, 28(a0)    # x9
+    sb    t2, 0(a0)     # x0
+    srli  t2, t2, 8     #
+    sb    t2, 1(a0)     #
+    srli  t2, t2, 8     #
+    sb    t2, 2(a0)     #
+    srli  t2, t2, 8     #
+    sb    t2, 3(a0)     #
+   
+    sb    a4, 4(a0)     # x5
+    srli  a4, a4, 8     #
+    sb    a4, 5(a0)     #
+    srli  a4, a4, 8     #
+    sb    a4, 6(a0)     #
+    srli  a4, a4, 8     #
+    sb    a4, 7(a0)     #
+
+    sb    s1, 8(a0)     # x10
+    srli  s1, s1, 8     #
+    sb    s1, 9(a0)     #
+    srli  s1, s1, 8     #
+    sb    s1, 10(a0)    #
+    srli  s1, s1, 8     #
+    sb    s1, 11(a0)    #
+
+    sb    s6, 12(a0)    # x15
+    srli  s6, s6, 8     #
+    sb    s6, 13(a0)    #
+    srli  s6, s6, 8     #
+    sb    s6, 14(a0)    #
+    srli  s6, s6, 8     #
+    sb    s6, 15(a0)    #
+
+    sb    a5, 16(a0)    # x6
+    srli  a5, a5, 8     #
+    sb    a5, 17(a0)    #
+    srli  a5, a5, 8     #
+    sb    a5, 18(a0)    #
+    srli  a5, a5, 8     #
+    sb    a5, 19(a0)    #
+
+    sb    a6, 20(a0)    # x7
+    srli  a6, a6, 8     #
+    sb    a6, 21(a0)    #
+    srli  a6, a6, 8     #
+    sb    a6, 22(a0)    #
+    srli  a6, a6, 8     #
+    sb    a6, 23(a0)    #
+
+    sb    a7, 24(a0)    # x8
+    srli  a7, a7, 8     #
+    sb    a7, 25(a0)    #
+    srli  a7, a7, 8     #
+    sb    a7, 26(a0)    #
+    srli  a7, a7, 8     #
+    sb    a7, 27(a0)    #
+    
+    sb    s0, 28(a0)    # x9
+    srli  s0, s0, 8     #
+    sb    s0, 29(a0)    #
+    srli  s0, s0, 8     #
+    sb    s0, 30(a0)    #
+    srli  s0, s0, 8     #
+    sb    s0, 31(a0)    #
 
     lw    s0, 28(sp)    # restore variables
     lw    s1, 24(sp)    #

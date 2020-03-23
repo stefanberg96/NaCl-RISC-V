@@ -31,7 +31,7 @@ static void store_littleendian(unsigned char *x,uint32 u)
   x[3] = u;
 }
 
-int crypto_core(
+int crypto_core_hsalsa20(
         unsigned char *out,
   const unsigned char *in,
   const unsigned char *k,

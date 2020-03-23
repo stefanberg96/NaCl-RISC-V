@@ -12,8 +12,6 @@ int crypto_box_beforenm(
 {
   unsigned char s[32];
   crypto_scalarmult(s,sk,pk);
-  printf("scalar finished\n");
   crypto_core_hsalsa20(k,n,s,sigma);
-  printf("salsa_finished\n");
   return 0;
 }

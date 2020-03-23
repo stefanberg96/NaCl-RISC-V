@@ -36,10 +36,10 @@ lib: checkdirs $(LIB_OBJS)
 	$(riscv64-unknown-elf-gcc)/bin/riscv64-unknown-elf-gcc-ar --target=elf32-littleriscv -q build/lib.a $(LIB_OBJS) 
 
 build/%.o: %.c
-	clang -O3 -c $< --target=riscv32 -march=rv32ima -I$(freedom-e-sdk)/freedom-metal -o $@ 
+	clang -O3 -c $< --target=riscv32 -march=rv32imac -I$(freedom-e-sdk)/freedom-metal -o $@ 
 
 build/%.o: %.S
-	clang -O0 -c $< --target=riscv32 -march=rv32ima -o $@
+	clang -O0 -c $< --target=riscv32 -march=rv32imac -o $@
 
 objdump:
 	$(riscv-gnu-toolchain)/build-binutils-newlib/binutils/objdump -D $(file) > $(file).objdump 

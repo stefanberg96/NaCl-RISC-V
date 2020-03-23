@@ -2,7 +2,7 @@
 extern void karatsuba226_255(unsigned int *, const unsigned int *,
                          const unsigned int *);
 extern void mainloop226_asm(unsigned int *, const unsigned int *);
-void squeeze226(unsigned int *);
+extern void squeeze226_255(unsigned int *);
 
 // addition of a and b
 // possible need to squeeze for the karatsuba
@@ -18,7 +18,7 @@ void add226(unsigned int out[10], const unsigned int a[10],
   }
   u += a[9] + b[9];
   out[9] = u;
-  squeeze226(out);
+  squeeze226_255(out);
 }
 
 void add226_wo_squeeze(unsigned int out[10], const unsigned int a[10],
@@ -48,7 +48,7 @@ void sub226(unsigned int out[10], const unsigned int a[10],
   }
   u += a[9] - b[9];
   out[9] = u;
-  squeeze226(out);
+  squeeze226_255(out);
 }
 const unsigned int minusp[10] = {19, 0, 0, 0, 0, 0, 0, 0, 0, 0x200000};
 

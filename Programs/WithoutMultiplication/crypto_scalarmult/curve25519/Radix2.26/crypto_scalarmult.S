@@ -12,7 +12,7 @@ crypto_scalarmult_asm:
     mv    s2, a2         #
 
     mv    a0, sp         # e226
-    call  convert_to_radix226
+    call  convert_to_radix226_255
 
     lw    t0, 0(sp)      # e226[0]
     lw    t1, 36(sp)     # e226[9]
@@ -27,7 +27,7 @@ crypto_scalarmult_asm:
 
     addi  a0, sp, 40     # work226 address
     mv    a1, s2         # 
-    call convert_to_radix226
+    call convert_to_radix226_255
 
     addi  a0, sp, 40     # work226
     addi  a1, sp, 0      # e226
@@ -42,17 +42,12 @@ crypto_scalarmult_asm:
     addi  a2, sp, 80     # work226[10]
     call karatsuba226_255
 
+    addi  a0, sp, 40     # work226
+    call freeze
+
     mv    a0, s0         # q
     addi  a1, sp, 40     # work226
-    call toradix28
-
-
-//    addi  a0, s0,0     # work226
-//    call freeze
-
-#    mv    a0, s0         # q
-#    addi  a1, sp, 40     # work226
-#    call toradix28
+    call toradix28_255
 
     lw    ra, 140(sp)    # restore variables
     lw    s0, 136(sp)    #

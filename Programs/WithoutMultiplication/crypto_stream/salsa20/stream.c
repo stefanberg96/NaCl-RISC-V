@@ -43,7 +43,9 @@ int crypto_stream_salsa20(
 
   if (clen) {
     crypto_core_salsa20(block,in,k,sigma);
-    for (i = 0;i < clen;++i) c[i] = block[i];
+    for (i = 0;i < clen;++i){
+        c[i] = block[i];
+    }
   }
   return 0;
 }

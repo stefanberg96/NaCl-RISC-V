@@ -30,11 +30,12 @@ loop:
     or     a0, a0, t1    # c[0] << 2 +in[2]
     lbu    t1, 0(s0)     # in[0]
     slli   a0, a0, 8     #
+    lw     t4, 0(s2)     # h[0] 
     or     a0, a0, t0    # c[0] << 8 + in[1]
     slli   a0, a0, 8     # 
     or     a0, a0, t1    # c[0] << 8 + in[0]
-    sw     a0, 0(s4)     # store c[0]
-    lw     a0, 0(s4)
+    add    t4, t4, a0    # c[0] + h[0]
+    sw     t4, 0(s2)     # store h[0] += c[0]
 
     lbu    t3, 6(s0)     # in[6]
     lbu    t1, 5(s0)     # in[5]
@@ -44,10 +45,12 @@ loop:
     or     a0, a0, t1    # c[1] += in[5]
     slli   a0, a0, 8     # c[1] << 8
     or     a0, a0, t0    # c[1] += in[4]
+    lw     t4, 4(s2)     # load h[1]
     slli   a0, a0, 6     # c[1] << 6 
     srli   t2, t2, 2     # in[3] >> 2
     or     a0, a0, t2    # c[1] += in[3]
-    sw     a0, 4(s4)     # store c[1]
+    add    t4, t4, a0    #
+    sw     t4, 4(s2)     # store h[1] += c[1]
 
     lbu    t2, 9(s0)     # in[9]
     lbu    t1, 8(s0)     # in[8]
@@ -56,11 +59,13 @@ loop:
     slli   a0, a0, 8     # c[2] <<= 2
     or     a0, a0, t1    # c[2] += in[8]
     slli   a0, a0, 8     # c[2] <<= 8
+    lw     t4, 8(s2)     # load h[2]
     or     a0, a0, t0    # c[2] += in[7]
     slli   a0, a0, 4     # c[2] <<= 2 
     srli   t3, t3, 4     # in[6] >> 4
     or     a0, a0, t3    # c[2] += in[6] 
-    sw     a0, 8(s4)     # store c[2]
+    add    t4, t4, a0    # 
+    sw     t4, 8(s2)     # store h[2] += c[2]
 
     lbu    a0, 12(s0)    # in[12]
     lbu    t1, 11(s0)    # in[11]
@@ -69,24 +74,24 @@ loop:
     or     a0, a0, t1    # c[3] += in[11]
     slli   a0, a0, 8     # c[3] <<= 8
     or     a0, a0, t0    # c[3] += in[10]
+    lw     t4, 12(s2)    # load h[3]
     slli   a0, a0, 2     # c[3] <<= 2
     srli   t2, t2, 6     # in[9] >> 6
     or     a0, a0, t2    # c[3] += in[9]
-    sw     a0, 12(s4)    # store c[3]
+    add    t4, t4, a0    #
+    sw     t4, 12(s2)    # store h[3] += c[3]
 
     lbu    a0, 15(s0)    # in[15]
     lbu    t1, 14(s0)    # in[14]
     lbu    t2, 13(s0)    # in[13]
     addi   a0, a0, 0x100 # append the 1 bit at the end
     slli   a0, a0, 8     # c[4] <<= 8
+    lw     t4, 16(s2)    # load h[4]
     or     a0, a0, t1    # c[4] += in[14]
     slli   a0, a0, 8     # c[4] <<= 8
     or     a0, a0, t2    # c[4] += in[13]
-    sw     a0, 16(s4)    # store c[4]
-
-    mv     a0, s2        #
-    mv     a1, s4        #
-    call   add226asm     #
+    add    t4, t4, a0    #
+    sw     t4, 16(s2)    # store h[4] += c[4]
 
     mv     a0, s2        #
     mv     a1, s3        #

@@ -14,7 +14,6 @@ karatsuba226_255_2asm:
     mulh    a5, a0, a2  # A0*B0_h
     mul     t5, a1, a3  # A1*B1_l
     mulh    a7, a1, a3  # A1*B1_h
-
     
     sub     t0, a0, a1  # A0-A1
     srai    t4, t0, 31  # get the sign of the subtraction
@@ -43,12 +42,10 @@ karatsuba226_255_2asm:
     add     a6, a7, a5  # A0*B0_h + A1*B1
     add     a5, a5, a0  # A0*B0 + A1*B1
 
-
     srli   t0, t2, 26   # base change to 2^26
     slli   t3, t3, 6    #
     or     t3, t3, t0   #
     and    t2, t2, t6   #
-    
 
     add     t2, t2, t4  # if sign is negative make the value negative
     xor     t2, t2, t4  # otherwise keep it the same
