@@ -109,7 +109,7 @@ impl Generator for ScalarmultGenerator {
     }
 
     fn get_timeout(&self) -> u64 {
-        180
+        210
     }
 
     fn get_outputlen(&self) -> usize {

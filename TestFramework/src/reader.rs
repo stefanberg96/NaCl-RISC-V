@@ -45,27 +45,26 @@ impl ReadResult for ReadResultObj{
 
 pub struct ReaderObj {
     reader: BufReader<File>,
-    outputlen: usize,
 }
 
 impl ReaderObj {
-    pub fn new(outputlen: usize) -> ReaderObj {
+    pub fn new() -> ReaderObj {
         let path = Path::new("/dev/ttyACM1");
         let file = match File::open(&path) {
             Err(e) => panic!("Couldn't open /dev/ttyACM1: {}", e.description()),
             Ok(file) => file,
         };
 
-        ReaderObj { reader: BufReader::new(file), outputlen }
+        ReaderObj { reader: BufReader::new(file) }
     }
 }
 
 impl Reader for ReaderObj {
-    fn start_reader_thread(&self, tx: Sender<ReadResultObj>) {
-        let outputlen = self.outputlen;
+    fn start_reader_thread(tx: Sender<ReadResultObj>) {
+
 
         thread::spawn(move || {
-            let reader = ReaderObj::new(outputlen);
+            let reader = ReaderObj::new();
 
             for result in reader {
                 let _ = tx.send(result);
@@ -78,7 +77,7 @@ impl Iterator for ReaderObj {
     type Item = ReadResultObj;
 
     fn next(&mut self) -> Option<ReadResultObj> {
-        let output_regex_str = format!("([a-f0-9]{{ {} }})", 2*self.outputlen);
+        let output_regex_str = format!("([a-f0-9]{{10,9000}})");
         let cycle_regex = Regex::new("(?:([0-9]+), )").expect("Cycle regex is invalid");
         let output_regex = Regex::new(output_regex_str.as_str()).expect("Output regex is invalid");
 
@@ -95,7 +94,7 @@ impl Iterator for ReaderObj {
                     .collect();
                 result.cycle_counts = z;
             } else if line.starts_with("Result:") {
-                let hex = output_regex.captures(line.as_str()).unwrap();
+                let hex = output_regex.captures(line.as_str()).expect("Result could not be captured");
                 let bytes = hex::decode(&hex[0]).expect("Failed to decode output result from hex to bytes");
                 result.result = bytes;
 

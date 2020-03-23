@@ -25,6 +25,7 @@ use crate::generators::scalarmult::generator::ScalarMultTestcase;
 use crate::generators::crypto_box::generator::CryptoBoxTestcase;
 use crate::generators::crypto_stream::generator::TestcaseStream;
 use crate::generators::crypto_secretbox::generator::SecretboxTestcase;
+use std::sync::mpsc::Receiver;
 
 mod cli;
 mod make;
@@ -80,9 +81,12 @@ fn main() -> Result<(), SimpleError> {
         functions = args.functions.iter();
     }
 
+    let (tx, rx) = mpsc::channel::<ReadResultObj>();
+    ReaderObj::start_reader_thread( tx);
+
     for function in functions {
         let generator = function;
-        let reader = ReaderObj::new(generator.get_outputlen());
+
         let bar = ProgressBar::new(args.tests);
         bar.set_message(format!("Testing {}", generator.get_generator_name()).as_str());
 
@@ -90,7 +94,7 @@ fn main() -> Result<(), SimpleError> {
             .template("{msg} {wide_bar:.cyan/blue} {pos}/{len} {elapsed_precise}")
         );
 
-        run_test(reader, generator, args.attempts, args.tests, &bar)?;
+        run_test(generator, args.attempts, args.tests, &bar, &rx)?;
 
         bar.finish();
     }
@@ -100,7 +104,7 @@ fn main() -> Result<(), SimpleError> {
 }
 
 
-fn run_test(reader: impl Reader, generator: &impl Generator, attempts: i64, tests: u64, bar: &ProgressBar) -> Result<(), SimpleError> {
+fn run_test( generator: &impl Generator, attempts: i64, tests: u64, bar: &ProgressBar, rx: &Receiver<ReadResultObj>) -> Result<(), SimpleError> {
     let dt = Local::now();
     let opt = Opt::from_args();
     let x;
@@ -128,8 +132,8 @@ fn run_test(reader: impl Reader, generator: &impl Generator, attempts: i64, test
         .read(true)
         .open(dir.join(Path::new("raw_output.txt"))).expect("Couldn't create raw_output file");
 
-    let (tx, rx) = mpsc::channel::<ReadResultObj>();
-    reader.start_reader_thread(tx);
+
+
     let timeout = generator.get_timeout();
 
     for _testcase_run in 0..tests {

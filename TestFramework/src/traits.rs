@@ -20,7 +20,7 @@ pub trait ReadResult {
 }
 
 pub trait Reader {
-    fn start_reader_thread(&self, channel: Sender<ReadResultObj>);
+    fn start_reader_thread(channel: Sender<ReadResultObj>);
 }
 
 pub trait Generator {

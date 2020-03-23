@@ -1,6 +1,7 @@
 use std::fmt::{Display, Error, Formatter};
 use std::io::Write;
 use std::str::FromStr;
+use crate::cli::Opt;
 
 use rand::prelude::*;
 use sodiumoxide::crypto::onetimeauth;
@@ -9,7 +10,7 @@ use crate::traits::{Generator, ReadResult, Testcase};
 use crate::utils::{generate_testcasefile, u8_to_string_variable, u8_to_string};
 use crate::{Poly1305Generator, TestcaseEnum};
 
-const MESSAGELEN: usize = 132;
+const MESSAGELEN: usize = 1024;
 
 pub struct TestcasePoly1305 {
     message: [u8; MESSAGELEN],
@@ -80,6 +81,7 @@ impl Generator for Poly1305Generator {
     }
 
     fn generate_testcase(&self) -> TestcaseEnum {
+
         let mut rng = rand::thread_rng();
         let mut message: [u8; MESSAGELEN] = [0; MESSAGELEN];
         rng.fill_bytes(&mut message);
@@ -98,12 +100,13 @@ impl Generator for Poly1305Generator {
         variables.push(rc_string);
 
         let expected_result = onetimeauth::authenticate(&message, &poly1305_key).0;
-        generate_testcasefile(variables.clone(), "crypto_onetimeauth(a,c,132,rs);", "printresult(a, 16);");
+        let functioncall = format!("crypto_onetimeauth(a,c,{},rs);", MESSAGELEN);
+        generate_testcasefile(variables.clone(), functioncall.as_str(), "printresult(a, 16);");
         TestcaseEnum::poly130(TestcasePoly1305 { message, key, expected_result, ..Default::default() })
     }
 
     fn get_timeout(&self) -> u64 {
-        15
+        20
     }
 
     fn get_outputlen(&self) -> usize {

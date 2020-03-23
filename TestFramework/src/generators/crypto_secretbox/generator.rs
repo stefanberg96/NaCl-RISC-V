@@ -8,7 +8,7 @@ use crate::utils::{generate_testcasefile, u8_to_string_variable, u8_to_string};
 use crate::{SecretBoxGenerator, TestcaseEnum};
 use microsalt::secretbox::xsalsa20poly1305::{secretbox, SecretboxKey, SecretboxNonce};
 
-const MESSAGELEN: usize = 132;
+const MESSAGELEN: usize = 1024;
 
 pub struct SecretboxTestcase {
     message: [u8;MESSAGELEN],
@@ -124,7 +124,7 @@ impl Generator for SecretBoxGenerator {
     }
 
     fn get_timeout(&self) -> u64 {
-        30
+        60
     }
 
     fn get_outputlen(&self) -> usize {

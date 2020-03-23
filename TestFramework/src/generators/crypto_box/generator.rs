@@ -21,7 +21,7 @@ pub struct CryptoBoxTestcase {
     raw_output: Vec<String>,
 }
 
-const MESSAGELEN:usize = 132;
+const MESSAGELEN:usize = 1024;
 
 impl Default for CryptoBoxTestcase {
     fn default() -> Self {
@@ -80,7 +80,10 @@ impl Testcase for CryptoBoxTestcase {
     fn copy_result_variables(&mut self, read_result: impl ReadResult) {
         self.cycle_counts = read_result.get_cycle_count().clone();
         self.raw_output = read_result.get_raw_output().clone();
-        self.result.copy_from_slice(read_result.get_result());
+        for i in 0.. read_result.get_result().len(){
+            self.result[i] = read_result.get_result().get(i).unwrap().clone();
+        }
+        //self.result.copy_from_slice(read_result.get_result());
     }
 }
 
@@ -131,7 +134,7 @@ impl Generator for CryptoboxGenerator {
     }
 
     fn get_timeout(&self) -> u64 {
-        240
+        300
     }
 
     fn get_outputlen(&self) -> usize {

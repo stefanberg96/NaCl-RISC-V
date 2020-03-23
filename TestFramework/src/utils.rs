@@ -53,6 +53,7 @@ pub fn generate_testcasefile(variables: Vec<String>, functioncall: &str, resultp
     void printresult(unsigned char *in, int inlen){{
         for(int i =0;i<inlen;i++){{
             printf(\"%02x\", in[i]);
+            fflush(stdout);
         }}
         printf(\"\\n\");
     }}

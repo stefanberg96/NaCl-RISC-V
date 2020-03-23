@@ -1,17 +1,17 @@
 use std::fmt::{Display, Error, Formatter};
 use std::io::Write;
 use std::str::FromStr;
-use sodiumoxide::crypto::stream::xsalsa20::{stream, gen_key, gen_nonce};
+use sodiumoxide::crypto::stream::salsa20::{stream, gen_key, gen_nonce};
 
 use crate::traits::{Generator, ReadResult, Testcase};
 use crate::utils::{generate_testcasefile, u8_to_string_variable, u8_to_string};
 use crate::{StreamGenerator, TestcaseEnum};
 
-const CLEN: usize = 132;
+const CLEN: usize = 1024;
 
 pub struct TestcaseStream {
     key: [u8; 32],
-    nonce: [u8;24],
+    nonce: [u8;8],
     expected_result: Vec<u8>,
     result: Vec<u8>,
     cycle_counts: Vec<f64>,
@@ -34,7 +34,7 @@ impl Default for TestcaseStream {
     fn default() -> Self {
         TestcaseStream {
             key: [0; 32],
-            nonce: [0; 24],
+            nonce: [0; 8],
             expected_result: vec!(),
             result: vec!(),
             cycle_counts: Vec::new(),
@@ -98,7 +98,7 @@ impl Generator for StreamGenerator {
         variables.push(key_string);
 
         let expected_result = stream(CLEN, &nonce, &key);
-        let functioncall = format!("crypto_stream_xsalsa20(c,{}, n, k);",CLEN);
+        let functioncall = format!("crypto_stream_salsa20(c,{}, n, k);",CLEN);
         let resultprint = format!("printresult(c, {});", CLEN);
 
         generate_testcasefile(variables.clone(), functioncall.as_str(), resultprint.as_str());
@@ -106,7 +106,7 @@ impl Generator for StreamGenerator {
     }
 
     fn get_timeout(&self) -> u64 {
-        20
+        60
     }
 
     fn get_outputlen(&self) -> usize {
