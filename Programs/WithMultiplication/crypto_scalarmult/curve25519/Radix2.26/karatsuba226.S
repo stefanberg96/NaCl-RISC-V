@@ -65,18 +65,6 @@ karatsuba226_255:
     xor   t4, t4, s3    #
     neg   a0, s3        #
     add   t0, t0, a0    # 
-    srli  a0, t0, 31    # handle carry
-    add   t1, t1, a0    #
-    and   t0, t0, s4    #
-    srli  a0, t1, 31    #
-    add   t2, t2, a0    #
-    and   t1, t1, s4    #
-    srli  a0, t2, 31    #
-    add   t3, t3, a0    #
-    and   t2, t2, s4    #
-    srli  a0, t3, 31    #
-    add   t4, t4, a0    #
-    and   t3, t3, s4    #
     sw    t0, 80(sp)    # store |A0..A4-A5..A9|
     sw    t1, 84(sp)    #
     sw    t2, 88(sp)    #
@@ -128,18 +116,6 @@ karatsuba226_255:
     xor   t4, t4, a1    #
     neg   a0, a1        #
     add   t0, t0, a0    # 
-    srli  a0, t0, 31    # handle carry
-    add   t1, t1, a0    #
-    and   t0, t0, s4    #
-    srli  a0, t1, 31    #
-    add   t2, t2, a0    #
-    and   t1, t1, s4    #
-    srli  a0, t2, 31    #
-    add   t3, t3, a0    #
-    and   t2, t2, s4    #
-    srli  a0, t3, 31    #
-    add   t4, t4, a0    #
-    and   t3, t3, s4    #
     xor   s3, s3, a1    # sign of the multiplication
     sw    t0, 100(sp)   # store |B0..B4-B5..B9|
     sw    t1, 104(sp)   #
