@@ -26,8 +26,7 @@ karatsuba226_255_5:
     mv    a1, s1        # A0
     mv    a2, s2        # B0
     call karatsuba226_255_3 # A0A1A2*B0B1B2=x
-
-
+ 
     lw    t0, 0(s1)     # A0
     lw    t1, 4(s1)     # A1
     lw    t2, 8(s1)     # A2
@@ -102,7 +101,7 @@ karatsuba226_255_5:
     addi  a1, sp, 64    # address |A0A1A2-A3A4|
     addi  a2, sp, 76    # address |B0B1B2-B3B4|
     call   karatsuba226_255_3 # (A0A1A2-A3A4)*(B0B1B2-B3B4)=m
-    
+
     lw    t4, 24(sp)    # x_0
     lw    t5, 28(sp)    # x_1
     lw    t6, 32(sp)    # x_2

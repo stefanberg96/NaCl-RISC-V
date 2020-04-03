@@ -18,6 +18,8 @@ karatsuba226_255_3:
     mv   s2, a2         # store B pointer
 
     mv   a0, sp         # place to store A0A1*B0B1
+    mv a1, s1
+    mv  a2,s2
     call  karatsuba226_255_2 # calulate A0A1*B0B1=x
 
     lw   t0, 0(s1)      # load A0
@@ -34,7 +36,7 @@ karatsuba226_255_3:
     and  t2, s3, s4     # cut mask to 26 bits length
     xor  t1, t1, s3     # absolute value of A0A1-A2
     xor  t0, t0, t2     # 
-    neg  t3, t2         #
+    neg  t3, s3         #
     add  t0, t0, t3     #    
     srli t3, t0, 26     # handle carry
     add  t1, t1, t3     #
@@ -56,7 +58,7 @@ karatsuba226_255_3:
     and  a0, t3, s4     # cut mask to 26 bits
     xor  t1, t1, t3     # absolute value of B0B1-B2
     xor  t0, t0, a0     #
-    neg  t4, a0         #
+    neg  t4, t3         #
     add  t0, t0, t4     #
     srli t4, t0, 26     # handle carry
     add  t1, t1, t4     #
@@ -73,6 +75,7 @@ karatsuba226_255_3:
     lw   a0, 8(s1)      # A2
     lw   a1, 8(s2)      # B2
     call securemul226    # A2*B2 = y 
+    
     lw   a4, 8(sp)      # x_2
     lw   a5, 12(sp)     # x_3
     lw   a2, 0(sp)      # x_0

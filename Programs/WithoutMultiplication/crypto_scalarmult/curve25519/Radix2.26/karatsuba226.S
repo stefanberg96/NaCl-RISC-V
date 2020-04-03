@@ -146,7 +146,7 @@ karatsuba226_255:
     sw    t2, 108(sp)   #
     sw    t3, 112(sp)   #
     sw    t4, 116(sp)   #
-    
+
     mv    a0, sp        # result address
     addi  a1, sp, 80    # address |A0..A4-A5..A9|
     addi  a2, sp, 100   # address |B0..B4-B5..B9| 
