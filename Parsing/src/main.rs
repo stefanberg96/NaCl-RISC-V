@@ -11,7 +11,6 @@ struct Testcase {
     cycles: Vec<i32>,
     branch_dir_mis: Vec<i32>,
     branch_tar_mis: Vec<i32>,
-    correct: bool,
     result: String,
     expected_result: String,
     run: i32,
@@ -19,7 +18,7 @@ struct Testcase {
 
 impl Testcase {
     fn new() -> Testcase {
-        Testcase { cycles: Vec::new(), branch_dir_mis: Vec::new(), branch_tar_mis: Vec::new(), correct: false, run: 0, result: String::new(), expected_result: String::new() }
+        Testcase { cycles: Vec::new(), branch_dir_mis: Vec::new(), branch_tar_mis: Vec::new(), run: 0, result: String::new(), expected_result: String::new() }
     }
 }
 
@@ -27,7 +26,6 @@ struct Trial {
     cycle: i32,
     branch_dir_mis: i32,
     branch_tar_mis: i32,
-    correct: bool,
     run: i32,
     id: i32,
 }
@@ -35,13 +33,7 @@ struct Trial {
 
 impl Display for Trial{
     fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
-        let _ = write!(f, "{}, {}, {}, {}, {}, ", self.run, self.id, self.cycle, self.branch_dir_mis, self.branch_tar_mis);
-        match self.correct{
-            true => writeln!(f,"TRUE"),
-            false => writeln!(f, "FALSE")
-        }
-
-
+        write!(f, "{}, {}, {}, {}, {} ", self.run, self.id, self.cycle, self.branch_dir_mis, self.branch_tar_mis)
     }
 }
 
@@ -81,7 +73,7 @@ fn main() {
         .truncate(true)
         .open(output_path).expect("Can not create or open output file");
     let mut writer = BufWriter::new(output_file);
-    let _ = writeln!(&mut writer, "run, id, cycles, Branch direction mis, Branch target mis, Correct");
+    let _ = writeln!(&mut writer, "run, id, cycles, Branch mispredictions, Icache busy");
     let mut run_counter = 0;
     let mut testcase = Testcase::new();
     for line in BufReader::new(input_file).lines() {
@@ -105,22 +97,20 @@ fn parse_line(testcase: &mut Testcase, line: String) {
     if line.starts_with("Cycle counts:") {
         let csline = line.replace("Cycle counts:", "");
         testcase.cycles = line_to_vec(csline);
-    } else if line.starts_with("Branch dir mis:") {
-        let csline = line.replace("Branch dir mis:", "");
+    } else if line.starts_with("Branch mispredictions:") {
+        let csline = line.replace("Branch mispredictions:", "");
         testcase.branch_dir_mis = line_to_vec(csline);
-    } else if line.starts_with("Branch target mis:") {
-        let csline = line.replace("Branch target mis:", "");
+    } else if line.starts_with("Icache busy:") {
+        let csline = line.replace("Icache busy:", "");
         testcase.branch_tar_mis = line_to_vec(csline);
     } else if line.starts_with("Result:") {
         let result = line.replace("Result:", "");
         testcase.result = result.trim().to_string();
     } else if line.starts_with("Expected result:") {
-        let eresult = line.replace("Expected result:", "");
+        let mut eresult = line.replace("Expected result:", "");
+        eresult = eresult.replace("0x", "");
+        eresult = eresult.replace(", ", "");
         testcase.expected_result = eresult.trim().to_string();
-        testcase.correct = testcase.result == testcase.expected_result;
-        if ! testcase.correct{
-            println!("Result not correct expected: {}\n got:{}", testcase.expected_result, testcase.result);
-        }
     }
 }
 
@@ -138,7 +128,7 @@ fn testcase_to_trial(testcase: Testcase) -> Vec<Trial>{
         let branch_dir_mis = testcase.branch_dir_mis[i];
         let branch_tar_mis = testcase.branch_tar_mis[i];
         trials.push(Trial{cycle, branch_dir_mis, branch_tar_mis, run:testcase.run
-        , id: i as i32, correct: testcase.correct});
+        , id: i as i32});
     }
     trials
 }

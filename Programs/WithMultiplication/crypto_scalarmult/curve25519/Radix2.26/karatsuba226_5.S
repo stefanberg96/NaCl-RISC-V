@@ -25,9 +25,8 @@ karatsuba226_255_5asm:
     li    t6, 0x3ffffff # 2^26-1
 
     lw    a0, 0(s10)    # load A
-    lw    a1, 4(s10)    #
-
     lw    a5, 0(s9)     # load B
+    lw    a1, 4(s10)    #
     lw    a6, 4(s9)     #
 
     mul   t0, a0, a5    # A0*B0
@@ -40,7 +39,7 @@ karatsuba226_255_5asm:
     lw    a7, 8(s9)     #
     lw    s0, 12(s9)    #
     lw    s1, 16(s9)    #
-
+    
     mul   t2, a0, a6    # A0*B1
     mulh  t3, a0, a6    #
 
@@ -335,6 +334,8 @@ karatsuba226_255_5asm:
 
     lw    s0, 76(sp)    # restore variables
     lw    s1, 72(sp)    #
+    lw    s11, 32(sp)   #
+    lw    ra, 28(sp)    #
     lw    s2, 68(sp)    #
     lw    s3, 64(sp)    #
     lw    s4, 60(sp)    #
@@ -344,7 +345,7 @@ karatsuba226_255_5asm:
     lw    s8, 44(sp)    #
     lw    s9, 40(sp)    #
     lw    s10, 36(sp)   #
-    lw    s11, 32(sp)   #
-    lw    ra, 28(sp)    #
     addi  sp, sp, 80    #
     ret
+
+

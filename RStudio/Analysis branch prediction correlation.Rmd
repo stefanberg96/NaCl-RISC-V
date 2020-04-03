@@ -11,6 +11,7 @@ library("dplyr")
 library("car")
 library("plyr")
 library("sqldf")
+library("scales")
 ```
 
 Check if the data has no incorrect solutions
@@ -220,4 +221,45 @@ fasd<- sqldf('SELECT test.target, test.dir, test.cycles , test2.cycles
         FROM test INNER JOIN test as test2
         WHERE test.target == test2.target AND test.dir == test2.dir AND test.cycles != test2.cycles
       ')
+```
+
+Final Results
+```{r}
+cryptobox<-read.csv("/home/stefan/Documents/Graduation/RISC-V-toolchain/riscv/Programs/WithMultiplication/results/crypto_box_2020-03-30 17:31/raw_output.csv")
+cryptobox_filtered<- dplyr::filter(cryptobox, Icache.busy<1200000)
+
+cryptobox_filtered$Branch.mispredictions.factor = as.factor(cryptobox_filtered$Branch.mispredictions)
+ggplot(cryptobox_filtered, aes(x=Icache.busy, y=cycles, color=Branch.mispredictions.factor))  +  geom_point(alpha=.3, colour="#4fc3f7") + scale_y_continuous() +ylab("Cycles") + xlab("Instruction cache busy")
+median(cryptobox_filtered$cycles)
+```
+
+```{r}
+secretbox<-read.csv("/home/stefan/Documents/Graduation/RISC-V-toolchain/riscv/Programs/WithMultiplication/results/secretbox_2020-03-30 22:44/raw_output.csv")
+secretbox_filtered<- dplyr::filter(secretbox, Icache.busy< 100)
+secretbox_filtered$Branch.mispredictions.factor = as.factor(secretbox_filtered$Branch.mispredictions)
+ggplot(secretbox_filtered, aes(x=Branch.mispredictions, y=cycles))   +  geom_point(alpha=.3, colour="#4fc3f7")+ scale_y_continuous() + ylab("Cycles") + xlab("Branch mispredictions")
+print(median(secretbox_filtered$cycles))
+```
+
+```{r}
+poly1305_1024<-read.csv("/home/stefan/Documents/Graduation/RISC-V-toolchain/riscv/Programs/WithMultiplication/results/poly1305_2020-03-30 12:55/raw_output.csv")
+poly1305_1024_filtered<- dplyr::filter(poly1305_1024, Icache.busy<1)
+poly1305_1024_filtered$Branch.mispredictions.factor = as.factor(poly1305_1024_filtered$Branch.mispredictions)
+ggplot(poly1305_1024_filtered, aes(x=Branch.mispredictions, y=cycles))  +  geom_point(alpha=.3, colour="#4fc3f7") +scale_y_continuous() + ylab("Cycles") + xlab("Branch mispredictions")
+median(poly1305_1024_filtered$cycles)
+```
+```{r}
+scalarmult<-read.csv("/home/stefan/Documents/Graduation/RISC-V-toolchain/riscv/Programs/WithMultiplication/results/scalarmult_2020-03-30 14:07/raw_output.csv")
+scalarmult_filtered<- dplyr::filter(scalarmult, Icache.busy<1)
+scalarmult_filtered$Branch.mispredictions.factor = as.factor(scalarmult_filtered$Branch.mispredictions)
+ggplot(scalarmult_filtered, aes(x=Branch.mispredictions, y=cycles))  +  geom_point(alpha=.3, colour="#4fc3f7") + scale_y_continuous() + ylab("Cycles") + xlab("Branch mispredictions")
+median(scalarmult_filtered$cycles)
+```
+
+```{r}
+stream<-read.csv("/home/stefan/Documents/Graduation/RISC-V-toolchain/riscv/Programs/WithMultiplication/results/stream_xsalsa20_2020-03-30 21:27/raw_output.csv")
+stream_filtered<- dplyr::filter(stream, Icache.busy<1)
+stream_filtered$Branch.mispredictions.factor = as.factor(stream_filtered$Branch.mispredictions)
+ggplot(stream_filtered, aes(x=Branch.mispredictions, y=cycles))  +  geom_point(alpha=.3, colour="#4fc3f7") + scale_y_continuous() + ylab("Cycles") + xlab("Branch mispredictions")
+median(stream_filtered$cycles)
 ```

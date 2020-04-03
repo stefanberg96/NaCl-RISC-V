@@ -1,6 +1,6 @@
 .text
 
-.global karatsuba226_255
+.globl karatsuba226_255
 .type karatsuba226_255, @function
 karatsuba226_255:
 
@@ -12,10 +12,10 @@ karatsuba226_255:
     sw    s4, 124(sp)   #
     sw    ra, 120(sp)   #
 
-    li    s4, 0x3ffffff # 2^26-1
     mv    s0, a0        # result address
     mv    s1, a1        # A address
     mv    s2, a2        # B address
+    li    s4, 0x3ffffff # 2^26-1
 
     addi  a0, sp, 40    # result x
     call karatsuba226_255_5asm # A0..A4 *B0..B4 = x
@@ -65,6 +65,7 @@ karatsuba226_255:
     xor   t4, t4, s3    #
     neg   a0, s3        #
     add   t0, t0, a0    # 
+
     sw    t0, 80(sp)    # store |A0..A4-A5..A9|
     sw    t1, 84(sp)    #
     sw    t2, 88(sp)    #
@@ -74,7 +75,6 @@ karatsuba226_255:
     lw    t0, 0(s2)     # B0
     lw    t5, 20(s2)    # B5
     lw    t1, 4(s2)     # B2
-    li    a6, 0x4000000 # 2^26
     sub   t0, t0, t5    # B0-B5
     srai  a0, t0, 31    # sign of t0
     and   a1, a6, a0    # mask 2^26 with the sign
@@ -436,33 +436,6 @@ karatsuba226_255:
     li    t0, 0x1fffff  # 2^21
     and   a6, a6, t0    # 
     add   t4, t4, t1    #
-
-    srli  t0, t4, 26    # overflow in res[0]
-    add   t5, t5, t0    #
-    and   t4, t4, s4    #
-    srli  t0, t5, 26    # overflow in res[1]
-    add   t6, t6, t0    #
-    and   t5, t5, s4    #
-    srli  t0, t6, 26    # overflow in res[2]
-    add   a0, a0, t0    #
-    and   t6, t6, s4    #
-    srli  t0, a0, 26    # overflow in res[3]
-    add   a1, a1, t0    #
-    and   a0, a0, s4    #
-    srli  t0, a1, 26    # overflow in res[4]
-    add   a2, a2, t0    #
-    and   a1, a1, s4    #
-    srli  t0, a2, 26    # overflow in res[5]
-    add   a3, a3, t0    #
-    and   a2, a2, s4    #
-    srli  t0, a3, 26    # overflow in res[6]
-    add   a4, a4, t0    #
-    and   a3, a3, s4    #
-    srli  t0, a4, 26    # overflow in res[7]
-    add   a5, a5, t0    #
-    and   a4, a4, s4    #
-    srli  t0, a5, 26    # overflow in res[8]
-    add   a6, a6, t0    #
 
     sw    t4, 0(s0)     # store result
     sw    t5, 4(s0)     #
