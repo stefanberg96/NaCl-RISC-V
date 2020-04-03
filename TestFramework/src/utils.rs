@@ -115,7 +115,7 @@ pub fn generate_testcasefile(variables: Vec<String>, functioncall: &str, resultp
         printf(\"Branch mispredictions:        \");
         printcounters(counters, 1);
 
-        printf(\"ICache misses:    \");
+        printf(\"Icache busy:    \");
         printcounters(counters, 2);
 
         printf(\"Result: \");

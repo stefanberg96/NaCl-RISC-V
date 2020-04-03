@@ -129,7 +129,7 @@ impl FromStr for Function {
 
 impl Function {
     pub fn iterator() -> Iter<'static, Function> {
-        static FUNCTIONS: [Function; 2] = [Function::poly1305(Poly1305Generator {}), Function::scalarmult(ScalarmultGenerator {})];
+        static FUNCTIONS: [Function; 5] = [Function::poly1305(Poly1305Generator {}), Function::scalarmult(ScalarmultGenerator {}), Function::cryptobox(CryptoboxGenerator{}), Function::salsa20(StreamGenerator{}), Function::secretbox(SecretBoxGenerator{})];
         FUNCTIONS.iter()
     }
 }
