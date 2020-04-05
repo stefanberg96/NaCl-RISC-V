@@ -10,7 +10,7 @@ use crate::traits::{Generator, ReadResult, Testcase};
 use crate::utils::{generate_testcasefile, u8_to_string_variable, u8_to_string};
 use crate::{Poly1305Generator, TestcaseEnum};
 
-const MESSAGELEN: usize = 1024;
+const MESSAGELEN: usize = 512;
 
 pub struct TestcasePoly1305 {
     message: [u8; MESSAGELEN],

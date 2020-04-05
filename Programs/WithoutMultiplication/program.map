@@ -1,20 +1,28 @@
 Archive member included to satisfy reference by file (symbol)
 
-build/lib.a(crypto_scalarmult.o)
-                              build/benchmark.o (crypto_scalarmult_asm)
-build/lib.a(mainloop.o)       build/lib.a(crypto_scalarmult.o) (mainloop226_asm)
-build/lib.a(scalarmult.o)     build/lib.a(mainloop.o) (add226)
-build/lib.a(karatsuba226.o)   build/lib.a(crypto_scalarmult.o) (karatsuba226_255)
-build/lib.a(securemul.o)      build/lib.a(mainloop.o) (mul121665asm)
+build/lib.a(karatsuba226.o)   build/benchmark.o (karatsuba226_255)
 build/lib.a(karatsuba226_5.o)
                               build/lib.a(karatsuba226.o) (karatsuba226_255_5)
-build/lib.a(crypto_select_asm.o)
-                              build/lib.a(mainloop.o) (crypto_select_asm)
-build/lib.a(squeeze226.o)     build/lib.a(scalarmult.o) (squeeze226)
+build/lib.a(onetime_auth.o)   build/benchmark.o (crypto_onetimeauth)
+build/lib.a(scalarmult.o)     build/benchmark.o (crypto_scalarmult)
+build/lib.a(karatsuba226.o)   build/lib.a(onetime_auth.o) (karatsuba226_130)
+build/lib.a(karatsuba226_2.o)
+                              build/lib.a(karatsuba226.o) (karatsuba226_130_2)
+build/lib.a(karatsuba226_3.o)
+                              build/lib.a(karatsuba226.o) (karatsuba226_130_3)
+build/lib.a(squeeze.o)        build/lib.a(karatsuba226.o) (squeeze226param)
+build/lib.a(add.o)            build/lib.a(onetime_auth.o) (add226asm)
+build/lib.a(onetime_authloop.o)
+                              build/lib.a(onetime_auth.o) (onetimeauth_loop)
 build/lib.a(karatsuba226_2.o)
                               build/lib.a(karatsuba226_5.o) (karatsuba226_255_2)
 build/lib.a(karatsuba226_3.o)
                               build/lib.a(karatsuba226_5.o) (karatsuba226_255_3)
+build/lib.a(securemul.o)      build/lib.a(karatsuba226_2.o) (securemul226)
+build/lib.a(squeeze226.o)     build/lib.a(scalarmult.o) (squeeze226)
+build/lib.a(mainloop.o)       build/lib.a(scalarmult.o) (mainloop226_asm)
+build/lib.a(crypto_select_asm.o)
+                              build/lib.a(mainloop.o) (crypto_select_asm)
 /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-fflush.o)
                               build/benchmark.o (fflush)
 /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-findfp.o)
@@ -28,9 +36,9 @@ build/lib.a(karatsuba226_3.o)
 /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-mallocr.o)
                               /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-findfp.o) (_malloc_r)
 /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-memcpy.o)
-                              build/lib.a(scalarmult.o) (memcpy)
+                              build/lib.a(onetime_auth.o) (memcpy)
 /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-memset.o)
-                              /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-findfp.o) (memset)
+                              build/lib.a(onetime_auth.o) (memset)
 /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-mlock.o)
                               /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-freer.o) (__malloc_lock)
 /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-printf.o)
@@ -223,6 +231,7 @@ Discarded input sections
 
  .llvm_addrsig  0x0000000000000000        0x2 build/benchmark.o
  .llvm_addrsig  0x0000000000000000        0x0 build/main.o
+ .llvm_addrsig  0x0000000000000000        0x1 build/lib.a(onetime_auth.o)
  .rodata        0x0000000000000000       0x28 build/lib.a(scalarmult.o)
  .llvm_addrsig  0x0000000000000000        0x0 build/lib.a(scalarmult.o)
  .data          0x0000000000000000        0x0 /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-fflush.o)
@@ -923,582 +932,594 @@ END GROUP
                 0x0000000020010132                _init
                 0x0000000020010132                _fini
 
-.text           0x0000000020010180    0x10942
+.text           0x0000000020010180    0x12d42
  *(.text.unlikely .text.unlikely.*)
  *(.text.startup .text.startup.*)
  *(.text .text.*)
- .text          0x0000000020010180      0x332 build/benchmark.o
+ .text          0x0000000020010180      0x65c build/benchmark.o
                 0x0000000020010180                printresult
-                0x00000000200101dc                printresultreverse
-                0x0000000020010226                printintarray
-                0x000000002001026a                printchararray
-                0x00000000200102b0                printcounters
-                0x0000000020010308                dobenchmark
- *fill*         0x00000000200104b2        0x2 
- .text          0x00000000200104b4       0x24 build/main.o
-                0x00000000200104b4                main
-                0x00000000200104c8                printdebug
- .text          0x00000000200104d8       0x36 build/cyclecounter.o
-                0x00000000200104d8                getcycles
-                0x00000000200104f2                icachemisses
-                0x0000000020010504                getsp
-                0x0000000020010508                getra
- *fill*         0x000000002001050e        0x2 
- .text          0x0000000020010510       0x8c build/lib.a(crypto_scalarmult.o)
-                0x0000000020010510                crypto_scalarmult_asm
- .text          0x000000002001059c      0x396 build/lib.a(mainloop.o)
-                0x000000002001059c                mainloop226_asm
- *fill*         0x0000000020010932        0x2 
- .text          0x0000000020010934     0x1246 build/lib.a(scalarmult.o)
-                0x0000000020010934                add226
-                0x00000000200109d8                add226_wo_squeeze
-                0x0000000020010a76                sub226
-                0x0000000020010c88                add
-                0x0000000020010cc2                freeze
-                0x0000000020010df6                recip226
-                0x0000000020011772                convert_to_radix226_255
-                0x00000000200118b8                toradix28_255
-                0x00000000200119de                crypto_scalarmult
- *fill*         0x0000000020011b7a        0x2 
- .text          0x0000000020011b7c      0x5c8 build/lib.a(karatsuba226.o)
-                0x0000000020011b7c                karatsuba226_255
- .text          0x0000000020012144      0x804 build/lib.a(securemul.o)
-                0x0000000020012144                securemul226
-                0x00000000200124b4                mul121665asm
- .text          0x0000000020012948      0x262 build/lib.a(karatsuba226_5.o)
-                0x0000000020012948                karatsuba226_255_5
- *fill*         0x0000000020012baa        0x2 
- .text          0x0000000020012bac      0x284 build/lib.a(crypto_select_asm.o)
-                0x0000000020012bac                crypto_select_asm
- .text          0x0000000020012e30       0xf8 build/lib.a(squeeze226.o)
-                0x0000000020012e30                squeeze226
- .text          0x0000000020012f28       0xf4 build/lib.a(karatsuba226_2.o)
-                0x0000000020012f28                karatsuba226_255_2
- .text          0x000000002001301c      0x194 build/lib.a(karatsuba226_3.o)
-                0x000000002001301c                karatsuba226_255_3
- .text          0x00000000200131b0      0x1a8 /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-fflush.o)
-                0x00000000200131b0                __sflush_r
-                0x000000002001330a                _fflush_r
-                0x0000000020013338                fflush
- .text          0x0000000020013358      0x1e4 /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-findfp.o)
-                0x00000000200133c6                _cleanup_r
-                0x00000000200133d4                __sfmoreglue
-                0x000000002001341a                _cleanup
-                0x0000000020013422                __sinit
-                0x0000000020013470                __sfp
-                0x000000002001350c                __sfp_lock_acquire
-                0x000000002001350e                __sfp_lock_release
-                0x0000000020013510                __sinit_lock_acquire
-                0x0000000020013512                __sinit_lock_release
-                0x0000000020013514                __fp_lock_all
-                0x0000000020013528                __fp_unlock_all
- .text          0x000000002001353c      0x2a0 /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-freer.o)
-                0x000000002001353c                _malloc_trim_r
-                0x000000002001360c                _free_r
- .text          0x00000000200137dc       0xce /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-fwalk.o)
-                0x00000000200137dc                _fwalk
-                0x000000002001383e                _fwalk_reent
- .text          0x00000000200138aa      0x50a /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-mallocr.o)
-                0x00000000200138aa                _malloc_r
- .text          0x0000000020013db4       0xb6 /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-memcpy.o)
-                0x0000000020013db4                memcpy
- .text          0x0000000020013e6a       0xa8 /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-memset.o)
-                0x0000000020013e6a                memset
- .text          0x0000000020013f12        0x4 /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-mlock.o)
-                0x0000000020013f12                __malloc_lock
-                0x0000000020013f14                __malloc_unlock
- .text          0x0000000020013f16       0x4e /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-printf.o)
-                0x0000000020013f16                _printf_r
-                0x0000000020013f36                printf
- .text          0x0000000020013f64       0x16 /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-putchar.o)
-                0x0000000020013f64                _putchar_r
-                0x0000000020013f68                putchar
- .text          0x0000000020013f7a       0x68 /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-putc.o)
-                0x0000000020013f7a                _putc_r
-                0x0000000020013fd2                putc
- .text          0x0000000020013fe2       0x82 /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-puts.o)
-                0x0000000020013fe2                _puts_r
-                0x0000000020014056                puts
- .text          0x0000000020014064       0x2a /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-sbrkr.o)
-                0x0000000020014064                _sbrk_r
- .text          0x000000002001408e       0xc8 /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-stdio.o)
-                0x000000002001408e                __sread
-                0x00000000200140c0                __seofread
-                0x00000000200140c4                __swrite
-                0x0000000020014116                __sseek
-                0x000000002001414e                __sclose
- .text          0x0000000020014156       0x12 /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-strlen.o)
-                0x0000000020014156                strlen
- .text          0x0000000020014168     0x16b2 /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-vfprintf.o)
-                0x0000000020014168                _vfprintf_r
-                0x000000002001577a                vfprintf
- .text          0x000000002001581a       0xc8 /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-wbuf.o)
-                0x000000002001581a                __swbuf_r
-                0x00000000200158d2                __swbuf
- .text          0x00000000200158e2       0x2e /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-writer.o)
-                0x00000000200158e2                _write_r
- .text          0x0000000020015910       0xe0 /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-wsetup.o)
-                0x0000000020015910                __swsetup_r
- .text          0x00000000200159f0       0x2a /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-closer.o)
-                0x00000000200159f0                _close_r
- .text          0x0000000020015a1a       0x9c /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-fclose.o)
-                0x0000000020015a1a                _fclose_r
-                0x0000000020015aa8                fclose
- .text          0x0000000020015ab6      0x2e4 /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-fvwrite.o)
-                0x0000000020015ab6                __sfvwrite_r
- .text          0x0000000020015d9a     0x160e /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-ldtoa.o)
-                0x0000000020016a78                _ldtoa_r
-                0x000000002001736a                _ldcheck
- .text          0x00000000200173a8       0x3e /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-localeconv.o)
-                0x00000000200173a8                __localeconv_l
-                0x00000000200173ae                _localeconv_r
-                0x00000000200173ca                localeconv
- .text          0x00000000200173e6       0xa6 /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-locale.o)
-                0x00000000200173e6                _setlocale_r
-                0x000000002001743e                __locale_mb_cur_max
-                0x000000002001745a                __locale_ctype_ptr_l
-                0x0000000020017460                __locale_ctype_ptr
-                0x000000002001747c                setlocale
- .text          0x000000002001748c       0x2e /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-lseekr.o)
-                0x000000002001748c                _lseek_r
- .text          0x00000000200174ba      0x106 /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-makebuf.o)
-                0x00000000200174ba                __swhatbuf_r
-                0x0000000020017520                __smakebuf_r
- .text          0x00000000200175c0       0x56 /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-mbtowc_r.o)
-                0x00000000200175c0                _mbtowc_r
-                0x00000000200175dc                __ascii_mbtowc
- .text          0x0000000020017616       0x1a /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-memchr.o)
-                0x0000000020017616                memchr
- .text          0x0000000020017630       0x4a /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-memmove.o)
-                0x0000000020017630                memmove
- .text          0x000000002001767a      0x93c /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-mprec.o)
-                0x000000002001767a                _Balloc
-                0x00000000200176e0                _Bfree
-                0x00000000200176f4                __multadd
-                0x0000000020017788                __s2b
-                0x0000000020017828                __hi0bits
-                0x000000002001786e                __lo0bits
-                0x00000000200178d8                __i2b
-                0x00000000200178f2                __multiply
-                0x0000000020017a34                __pow5mult
-                0x0000000020017ac4                __lshift
-                0x0000000020017b8e                __mcmp
-                0x0000000020017bc0                __mdiff
-                0x0000000020017cac                __ulp
-                0x0000000020017cf2                __b2d
-                0x0000000020017da4                __d2b
-                0x0000000020017e70                __ratio
-                0x0000000020017ee0                _mprec_log10
-                0x0000000020017f3a                __copybits
-                0x0000000020017f70                __any_on
- .text          0x0000000020017fb6       0x2e /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-readr.o)
-                0x0000000020017fb6                _read_r
- .text          0x0000000020017fe4      0x3a0 /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-reallocr.o)
-                0x0000000020017fe4                _realloc_r
- .text          0x0000000020018384       0x7e /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-s_frexp.o)
-                0x0000000020018384                frexp
- .text          0x0000000020018402       0x82 /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-sprintf.o)
-                0x0000000020018402                _sprintf_r
-                0x000000002001843c                sprintf
- .text          0x0000000020018484      0x11e /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-strcmp.o)
-                0x0000000020018484                strcmp
- .text          0x00000000200185a2       0x12 /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-strcpy.o)
-                0x00000000200185a2                strcpy
- .text          0x00000000200185b4       0x24 /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-strncpy.o)
-                0x00000000200185b4                strncpy
- .text          0x00000000200185d8     0x15de /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-svfprintf.o)
-                0x00000000200185d8                _svfprintf_r
- .text          0x0000000020019bb6      0xa2a /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-vfiprintf.o)
-                0x0000000020019bb6                __sprint_r
-                0x0000000020019c52                _vfiprintf_r
-                0x000000002001a540                vfiprintf
- .text          0x000000002001a5e0       0x3c /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-wctomb_r.o)
-                0x000000002001a5e0                _wctomb_r
-                0x000000002001a5fc                __ascii_wctomb
- .text          0x000000002001a61c       0x78 /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-callocr.o)
-                0x000000002001a61c                _calloc_r
- .text          0x000000002001a694      0x106 /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-fputwc.o)
-                0x000000002001a694                __fputwc
-                0x000000002001a748                _fputwc_r
-                0x000000002001a766                fputwc
- .text          0x000000002001a79a       0x2c /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-fstatr.o)
-                0x000000002001a79a                _fstat_r
- .text          0x000000002001a7c6       0x2a /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-isattyr.o)
-                0x000000002001a7c6                _isatty_r
- .text          0x000000002001a7f0      0x9ce /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-svfiprintf.o)
-                0x000000002001a7f0                __ssprint_r
-                0x000000002001a924                _svfiprintf_r
- .text          0x000000002001b1be       0x70 /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-wcrtomb.o)
-                0x000000002001b1be                _wcrtomb_r
-                0x000000002001b21c                wcrtomb
- .text          0x000000002001b22e      0x35e /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/rv32imac/ilp32/libgcc.a(_udivdi3.o)
-                0x000000002001b22e                __udivdi3
- .text          0x000000002001b58c      0x352 /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/rv32imac/ilp32/libgcc.a(_umoddi3.o)
-                0x000000002001b58c                __umoddi3
- .text          0x000000002001b8de      0x54a /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/rv32imac/ilp32/libgcc.a(divdf3.o)
-                0x000000002001b8de                __divdf3
- .text          0x000000002001be28      0x450 /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/rv32imac/ilp32/libgcc.a(muldf3.o)
-                0x000000002001be28                __muldf3
- .text          0x000000002001c278       0xa6 /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/rv32imac/ilp32/libgcc.a(eqtf2.o)
-                0x000000002001c278                __eqtf2
-                0x000000002001c278                __netf2
- .text          0x000000002001c31e       0xfa /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/rv32imac/ilp32/libgcc.a(getf2.o)
-                0x000000002001c31e                __getf2
-                0x000000002001c31e                __gttf2
- .text          0x000000002001c418       0xfa /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/rv32imac/ilp32/libgcc.a(letf2.o)
-                0x000000002001c418                __letf2
-                0x000000002001c418                __lttf2
- .text          0x000000002001c512      0xb3c /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/rv32imac/ilp32/libgcc.a(multf3.o)
-                0x000000002001c512                __multf3
- .text          0x000000002001d04e      0xe5c /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/rv32imac/ilp32/libgcc.a(subtf3.o)
-                0x000000002001d04e                __subtf3
- .text          0x000000002001deaa       0xec /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/rv32imac/ilp32/libgcc.a(fixtfsi.o)
-                0x000000002001deaa                __fixtfsi
- .text          0x000000002001df96       0xf8 /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/rv32imac/ilp32/libgcc.a(floatsitf.o)
-                0x000000002001df96                __floatsitf
- .text          0x000000002001e08e      0x152 /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/rv32imac/ilp32/libgcc.a(extenddftf2.o)
-                0x000000002001e08e                __extenddftf2
- .text          0x000000002001e1e0      0x230 /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/rv32imac/ilp32/libgcc.a(trunctfdf2.o)
-                0x000000002001e1e0                __trunctfdf2
- .text          0x000000002001e410       0x3c /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/rv32imac/ilp32/libgcc.a(_clzsi2.o)
-                0x000000002001e410                __clzsi2
+                0x0000000020010204                printresultreverse
+                0x000000002001026c                printintarray
+                0x00000000200102d4                printchararray
+                0x000000002001033c                printcounters
+                0x00000000200103bc                dobenchmark
+ .text          0x00000000200107dc       0x30 build/main.o
+                0x00000000200107dc                main
+                0x00000000200107fc                printdebug
+ .text          0x000000002001080c       0x44 build/cyclecounter.o
+                0x000000002001080c                getcycles
+                0x0000000020010828                icachemisses
+                0x0000000020010840                getsp
+                0x0000000020010848                getra
+ .text          0x0000000020010850      0x768 build/lib.a(karatsuba226.o)
+                0x0000000020010850                karatsuba226_255
+ .text          0x0000000020010fb8      0x318 build/lib.a(karatsuba226_5.o)
+                0x0000000020010fb8                karatsuba226_255_5
+ .text          0x00000000200112d0      0x7c0 build/lib.a(onetime_auth.o)
+                0x00000000200112d0                freeze_130
+                0x00000000200114bc                toradix28_130
+                0x00000000200115ac                crypto_onetimeauth
+ .text          0x0000000020011a90     0x1a60 build/lib.a(scalarmult.o)
+                0x0000000020011a90                add226
+                0x0000000020011bac                add226_wo_squeeze
+                0x0000000020011cc4                sub226
+                0x0000000020011f68                add
+                0x0000000020011fbc                freeze
+                0x000000002001216c                recip226
+                0x0000000020012f04                convert_to_radix226_255
+                0x00000000200130ec                toradix28_255
+                0x00000000200132a0                crypto_scalarmult
+ .text          0x00000000200134f0      0x3a4 build/lib.a(karatsuba226.o)
+                0x00000000200134f0                karatsuba226_130_inplace
+                0x000000002001354c                karatsuba226_130
+ .text          0x0000000020013894      0x14c build/lib.a(karatsuba226_2.o)
+                0x0000000020013894                karatsuba226_130_2
+ .text          0x00000000200139e0      0x27c build/lib.a(karatsuba226_3.o)
+                0x00000000200139e0                karatsuba226_130_3
+ .text          0x0000000020013c5c       0xa4 build/lib.a(squeeze.o)
+                0x0000000020013c5c                squeeze226asm
+                0x0000000020013c9c                squeeze226param
+ .text          0x0000000020013d00       0xf0 build/lib.a(add.o)
+                0x0000000020013d00                addasm
+                0x0000000020013d34                add226asm
+ .text          0x0000000020013df0      0x184 build/lib.a(onetime_authloop.o)
+                0x0000000020013df0                onetimeauth_loop
+ .text          0x0000000020013f74      0x144 build/lib.a(karatsuba226_2.o)
+                0x0000000020013f74                karatsuba226_255_2
+ .text          0x00000000200140b8      0x210 build/lib.a(karatsuba226_3.o)
+                0x00000000200140b8                karatsuba226_255_3
+ .text          0x00000000200142c8      0x9d0 build/lib.a(securemul.o)
+                0x00000000200142c8                securemul226
+                0x00000000200146d0                mul121665asm
+ .text          0x0000000020014c98      0x158 build/lib.a(squeeze226.o)
+                0x0000000020014c98                squeeze226
+ .text          0x0000000020014df0      0x52c build/lib.a(mainloop.o)
+                0x0000000020014df0                mainloop226_asm
+ .text          0x000000002001531c      0x288 build/lib.a(crypto_select_asm.o)
+                0x000000002001531c                crypto_select_asm
+ .text          0x00000000200155a4      0x1a8 /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-fflush.o)
+                0x00000000200155a4                __sflush_r
+                0x00000000200156fe                _fflush_r
+                0x000000002001572c                fflush
+ .text          0x000000002001574c      0x1e4 /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-findfp.o)
+                0x00000000200157ba                _cleanup_r
+                0x00000000200157c8                __sfmoreglue
+                0x000000002001580e                _cleanup
+                0x0000000020015816                __sinit
+                0x0000000020015864                __sfp
+                0x0000000020015900                __sfp_lock_acquire
+                0x0000000020015902                __sfp_lock_release
+                0x0000000020015904                __sinit_lock_acquire
+                0x0000000020015906                __sinit_lock_release
+                0x0000000020015908                __fp_lock_all
+                0x000000002001591c                __fp_unlock_all
+ .text          0x0000000020015930      0x2a0 /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-freer.o)
+                0x0000000020015930                _malloc_trim_r
+                0x0000000020015a00                _free_r
+ .text          0x0000000020015bd0       0xce /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-fwalk.o)
+                0x0000000020015bd0                _fwalk
+                0x0000000020015c32                _fwalk_reent
+ .text          0x0000000020015c9e      0x50a /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-mallocr.o)
+                0x0000000020015c9e                _malloc_r
+ .text          0x00000000200161a8       0xb6 /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-memcpy.o)
+                0x00000000200161a8                memcpy
+ .text          0x000000002001625e       0xa8 /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-memset.o)
+                0x000000002001625e                memset
+ .text          0x0000000020016306        0x4 /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-mlock.o)
+                0x0000000020016306                __malloc_lock
+                0x0000000020016308                __malloc_unlock
+ .text          0x000000002001630a       0x4e /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-printf.o)
+                0x000000002001630a                _printf_r
+                0x000000002001632a                printf
+ .text          0x0000000020016358       0x16 /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-putchar.o)
+                0x0000000020016358                _putchar_r
+                0x000000002001635c                putchar
+ .text          0x000000002001636e       0x68 /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-putc.o)
+                0x000000002001636e                _putc_r
+                0x00000000200163c6                putc
+ .text          0x00000000200163d6       0x82 /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-puts.o)
+                0x00000000200163d6                _puts_r
+                0x000000002001644a                puts
+ .text          0x0000000020016458       0x2a /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-sbrkr.o)
+                0x0000000020016458                _sbrk_r
+ .text          0x0000000020016482       0xc8 /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-stdio.o)
+                0x0000000020016482                __sread
+                0x00000000200164b4                __seofread
+                0x00000000200164b8                __swrite
+                0x000000002001650a                __sseek
+                0x0000000020016542                __sclose
+ .text          0x000000002001654a       0x12 /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-strlen.o)
+                0x000000002001654a                strlen
+ .text          0x000000002001655c     0x16b2 /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-vfprintf.o)
+                0x000000002001655c                _vfprintf_r
+                0x0000000020017b6e                vfprintf
+ .text          0x0000000020017c0e       0xc8 /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-wbuf.o)
+                0x0000000020017c0e                __swbuf_r
+                0x0000000020017cc6                __swbuf
+ .text          0x0000000020017cd6       0x2e /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-writer.o)
+                0x0000000020017cd6                _write_r
+ .text          0x0000000020017d04       0xe0 /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-wsetup.o)
+                0x0000000020017d04                __swsetup_r
+ .text          0x0000000020017de4       0x2a /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-closer.o)
+                0x0000000020017de4                _close_r
+ .text          0x0000000020017e0e       0x9c /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-fclose.o)
+                0x0000000020017e0e                _fclose_r
+                0x0000000020017e9c                fclose
+ .text          0x0000000020017eaa      0x2e4 /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-fvwrite.o)
+                0x0000000020017eaa                __sfvwrite_r
+ .text          0x000000002001818e     0x160e /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-ldtoa.o)
+                0x0000000020018e6c                _ldtoa_r
+                0x000000002001975e                _ldcheck
+ .text          0x000000002001979c       0x3e /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-localeconv.o)
+                0x000000002001979c                __localeconv_l
+                0x00000000200197a2                _localeconv_r
+                0x00000000200197be                localeconv
+ .text          0x00000000200197da       0xa6 /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-locale.o)
+                0x00000000200197da                _setlocale_r
+                0x0000000020019832                __locale_mb_cur_max
+                0x000000002001984e                __locale_ctype_ptr_l
+                0x0000000020019854                __locale_ctype_ptr
+                0x0000000020019870                setlocale
+ .text          0x0000000020019880       0x2e /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-lseekr.o)
+                0x0000000020019880                _lseek_r
+ .text          0x00000000200198ae      0x106 /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-makebuf.o)
+                0x00000000200198ae                __swhatbuf_r
+                0x0000000020019914                __smakebuf_r
+ .text          0x00000000200199b4       0x56 /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-mbtowc_r.o)
+                0x00000000200199b4                _mbtowc_r
+                0x00000000200199d0                __ascii_mbtowc
+ .text          0x0000000020019a0a       0x1a /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-memchr.o)
+                0x0000000020019a0a                memchr
+ .text          0x0000000020019a24       0x4a /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-memmove.o)
+                0x0000000020019a24                memmove
+ .text          0x0000000020019a6e      0x93c /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-mprec.o)
+                0x0000000020019a6e                _Balloc
+                0x0000000020019ad4                _Bfree
+                0x0000000020019ae8                __multadd
+                0x0000000020019b7c                __s2b
+                0x0000000020019c1c                __hi0bits
+                0x0000000020019c62                __lo0bits
+                0x0000000020019ccc                __i2b
+                0x0000000020019ce6                __multiply
+                0x0000000020019e28                __pow5mult
+                0x0000000020019eb8                __lshift
+                0x0000000020019f82                __mcmp
+                0x0000000020019fb4                __mdiff
+                0x000000002001a0a0                __ulp
+                0x000000002001a0e6                __b2d
+                0x000000002001a198                __d2b
+                0x000000002001a264                __ratio
+                0x000000002001a2d4                _mprec_log10
+                0x000000002001a32e                __copybits
+                0x000000002001a364                __any_on
+ .text          0x000000002001a3aa       0x2e /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-readr.o)
+                0x000000002001a3aa                _read_r
+ .text          0x000000002001a3d8      0x3a0 /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-reallocr.o)
+                0x000000002001a3d8                _realloc_r
+ .text          0x000000002001a778       0x7e /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-s_frexp.o)
+                0x000000002001a778                frexp
+ .text          0x000000002001a7f6       0x82 /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-sprintf.o)
+                0x000000002001a7f6                _sprintf_r
+                0x000000002001a830                sprintf
+ .text          0x000000002001a878      0x11e /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-strcmp.o)
+                0x000000002001a878                strcmp
+ .text          0x000000002001a996       0x12 /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-strcpy.o)
+                0x000000002001a996                strcpy
+ .text          0x000000002001a9a8       0x24 /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-strncpy.o)
+                0x000000002001a9a8                strncpy
+ .text          0x000000002001a9cc     0x15de /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-svfprintf.o)
+                0x000000002001a9cc                _svfprintf_r
+ .text          0x000000002001bfaa      0xa2a /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-vfiprintf.o)
+                0x000000002001bfaa                __sprint_r
+                0x000000002001c046                _vfiprintf_r
+                0x000000002001c934                vfiprintf
+ .text          0x000000002001c9d4       0x3c /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-wctomb_r.o)
+                0x000000002001c9d4                _wctomb_r
+                0x000000002001c9f0                __ascii_wctomb
+ .text          0x000000002001ca10       0x78 /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-callocr.o)
+                0x000000002001ca10                _calloc_r
+ .text          0x000000002001ca88      0x106 /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-fputwc.o)
+                0x000000002001ca88                __fputwc
+                0x000000002001cb3c                _fputwc_r
+                0x000000002001cb5a                fputwc
+ .text          0x000000002001cb8e       0x2c /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-fstatr.o)
+                0x000000002001cb8e                _fstat_r
+ .text          0x000000002001cbba       0x2a /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-isattyr.o)
+                0x000000002001cbba                _isatty_r
+ .text          0x000000002001cbe4      0x9ce /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-svfiprintf.o)
+                0x000000002001cbe4                __ssprint_r
+                0x000000002001cd18                _svfiprintf_r
+ .text          0x000000002001d5b2       0x70 /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-wcrtomb.o)
+                0x000000002001d5b2                _wcrtomb_r
+                0x000000002001d610                wcrtomb
+ .text          0x000000002001d622      0x35e /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/rv32imac/ilp32/libgcc.a(_udivdi3.o)
+                0x000000002001d622                __udivdi3
+ .text          0x000000002001d980      0x352 /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/rv32imac/ilp32/libgcc.a(_umoddi3.o)
+                0x000000002001d980                __umoddi3
+ .text          0x000000002001dcd2      0x54a /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/rv32imac/ilp32/libgcc.a(divdf3.o)
+                0x000000002001dcd2                __divdf3
+ .text          0x000000002001e21c      0x450 /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/rv32imac/ilp32/libgcc.a(muldf3.o)
+                0x000000002001e21c                __muldf3
+ .text          0x000000002001e66c       0xa6 /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/rv32imac/ilp32/libgcc.a(eqtf2.o)
+                0x000000002001e66c                __eqtf2
+                0x000000002001e66c                __netf2
+ .text          0x000000002001e712       0xfa /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/rv32imac/ilp32/libgcc.a(getf2.o)
+                0x000000002001e712                __getf2
+                0x000000002001e712                __gttf2
+ .text          0x000000002001e80c       0xfa /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/rv32imac/ilp32/libgcc.a(letf2.o)
+                0x000000002001e80c                __letf2
+                0x000000002001e80c                __lttf2
+ .text          0x000000002001e906      0xb3c /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/rv32imac/ilp32/libgcc.a(multf3.o)
+                0x000000002001e906                __multf3
+ .text          0x000000002001f442      0xe5c /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/rv32imac/ilp32/libgcc.a(subtf3.o)
+                0x000000002001f442                __subtf3
+ .text          0x000000002002029e       0xec /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/rv32imac/ilp32/libgcc.a(fixtfsi.o)
+                0x000000002002029e                __fixtfsi
+ .text          0x000000002002038a       0xf8 /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/rv32imac/ilp32/libgcc.a(floatsitf.o)
+                0x000000002002038a                __floatsitf
+ .text          0x0000000020020482      0x152 /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/rv32imac/ilp32/libgcc.a(extenddftf2.o)
+                0x0000000020020482                __extenddftf2
+ .text          0x00000000200205d4      0x230 /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/rv32imac/ilp32/libgcc.a(trunctfdf2.o)
+                0x00000000200205d4                __trunctfdf2
+ .text          0x0000000020020804       0x3c /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/rv32imac/ilp32/libgcc.a(_clzsi2.o)
+                0x0000000020020804                __clzsi2
  .text.metal.init.trapvec
-                0x000000002001e44c        0x2 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-entry.o)
- .text._close   0x000000002001e44e       0x22 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal-gloss.a(sys_close.o)
-                0x000000002001e44e                _close
- .text._fstat   0x000000002001e470       0x26 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal-gloss.a(sys_fstat.o)
-                0x000000002001e470                _fstat
- .text._isatty  0x000000002001e496       0x20 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal-gloss.a(sys_isatty.o)
-                0x000000002001e496                _isatty
- .text._lseek   0x000000002001e4b6       0x2a /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal-gloss.a(sys_lseek.o)
-                0x000000002001e4b6                _lseek
- .text._read    0x000000002001e4e0       0x2a /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal-gloss.a(sys_read.o)
-                0x000000002001e4e0                _read
- .text._sbrk    0x000000002001e50a       0x68 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal-gloss.a(sys_sbrk.o)
-                0x000000002001e50a                _sbrk
- .text._write   0x000000002001e572       0x6e /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal-gloss.a(sys_write.o)
-                0x000000002001e572                _write
- .text          0x000000002001e5e0        0xa /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-atexit.o)
-                0x000000002001e5e0                atexit
- .text          0x000000002001e5ea        0xc /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-errno.o)
-                0x000000002001e5ea                __errno
- .text          0x000000002001e5f6       0x1e /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-exit.o)
-                0x000000002001e5f6                exit
- .text          0x000000002001e614       0x3a /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-fini.o)
-                0x000000002001e614                __libc_fini_array
- .text          0x000000002001e64e       0x6e /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-init.o)
-                0x000000002001e64e                __libc_init_array
- .text          0x000000002001e6bc       0x62 /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-__atexit.o)
-                0x000000002001e6bc                __register_exitproc
- .text          0x000000002001e71e       0xae /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-__call_atexit.o)
-                0x000000002001e71e                __call_exitprocs
+                0x0000000020020840        0x2 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-entry.o)
+ .text._close   0x0000000020020842       0x22 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal-gloss.a(sys_close.o)
+                0x0000000020020842                _close
+ .text._fstat   0x0000000020020864       0x26 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal-gloss.a(sys_fstat.o)
+                0x0000000020020864                _fstat
+ .text._isatty  0x000000002002088a       0x20 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal-gloss.a(sys_isatty.o)
+                0x000000002002088a                _isatty
+ .text._lseek   0x00000000200208aa       0x2a /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal-gloss.a(sys_lseek.o)
+                0x00000000200208aa                _lseek
+ .text._read    0x00000000200208d4       0x2a /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal-gloss.a(sys_read.o)
+                0x00000000200208d4                _read
+ .text._sbrk    0x00000000200208fe       0x68 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal-gloss.a(sys_sbrk.o)
+                0x00000000200208fe                _sbrk
+ .text._write   0x0000000020020966       0x6e /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal-gloss.a(sys_write.o)
+                0x0000000020020966                _write
+ .text          0x00000000200209d4        0xa /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-atexit.o)
+                0x00000000200209d4                atexit
+ .text          0x00000000200209de        0xc /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-errno.o)
+                0x00000000200209de                __errno
+ .text          0x00000000200209ea       0x1e /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-exit.o)
+                0x00000000200209ea                exit
+ .text          0x0000000020020a08       0x3a /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-fini.o)
+                0x0000000020020a08                __libc_fini_array
+ .text          0x0000000020020a42       0x6e /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-init.o)
+                0x0000000020020a42                __libc_init_array
+ .text          0x0000000020020ab0       0x62 /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-__atexit.o)
+                0x0000000020020ab0                __register_exitproc
+ .text          0x0000000020020b12       0xae /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-__call_atexit.o)
+                0x0000000020020b12                __call_exitprocs
  .text.metal_tty_putc
-                0x000000002001e7cc       0x50 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-tty.o)
-                0x000000002001e7cc                metal_tty_putc
+                0x0000000020020bc0       0x50 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-tty.o)
+                0x0000000020020bc0                metal_tty_putc
  .text.metal_tty_init
-                0x000000002001e81c       0x22 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-tty.o)
+                0x0000000020020c10       0x22 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-tty.o)
  .text.metal_uart_init
-                0x000000002001e83e       0x2a /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-uart.o)
-                0x000000002001e83e                metal_uart_init
+                0x0000000020020c32       0x2a /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-uart.o)
+                0x0000000020020c32                metal_uart_init
  .text.metal_uart_putc
-                0x000000002001e868       0x32 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-uart.o)
-                0x000000002001e868                metal_uart_putc
+                0x0000000020020c5c       0x32 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-uart.o)
+                0x0000000020020c5c                metal_uart_putc
  .text.metal_uart_set_baud_rate
-                0x000000002001e89a       0x2e /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-uart.o)
-                0x000000002001e89a                metal_uart_set_baud_rate
+                0x0000000020020c8e       0x2e /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-uart.o)
+                0x0000000020020c8e                metal_uart_set_baud_rate
  .text.__metal_driver_fixed_clock_get_rate_hz
-                0x000000002001e8c8       0x20 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-fixed-clock.o)
-                0x000000002001e8c8                __metal_driver_fixed_clock_get_rate_hz
+                0x0000000020020cbc       0x20 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-fixed-clock.o)
+                0x0000000020020cbc                __metal_driver_fixed_clock_get_rate_hz
  .text.__metal_driver_fixed_clock_set_rate_hz
-                0x000000002001e8e8       0x24 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-fixed-clock.o)
-                0x000000002001e8e8                __metal_driver_fixed_clock_set_rate_hz
+                0x0000000020020cdc       0x24 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-fixed-clock.o)
+                0x0000000020020cdc                __metal_driver_fixed_clock_set_rate_hz
  .text.__metal_clint0_mtime_get
-                0x000000002001e90c       0x76 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-riscv,clint0.o)
-                0x000000002001e90c                __metal_clint0_mtime_get
+                0x0000000020020d00       0x76 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-riscv,clint0.o)
+                0x0000000020020d00                __metal_clint0_mtime_get
  .text.__metal_clint0_mtime_set
-                0x000000002001e982       0x58 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-riscv,clint0.o)
-                0x000000002001e982                __metal_clint0_mtime_set
+                0x0000000020020d76       0x58 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-riscv,clint0.o)
+                0x0000000020020d76                __metal_clint0_mtime_set
  .text.__metal_driver_riscv_clint0_init
-                0x000000002001e9da       0x7e /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-riscv,clint0.o)
-                0x000000002001e9da                __metal_driver_riscv_clint0_init
+                0x0000000020020dce       0x7e /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-riscv,clint0.o)
+                0x0000000020020dce                __metal_driver_riscv_clint0_init
  .text.__metal_driver_riscv_clint0_register
-                0x000000002001ea58       0x62 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-riscv,clint0.o)
-                0x000000002001ea58                __metal_driver_riscv_clint0_register
+                0x0000000020020e4c       0x62 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-riscv,clint0.o)
+                0x0000000020020e4c                __metal_driver_riscv_clint0_register
  .text.__metal_driver_riscv_clint0_enable
-                0x000000002001eaba       0x56 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-riscv,clint0.o)
-                0x000000002001eaba                __metal_driver_riscv_clint0_enable
+                0x0000000020020eae       0x56 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-riscv,clint0.o)
+                0x0000000020020eae                __metal_driver_riscv_clint0_enable
  .text.__metal_driver_riscv_clint0_disable
-                0x000000002001eb10       0x56 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-riscv,clint0.o)
-                0x000000002001eb10                __metal_driver_riscv_clint0_disable
+                0x0000000020020f04       0x56 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-riscv,clint0.o)
+                0x0000000020020f04                __metal_driver_riscv_clint0_disable
  .text.__metal_driver_riscv_clint0_command_request
-                0x000000002001eb66      0x126 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-riscv,clint0.o)
-                0x000000002001eb66                __metal_driver_riscv_clint0_command_request
+                0x0000000020020f5a      0x126 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-riscv,clint0.o)
+                0x0000000020020f5a                __metal_driver_riscv_clint0_command_request
  .text.__metal_driver_cpu_get
-                0x000000002001ec8c       0x2c /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-riscv,cpu.o)
-                0x000000002001ec8c                __metal_driver_cpu_get
+                0x0000000020021080       0x2c /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-riscv,cpu.o)
+                0x0000000020021080                __metal_driver_cpu_get
  .text.__metal_myhart_id
-                0x000000002001ecb8       0x1a /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-riscv,cpu.o)
-                0x000000002001ecb8                __metal_myhart_id
+                0x00000000200210ac       0x1a /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-riscv,cpu.o)
+                0x00000000200210ac                __metal_myhart_id
  .text.__metal_interrupt_global_enable
-                0x000000002001ecd2       0x18 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-riscv,cpu.o)
-                0x000000002001ecd2                __metal_interrupt_global_enable
+                0x00000000200210c6       0x18 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-riscv,cpu.o)
+                0x00000000200210c6                __metal_interrupt_global_enable
  .text.__metal_interrupt_global_disable
-                0x000000002001ecea       0x18 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-riscv,cpu.o)
-                0x000000002001ecea                __metal_interrupt_global_disable
+                0x00000000200210de       0x18 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-riscv,cpu.o)
+                0x00000000200210de                __metal_interrupt_global_disable
  .text.__metal_interrupt_software_enable
-                0x000000002001ed02       0x18 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-riscv,cpu.o)
-                0x000000002001ed02                __metal_interrupt_software_enable
+                0x00000000200210f6       0x18 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-riscv,cpu.o)
+                0x00000000200210f6                __metal_interrupt_software_enable
  .text.__metal_interrupt_software_disable
-                0x000000002001ed1a       0x18 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-riscv,cpu.o)
-                0x000000002001ed1a                __metal_interrupt_software_disable
+                0x000000002002110e       0x18 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-riscv,cpu.o)
+                0x000000002002110e                __metal_interrupt_software_disable
  .text.__metal_interrupt_timer_enable
-                0x000000002001ed32       0x1a /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-riscv,cpu.o)
-                0x000000002001ed32                __metal_interrupt_timer_enable
+                0x0000000020021126       0x1a /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-riscv,cpu.o)
+                0x0000000020021126                __metal_interrupt_timer_enable
  .text.__metal_interrupt_timer_disable
-                0x000000002001ed4c       0x1a /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-riscv,cpu.o)
-                0x000000002001ed4c                __metal_interrupt_timer_disable
+                0x0000000020021140       0x1a /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-riscv,cpu.o)
+                0x0000000020021140                __metal_interrupt_timer_disable
  .text.__metal_interrupt_external_enable
-                0x000000002001ed66       0x1c /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-riscv,cpu.o)
-                0x000000002001ed66                __metal_interrupt_external_enable
+                0x000000002002115a       0x1c /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-riscv,cpu.o)
+                0x000000002002115a                __metal_interrupt_external_enable
  .text.__metal_interrupt_external_disable
-                0x000000002001ed82       0x1c /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-riscv,cpu.o)
-                0x000000002001ed82                __metal_interrupt_external_disable
+                0x0000000020021176       0x1c /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-riscv,cpu.o)
+                0x0000000020021176                __metal_interrupt_external_disable
  .text.__metal_interrupt_local_enable
-                0x000000002001ed9e       0x2c /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-riscv,cpu.o)
-                0x000000002001ed9e                __metal_interrupt_local_enable
+                0x0000000020021192       0x2c /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-riscv,cpu.o)
+                0x0000000020021192                __metal_interrupt_local_enable
  .text.__metal_interrupt_local_disable
-                0x000000002001edca       0x2c /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-riscv,cpu.o)
-                0x000000002001edca                __metal_interrupt_local_disable
+                0x00000000200211be       0x2c /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-riscv,cpu.o)
+                0x00000000200211be                __metal_interrupt_local_disable
  .text.__metal_default_exception_handler
-                0x000000002001edf6       0x18 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-riscv,cpu.o)
-                0x000000002001edf6                __metal_default_exception_handler
+                0x00000000200211ea       0x18 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-riscv,cpu.o)
+                0x00000000200211ea                __metal_default_exception_handler
  .text.__metal_default_interrupt_handler
-                0x000000002001ee0e       0x18 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-riscv,cpu.o)
-                0x000000002001ee0e                __metal_default_interrupt_handler
+                0x0000000020021202       0x18 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-riscv,cpu.o)
+                0x0000000020021202                __metal_default_interrupt_handler
  .text.__metal_default_sw_handler
-                0x000000002001ee26       0x66 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-riscv,cpu.o)
-                0x000000002001ee26                __metal_default_sw_handler
+                0x000000002002121a       0x66 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-riscv,cpu.o)
+                0x000000002002121a                __metal_default_sw_handler
  .text.__metal_default_timer_handler
-                0x000000002001ee8c       0x6a /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-riscv,cpu.o)
-                0x000000002001ee8c                __metal_default_timer_handler
- *fill*         0x000000002001eef6        0xa 
+                0x0000000020021280       0x6a /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-riscv,cpu.o)
+                0x0000000020021280                __metal_default_timer_handler
+ *fill*         0x00000000200212ea       0x16 
  .text.__metal_exception_handler
-                0x000000002001ef00      0x17a /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-riscv,cpu.o)
-                0x000000002001ef00                __metal_exception_handler
+                0x0000000020021300      0x17a /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-riscv,cpu.o)
+                0x0000000020021300                __metal_exception_handler
  .text.__metal_controller_interrupt_vector
-                0x000000002001f07a       0xa6 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-riscv,cpu.o)
-                0x000000002001f07a                __metal_controller_interrupt_vector
+                0x000000002002147a       0xa6 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-riscv,cpu.o)
+                0x000000002002147a                __metal_controller_interrupt_vector
  .text.__metal_valid_interrupt_id
-                0x000000002001f120       0x38 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-riscv,cpu.o)
-                0x000000002001f120                __metal_valid_interrupt_id
+                0x0000000020021520       0x38 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-riscv,cpu.o)
+                0x0000000020021520                __metal_valid_interrupt_id
  .text.__metal_local_interrupt_enable
-                0x000000002001f158       0xb6 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-riscv,cpu.o)
-                0x000000002001f158                __metal_local_interrupt_enable
+                0x0000000020021558       0xb6 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-riscv,cpu.o)
+                0x0000000020021558                __metal_local_interrupt_enable
  .text.__metal_exception_register
-                0x000000002001f20e       0x4e /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-riscv,cpu.o)
-                0x000000002001f20e                __metal_exception_register
+                0x000000002002160e       0x4e /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-riscv,cpu.o)
+                0x000000002002160e                __metal_exception_register
  .text.__metal_driver_riscv_cpu_controller_interrupt_init
-                0x000000002001f25c       0xf6 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-riscv,cpu.o)
-                0x000000002001f25c                __metal_driver_riscv_cpu_controller_interrupt_init
+                0x000000002002165c       0xf6 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-riscv,cpu.o)
+                0x000000002002165c                __metal_driver_riscv_cpu_controller_interrupt_init
  .text.__metal_driver_riscv_cpu_controller_interrupt_register
-                0x000000002001f352      0x14a /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-riscv,cpu.o)
-                0x000000002001f352                __metal_driver_riscv_cpu_controller_interrupt_register
+                0x0000000020021752      0x14a /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-riscv,cpu.o)
+                0x0000000020021752                __metal_driver_riscv_cpu_controller_interrupt_register
  .text.__metal_driver_riscv_cpu_controller_interrupt_enable
-                0x000000002001f49c       0x2c /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-riscv,cpu.o)
-                0x000000002001f49c                __metal_driver_riscv_cpu_controller_interrupt_enable
+                0x000000002002189c       0x2c /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-riscv,cpu.o)
+                0x000000002002189c                __metal_driver_riscv_cpu_controller_interrupt_enable
  .text.__metal_driver_riscv_cpu_controller_interrupt_disable
-                0x000000002001f4c8       0x2c /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-riscv,cpu.o)
-                0x000000002001f4c8                __metal_driver_riscv_cpu_controller_interrupt_disable
+                0x00000000200218c8       0x2c /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-riscv,cpu.o)
+                0x00000000200218c8                __metal_driver_riscv_cpu_controller_interrupt_disable
  .text.__metal_driver_riscv_cpu_controller_interrupt_enable_vector
-                0x000000002001f4f4       0x66 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-riscv,cpu.o)
-                0x000000002001f4f4                __metal_driver_riscv_cpu_controller_interrupt_enable_vector
+                0x00000000200218f4       0x66 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-riscv,cpu.o)
+                0x00000000200218f4                __metal_driver_riscv_cpu_controller_interrupt_enable_vector
  .text.__metal_driver_riscv_cpu_controller_interrupt_disable_vector
-                0x000000002001f55a       0x3c /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-riscv,cpu.o)
-                0x000000002001f55a                __metal_driver_riscv_cpu_controller_interrupt_disable_vector
+                0x000000002002195a       0x3c /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-riscv,cpu.o)
+                0x000000002002195a                __metal_driver_riscv_cpu_controller_interrupt_disable_vector
  .text.__metal_driver_riscv_cpu_controller_command_request
-                0x000000002001f596       0x1c /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-riscv,cpu.o)
-                0x000000002001f596                __metal_driver_riscv_cpu_controller_command_request
+                0x0000000020021996       0x1c /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-riscv,cpu.o)
+                0x0000000020021996                __metal_driver_riscv_cpu_controller_command_request
  .text.__metal_driver_cpu_timer_get
-                0x000000002001f5b2       0x72 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-riscv,cpu.o)
-                0x000000002001f5b2                __metal_driver_cpu_timer_get
+                0x00000000200219b2       0x72 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-riscv,cpu.o)
+                0x00000000200219b2                __metal_driver_cpu_timer_get
  .text.__metal_driver_cpu_timebase_get
-                0x000000002001f624       0x34 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-riscv,cpu.o)
-                0x000000002001f624                __metal_driver_cpu_timebase_get
+                0x0000000020021a24       0x34 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-riscv,cpu.o)
+                0x0000000020021a24                __metal_driver_cpu_timebase_get
  .text.__metal_driver_cpu_mtime_get
-                0x000000002001f658       0x6e /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-riscv,cpu.o)
-                0x000000002001f658                __metal_driver_cpu_mtime_get
+                0x0000000020021a58       0x6e /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-riscv,cpu.o)
+                0x0000000020021a58                __metal_driver_cpu_mtime_get
  .text.__metal_driver_cpu_mtimecmp_set
-                0x000000002001f6c6       0x6e /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-riscv,cpu.o)
-                0x000000002001f6c6                __metal_driver_cpu_mtimecmp_set
+                0x0000000020021ac6       0x6e /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-riscv,cpu.o)
+                0x0000000020021ac6                __metal_driver_cpu_mtimecmp_set
  .text.__metal_driver_cpu_timer_controller_interrupt
-                0x000000002001f734       0x1a /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-riscv,cpu.o)
-                0x000000002001f734                __metal_driver_cpu_timer_controller_interrupt
+                0x0000000020021b34       0x1a /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-riscv,cpu.o)
+                0x0000000020021b34                __metal_driver_cpu_timer_controller_interrupt
  .text.__metal_driver_cpu_get_timer_interrupt_id
-                0x000000002001f74e       0x14 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-riscv,cpu.o)
-                0x000000002001f74e                __metal_driver_cpu_get_timer_interrupt_id
+                0x0000000020021b4e       0x14 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-riscv,cpu.o)
+                0x0000000020021b4e                __metal_driver_cpu_get_timer_interrupt_id
  .text.__metal_driver_cpu_sw_controller_interrupt
-                0x000000002001f762       0x1a /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-riscv,cpu.o)
-                0x000000002001f762                __metal_driver_cpu_sw_controller_interrupt
+                0x0000000020021b62       0x1a /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-riscv,cpu.o)
+                0x0000000020021b62                __metal_driver_cpu_sw_controller_interrupt
  .text.__metal_driver_cpu_get_sw_interrupt_id
-                0x000000002001f77c       0x14 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-riscv,cpu.o)
-                0x000000002001f77c                __metal_driver_cpu_get_sw_interrupt_id
+                0x0000000020021b7c       0x14 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-riscv,cpu.o)
+                0x0000000020021b7c                __metal_driver_cpu_get_sw_interrupt_id
  .text.__metal_driver_cpu_set_sw_ipi
-                0x000000002001f790       0x6a /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-riscv,cpu.o)
-                0x000000002001f790                __metal_driver_cpu_set_sw_ipi
+                0x0000000020021b90       0x6a /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-riscv,cpu.o)
+                0x0000000020021b90                __metal_driver_cpu_set_sw_ipi
  .text.__metal_driver_cpu_clear_sw_ipi
-                0x000000002001f7fa       0x6a /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-riscv,cpu.o)
-                0x000000002001f7fa                __metal_driver_cpu_clear_sw_ipi
+                0x0000000020021bfa       0x6a /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-riscv,cpu.o)
+                0x0000000020021bfa                __metal_driver_cpu_clear_sw_ipi
  .text.__metal_driver_cpu_get_msip
-                0x000000002001f864       0x68 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-riscv,cpu.o)
-                0x000000002001f864                __metal_driver_cpu_get_msip
+                0x0000000020021c64       0x68 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-riscv,cpu.o)
+                0x0000000020021c64                __metal_driver_cpu_get_msip
  .text.__metal_driver_cpu_controller_interrupt
-                0x000000002001f8cc       0x20 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-riscv,cpu.o)
-                0x000000002001f8cc                __metal_driver_cpu_controller_interrupt
+                0x0000000020021ccc       0x20 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-riscv,cpu.o)
+                0x0000000020021ccc                __metal_driver_cpu_controller_interrupt
  .text.__metal_driver_cpu_exception_register
-                0x000000002001f8ec       0x48 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-riscv,cpu.o)
-                0x000000002001f8ec                __metal_driver_cpu_exception_register
+                0x0000000020021cec       0x48 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-riscv,cpu.o)
+                0x0000000020021cec                __metal_driver_cpu_exception_register
  .text.__metal_driver_cpu_get_instruction_length
-                0x000000002001f934       0x28 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-riscv,cpu.o)
-                0x000000002001f934                __metal_driver_cpu_get_instruction_length
+                0x0000000020021d34       0x28 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-riscv,cpu.o)
+                0x0000000020021d34                __metal_driver_cpu_get_instruction_length
  .text.__metal_driver_cpu_get_exception_pc
-                0x000000002001f95c       0x1e /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-riscv,cpu.o)
-                0x000000002001f95c                __metal_driver_cpu_get_exception_pc
+                0x0000000020021d5c       0x1e /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-riscv,cpu.o)
+                0x0000000020021d5c                __metal_driver_cpu_get_exception_pc
  .text.__metal_driver_cpu_set_exception_pc
-                0x000000002001f97a       0x20 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-riscv,cpu.o)
-                0x000000002001f97a                __metal_driver_cpu_set_exception_pc
+                0x0000000020021d7a       0x20 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-riscv,cpu.o)
+                0x0000000020021d7a                __metal_driver_cpu_set_exception_pc
  .text.__metal_plic0_claim_interrupt
-                0x000000002001f99a       0x22 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-riscv,plic0.o)
-                0x000000002001f99a                __metal_plic0_claim_interrupt
+                0x0000000020021d9a       0x22 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-riscv,plic0.o)
+                0x0000000020021d9a                __metal_plic0_claim_interrupt
  .text.__metal_plic0_complete_interrupt
-                0x000000002001f9bc       0x2c /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-riscv,plic0.o)
-                0x000000002001f9bc                __metal_plic0_complete_interrupt
+                0x0000000020021dbc       0x2c /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-riscv,plic0.o)
+                0x0000000020021dbc                __metal_plic0_complete_interrupt
  .text.__metal_plic0_set_threshold
-                0x000000002001f9e8       0x2a /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-riscv,plic0.o)
-                0x000000002001f9e8                __metal_plic0_set_threshold
+                0x0000000020021de8       0x2a /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-riscv,plic0.o)
+                0x0000000020021de8                __metal_plic0_set_threshold
  .text.__metal_plic0_set_priority
-                0x000000002001fa12       0x48 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-riscv,plic0.o)
-                0x000000002001fa12                __metal_plic0_set_priority
+                0x0000000020021e12       0x48 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-riscv,plic0.o)
+                0x0000000020021e12                __metal_plic0_set_priority
  .text.__metal_plic0_enable
-                0x000000002001fa5a       0x8a /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-riscv,plic0.o)
-                0x000000002001fa5a                __metal_plic0_enable
+                0x0000000020021e5a       0x8a /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-riscv,plic0.o)
+                0x0000000020021e5a                __metal_plic0_enable
  .text.__metal_plic0_default_handler
-                0x000000002001fae4       0x18 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-riscv,plic0.o)
-                0x000000002001fae4                __metal_plic0_default_handler
+                0x0000000020021ee4       0x18 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-riscv,plic0.o)
+                0x0000000020021ee4                __metal_plic0_default_handler
  .text.__metal_plic0_handler
-                0x000000002001fafc       0x8e /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-riscv,plic0.o)
-                0x000000002001fafc                __metal_plic0_handler
+                0x0000000020021efc       0x8e /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-riscv,plic0.o)
+                0x0000000020021efc                __metal_plic0_handler
  .text.__metal_driver_riscv_plic0_init
-                0x000000002001fb8a      0x120 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-riscv,plic0.o)
-                0x000000002001fb8a                __metal_driver_riscv_plic0_init
+                0x0000000020021f8a      0x120 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-riscv,plic0.o)
+                0x0000000020021f8a                __metal_driver_riscv_plic0_init
  .text.__metal_driver_riscv_plic0_register
-                0x000000002001fcaa       0xc2 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-riscv,plic0.o)
-                0x000000002001fcaa                __metal_driver_riscv_plic0_register
+                0x00000000200220aa       0xc2 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-riscv,plic0.o)
+                0x00000000200220aa                __metal_driver_riscv_plic0_register
  .text.__metal_driver_riscv_plic0_enable
-                0x000000002001fd6c       0x44 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-riscv,plic0.o)
-                0x000000002001fd6c                __metal_driver_riscv_plic0_enable
+                0x000000002002216c       0x44 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-riscv,plic0.o)
+                0x000000002002216c                __metal_driver_riscv_plic0_enable
  .text.__metal_driver_riscv_plic0_disable
-                0x000000002001fdb0       0x44 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-riscv,plic0.o)
-                0x000000002001fdb0                __metal_driver_riscv_plic0_disable
+                0x00000000200221b0       0x44 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-riscv,plic0.o)
+                0x00000000200221b0                __metal_driver_riscv_plic0_disable
  .text.__metal_driver_sifive_fe310_g000_hfrosc_get_rate_hz
-                0x000000002001fdf4       0x5c /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-sifive,fe310-g000,hfrosc.o)
-                0x000000002001fdf4                __metal_driver_sifive_fe310_g000_hfrosc_get_rate_hz
+                0x00000000200221f4       0x5c /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-sifive,fe310-g000,hfrosc.o)
+                0x00000000200221f4                __metal_driver_sifive_fe310_g000_hfrosc_get_rate_hz
  .text.__metal_driver_sifive_fe310_g000_hfrosc_set_rate_hz
-                0x000000002001fe50       0x24 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-sifive,fe310-g000,hfrosc.o)
-                0x000000002001fe50                __metal_driver_sifive_fe310_g000_hfrosc_set_rate_hz
+                0x0000000020022250       0x24 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-sifive,fe310-g000,hfrosc.o)
+                0x0000000020022250                __metal_driver_sifive_fe310_g000_hfrosc_set_rate_hz
  .text.__metal_driver_sifive_fe310_g000_hfxosc_get_rate_hz
-                0x000000002001fe74       0x4c /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-sifive,fe310-g000,hfxosc.o)
-                0x000000002001fe74                __metal_driver_sifive_fe310_g000_hfxosc_get_rate_hz
+                0x0000000020022274       0x4c /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-sifive,fe310-g000,hfxosc.o)
+                0x0000000020022274                __metal_driver_sifive_fe310_g000_hfxosc_get_rate_hz
  .text.__metal_driver_sifive_fe310_g000_hfxosc_set_rate_hz
-                0x000000002001fec0       0x24 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-sifive,fe310-g000,hfxosc.o)
-                0x000000002001fec0                __metal_driver_sifive_fe310_g000_hfxosc_set_rate_hz
+                0x00000000200222c0       0x24 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-sifive,fe310-g000,hfxosc.o)
+                0x00000000200222c0                __metal_driver_sifive_fe310_g000_hfxosc_set_rate_hz
  .text.get_pll_config_freq
-                0x000000002001fee4       0x4e /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-sifive,fe310-g000,pll.o)
+                0x00000000200222e4       0x4e /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-sifive,fe310-g000,pll.o)
  .text.metal_sifive_fe310_g000_pll_init
-                0x000000002001ff32       0x28 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-sifive,fe310-g000,pll.o)
+                0x0000000020022332       0x28 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-sifive,fe310-g000,pll.o)
  .text.__metal_driver_sifive_fe310_g000_pll_init
-                0x000000002001ff5a       0xaa /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-sifive,fe310-g000,pll.o)
-                0x000000002001ff5a                __metal_driver_sifive_fe310_g000_pll_init
+                0x000000002002235a       0xaa /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-sifive,fe310-g000,pll.o)
+                0x000000002002235a                __metal_driver_sifive_fe310_g000_pll_init
  .text.__metal_driver_sifive_fe310_g000_pll_get_rate_hz
-                0x0000000020020004      0x156 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-sifive,fe310-g000,pll.o)
-                0x0000000020020004                __metal_driver_sifive_fe310_g000_pll_get_rate_hz
+                0x0000000020022404      0x156 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-sifive,fe310-g000,pll.o)
+                0x0000000020022404                __metal_driver_sifive_fe310_g000_pll_get_rate_hz
  .text.find_closest_config
-                0x000000002002015a       0xaa /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-sifive,fe310-g000,pll.o)
+                0x000000002002255a       0xaa /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-sifive,fe310-g000,pll.o)
  .text.configure_pll
-                0x0000000020020204      0x132 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-sifive,fe310-g000,pll.o)
+                0x0000000020022604      0x132 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-sifive,fe310-g000,pll.o)
  .text.__metal_driver_sifive_fe310_g000_pll_set_rate_hz
-                0x0000000020020336      0x144 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-sifive,fe310-g000,pll.o)
-                0x0000000020020336                __metal_driver_sifive_fe310_g000_pll_set_rate_hz
+                0x0000000020022736      0x144 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-sifive,fe310-g000,pll.o)
+                0x0000000020022736                __metal_driver_sifive_fe310_g000_pll_set_rate_hz
  .text.use_hfxosc
-                0x000000002002047a       0x28 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-sifive,fe310-g000,pll.o)
+                0x000000002002287a       0x28 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-sifive,fe310-g000,pll.o)
  .text.__metal_driver_sifive_fe310_g000_prci_get_reg
-                0x00000000200204a2       0x24 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-sifive,fe310-g000,prci.o)
-                0x00000000200204a2                __metal_driver_sifive_fe310_g000_prci_get_reg
+                0x00000000200228a2       0x24 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-sifive,fe310-g000,prci.o)
+                0x00000000200228a2                __metal_driver_sifive_fe310_g000_prci_get_reg
  .text.__metal_driver_sifive_fe310_g000_prci_set_reg
-                0x00000000200204c6       0x2e /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-sifive,fe310-g000,prci.o)
-                0x00000000200204c6                __metal_driver_sifive_fe310_g000_prci_set_reg
+                0x00000000200228c6       0x2e /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-sifive,fe310-g000,prci.o)
+                0x00000000200228c6                __metal_driver_sifive_fe310_g000_prci_set_reg
  .text.__metal_driver_sifive_gpio0_disable_input
-                0x00000000200204f4       0x40 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-sifive,gpio0.o)
-                0x00000000200204f4                __metal_driver_sifive_gpio0_disable_input
+                0x00000000200228f4       0x40 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-sifive,gpio0.o)
+                0x00000000200228f4                __metal_driver_sifive_gpio0_disable_input
  .text.__metal_driver_sifive_gpio0_output
-                0x0000000020020534       0x24 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-sifive,gpio0.o)
-                0x0000000020020534                __metal_driver_sifive_gpio0_output
+                0x0000000020022934       0x24 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-sifive,gpio0.o)
+                0x0000000020022934                __metal_driver_sifive_gpio0_output
  .text.__metal_driver_sifive_gpio0_enable_output
-                0x0000000020020558       0x3a /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-sifive,gpio0.o)
-                0x0000000020020558                __metal_driver_sifive_gpio0_enable_output
+                0x0000000020022958       0x3a /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-sifive,gpio0.o)
+                0x0000000020022958                __metal_driver_sifive_gpio0_enable_output
  .text.__metal_driver_sifive_gpio0_output_set
-                0x0000000020020592       0x3a /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-sifive,gpio0.o)
-                0x0000000020020592                __metal_driver_sifive_gpio0_output_set
+                0x0000000020022992       0x3a /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-sifive,gpio0.o)
+                0x0000000020022992                __metal_driver_sifive_gpio0_output_set
  .text.__metal_driver_sifive_gpio0_output_clear
-                0x00000000200205cc       0x40 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-sifive,gpio0.o)
-                0x00000000200205cc                __metal_driver_sifive_gpio0_output_clear
+                0x00000000200229cc       0x40 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-sifive,gpio0.o)
+                0x00000000200229cc                __metal_driver_sifive_gpio0_output_clear
  .text.__metal_driver_sifive_gpio0_output_toggle
-                0x000000002002060c       0x3a /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-sifive,gpio0.o)
-                0x000000002002060c                __metal_driver_sifive_gpio0_output_toggle
+                0x0000000020022a0c       0x3a /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-sifive,gpio0.o)
+                0x0000000020022a0c                __metal_driver_sifive_gpio0_output_toggle
  .text.__metal_driver_sifive_gpio0_enable_io
-                0x0000000020020646       0x66 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-sifive,gpio0.o)
-                0x0000000020020646                __metal_driver_sifive_gpio0_enable_io
+                0x0000000020022a46       0x66 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-sifive,gpio0.o)
+                0x0000000020022a46                __metal_driver_sifive_gpio0_enable_io
  .text.__metal_driver_sifive_uart0_interrupt_controller
-                0x00000000200206ac       0x20 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-sifive,uart0.o)
-                0x00000000200206ac                __metal_driver_sifive_uart0_interrupt_controller
+                0x0000000020022aac       0x20 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-sifive,uart0.o)
+                0x0000000020022aac                __metal_driver_sifive_uart0_interrupt_controller
  .text.__metal_driver_sifive_uart0_get_interrupt_id
-                0x00000000200206cc       0x24 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-sifive,uart0.o)
-                0x00000000200206cc                __metal_driver_sifive_uart0_get_interrupt_id
+                0x0000000020022acc       0x24 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-sifive,uart0.o)
+                0x0000000020022acc                __metal_driver_sifive_uart0_get_interrupt_id
  .text.__metal_driver_sifive_uart0_putc
-                0x00000000200206f0       0x36 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-sifive,uart0.o)
-                0x00000000200206f0                __metal_driver_sifive_uart0_putc
+                0x0000000020022af0       0x36 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-sifive,uart0.o)
+                0x0000000020022af0                __metal_driver_sifive_uart0_putc
  .text.__metal_driver_sifive_uart0_getc
-                0x0000000020020726       0x48 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-sifive,uart0.o)
-                0x0000000020020726                __metal_driver_sifive_uart0_getc
+                0x0000000020022b26       0x48 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-sifive,uart0.o)
+                0x0000000020022b26                __metal_driver_sifive_uart0_getc
  .text.__metal_driver_sifive_uart0_get_baud_rate
-                0x000000002002076e       0x20 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-sifive,uart0.o)
-                0x000000002002076e                __metal_driver_sifive_uart0_get_baud_rate
+                0x0000000020022b6e       0x20 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-sifive,uart0.o)
+                0x0000000020022b6e                __metal_driver_sifive_uart0_get_baud_rate
  .text.__metal_driver_sifive_uart0_set_baud_rate
-                0x000000002002078e       0x98 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-sifive,uart0.o)
-                0x000000002002078e                __metal_driver_sifive_uart0_set_baud_rate
+                0x0000000020022b8e       0x98 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-sifive,uart0.o)
+                0x0000000020022b8e                __metal_driver_sifive_uart0_set_baud_rate
  .text.pre_rate_change_callback
-                0x0000000020020826       0xd0 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-sifive,uart0.o)
+                0x0000000020022c26       0xd0 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-sifive,uart0.o)
  .text.post_rate_change_callback
-                0x00000000200208f6       0x30 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-sifive,uart0.o)
+                0x0000000020022cf6       0x30 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-sifive,uart0.o)
  .text.__metal_driver_sifive_uart0_init
-                0x0000000020020926       0x94 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-sifive,uart0.o)
-                0x0000000020020926                __metal_driver_sifive_uart0_init
+                0x0000000020022d26       0x94 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-sifive,uart0.o)
+                0x0000000020022d26                __metal_driver_sifive_uart0_init
  .text.metal_clock_get_rate_hz
-                0x00000000200209ba       0x26 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-clock.o)
-                0x00000000200209ba                metal_clock_get_rate_hz
+                0x0000000020022dba       0x26 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-clock.o)
+                0x0000000020022dba                metal_clock_get_rate_hz
  .text.metal_clock_set_rate_hz
-                0x00000000200209e0       0x64 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-clock.o)
-                0x00000000200209e0                metal_clock_set_rate_hz
+                0x0000000020022de0       0x64 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-clock.o)
+                0x0000000020022de0                metal_clock_set_rate_hz
  .text.metal_clock_register_pre_rate_change_callback
-                0x0000000020020a44       0x2e /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-clock.o)
-                0x0000000020020a44                metal_clock_register_pre_rate_change_callback
+                0x0000000020022e44       0x2e /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-clock.o)
+                0x0000000020022e44                metal_clock_register_pre_rate_change_callback
  .text.metal_clock_register_post_rate_change_callback
-                0x0000000020020a72       0x2e /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-clock.o)
-                0x0000000020020a72                metal_clock_register_post_rate_change_callback
+                0x0000000020022e72       0x2e /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-clock.o)
+                0x0000000020022e72                metal_clock_register_post_rate_change_callback
  .text.metal_shutdown
-                0x0000000020020aa0        0xe /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-shutdown.o)
-                0x0000000020020aa0                metal_shutdown
- .text._exit    0x0000000020020aae       0x14 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal-gloss.a(sys_exit.o)
-                0x0000000020020aae                _exit
+                0x0000000020022ea0        0xe /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-shutdown.o)
+                0x0000000020022ea0                metal_shutdown
+ .text._exit    0x0000000020022eae       0x14 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal-gloss.a(sys_exit.o)
+                0x0000000020022eae                _exit
  *(.itim .itim.*)
  *(.gnu.linkonce.t.*)
 
@@ -1508,154 +1529,154 @@ END GROUP
                 [!provide]                        PROVIDE (_etext = .)
                 [!provide]                        PROVIDE (etext = .)
 
-.rodata         0x0000000020020ac8     0x1838
+.rodata         0x0000000020022ec8     0x1878
  *(.rdata)
  *(.rodata .rodata.*)
  .rodata.str1.1
-                0x0000000020020ac8       0x67 build/benchmark.o
+                0x0000000020022ec8       0x67 build/benchmark.o
  .rodata.str1.1
-                0x0000000020020b2f        0x5 build/main.o
+                0x0000000020022f2f        0x5 build/main.o
+ .rodata        0x0000000020022f34       0x44 build/lib.a(onetime_auth.o)
  .rodata.str1.4
-                0x0000000020020b34        0x2 /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-puts.o)
- *fill*         0x0000000020020b36        0x2 
- .rodata        0x0000000020020b38      0x18c /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-vfprintf.o)
+                0x0000000020022f78        0x2 /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-puts.o)
+ *fill*         0x0000000020022f7a        0x2 
+ .rodata        0x0000000020022f7c      0x18c /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-vfprintf.o)
  .rodata.str1.4
-                0x0000000020020cc4       0x3a /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-vfprintf.o)
- *fill*         0x0000000020020cfe        0x2 
- .rodata        0x0000000020020d00      0x254 /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-ldtoa.o)
+                0x0000000020023108       0x3a /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-vfprintf.o)
+ *fill*         0x0000000020023142        0x2 
+ .rodata        0x0000000020023144      0x254 /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-ldtoa.o)
  .rodata.str1.4
-                0x0000000020020f54       0x28 /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-ldtoa.o)
+                0x0000000020023398       0x28 /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-ldtoa.o)
  .rodata.str1.4
-                0x0000000020020f7c       0x10 /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-locale.o)
+                0x00000000200233c0       0x10 /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-locale.o)
                                          0x12 (size before relaxing)
- *fill*         0x0000000020020f8c        0x4 
- .rodata        0x0000000020020f90      0x128 /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-mprec.o)
-                0x0000000020020fa0                __mprec_tens
-                0x0000000020021068                __mprec_tinytens
-                0x0000000020021090                __mprec_bigtens
- .rodata        0x00000000200210b8      0x18c /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-svfprintf.o)
+ .rodata        0x00000000200233d0      0x128 /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-mprec.o)
+                0x00000000200233e0                __mprec_tens
+                0x00000000200234a8                __mprec_tinytens
+                0x00000000200234d0                __mprec_bigtens
+ .rodata        0x00000000200234f8      0x18c /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-svfprintf.o)
  .rodata.str1.4
-                0x0000000020021244       0x3a /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-svfprintf.o)
- .rodata        0x0000000020021244      0x18c /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-vfiprintf.o)
+                0x0000000020023684       0x3a /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-svfprintf.o)
+ .rodata        0x0000000020023684      0x18c /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-vfiprintf.o)
  .rodata.str1.4
-                0x00000000200213d0       0x25 /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-vfiprintf.o)
- .rodata        0x00000000200213d0      0x101 /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-ctype_.o)
-                0x00000000200213d0                _ctype_
- *fill*         0x00000000200214d1        0x3 
- .rodata        0x00000000200214d4      0x18c /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-svfiprintf.o)
+                0x0000000020023810       0x25 /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-vfiprintf.o)
+ .rodata        0x0000000020023810      0x101 /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-ctype_.o)
+                0x0000000020023810                _ctype_
+ *fill*         0x0000000020023911        0x3 
+ .rodata        0x0000000020023914      0x18c /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-svfiprintf.o)
  .rodata.str1.4
-                0x0000000020021660       0x25 /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-svfiprintf.o)
- .rodata        0x0000000020021660       0x3c /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/rv32imac/ilp32/libgcc.a(divdf3.o)
- .rodata        0x000000002002169c       0x3c /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/rv32imac/ilp32/libgcc.a(muldf3.o)
- .rodata        0x00000000200216d8       0x3c /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/rv32imac/ilp32/libgcc.a(multf3.o)
- .rodata        0x0000000020021714      0x100 /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/rv32imac/ilp32/libgcc.a(_clz.o)
-                0x0000000020021714                __clz_tab
+                0x0000000020023aa0       0x25 /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-svfiprintf.o)
+ .rodata        0x0000000020023aa0       0x3c /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/rv32imac/ilp32/libgcc.a(divdf3.o)
+ .rodata        0x0000000020023adc       0x3c /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/rv32imac/ilp32/libgcc.a(muldf3.o)
+ .rodata        0x0000000020023b18       0x3c /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/rv32imac/ilp32/libgcc.a(multf3.o)
+ .rodata        0x0000000020023b54      0x100 /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/rv32imac/ilp32/libgcc.a(_clz.o)
+                0x0000000020023b54                __clz_tab
  .rodata.libgloss.start
-                0x0000000020021814       0x11 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal-gloss.a(crt0.o)
- *fill*         0x0000000020021825        0x3 
+                0x0000000020023c54       0x11 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal-gloss.a(crt0.o)
+ *fill*         0x0000000020023c65        0x3 
  .rodata.__metal_driver_vtable_riscv_cpu_intc
-                0x0000000020021828       0x1c /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-tty.o)
-                0x0000000020021828                __metal_driver_vtable_riscv_cpu_intc
+                0x0000000020023c68       0x1c /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-tty.o)
+                0x0000000020023c68                __metal_driver_vtable_riscv_cpu_intc
  .rodata.__metal_driver_vtable_cpu
-                0x0000000020021844       0x40 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-tty.o)
-                0x0000000020021844                __metal_driver_vtable_cpu
+                0x0000000020023c84       0x40 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-tty.o)
+                0x0000000020023c84                __metal_driver_vtable_cpu
  .rodata.__metal_driver_vtable_riscv_clint0
-                0x0000000020021884       0x1c /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-tty.o)
-                0x0000000020021884                __metal_driver_vtable_riscv_clint0
+                0x0000000020023cc4       0x1c /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-tty.o)
+                0x0000000020023cc4                __metal_driver_vtable_riscv_clint0
  .rodata.__metal_driver_vtable_riscv_plic0
-                0x00000000200218a0       0x1c /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-tty.o)
-                0x00000000200218a0                __metal_driver_vtable_riscv_plic0
+                0x0000000020023ce0       0x1c /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-tty.o)
+                0x0000000020023ce0                __metal_driver_vtable_riscv_plic0
  .rodata.__metal_driver_vtable_sifive_gpio0
-                0x00000000200218bc       0x1c /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-tty.o)
-                0x00000000200218bc                __metal_driver_vtable_sifive_gpio0
+                0x0000000020023cfc       0x1c /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-tty.o)
+                0x0000000020023cfc                __metal_driver_vtable_sifive_gpio0
  .rodata.__metal_driver_vtable_sifive_uart0
-                0x00000000200218d8       0x1c /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-tty.o)
-                0x00000000200218d8                __metal_driver_vtable_sifive_uart0
+                0x0000000020023d18       0x1c /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-tty.o)
+                0x0000000020023d18                __metal_driver_vtable_sifive_uart0
  .rodata.__metal_driver_vtable_sifive_fe310_g000_pll
-                0x00000000200218f4        0xc /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-tty.o)
-                0x00000000200218f4                __metal_driver_vtable_sifive_fe310_g000_pll
+                0x0000000020023d34        0xc /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-tty.o)
+                0x0000000020023d34                __metal_driver_vtable_sifive_fe310_g000_pll
  .rodata.__metal_driver_riscv_clint0_command_request
-                0x0000000020021900       0x18 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-riscv,clint0.o)
+                0x0000000020023d40       0x18 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-riscv,clint0.o)
  .rodata.__metal_valid_interrupt_id
-                0x0000000020021918       0x74 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-riscv,cpu.o)
+                0x0000000020023d58       0x74 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-riscv,cpu.o)
  .rodata.__metal_local_interrupt_enable
-                0x000000002002198c       0x80 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-riscv,cpu.o)
+                0x0000000020023dcc       0x80 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-riscv,cpu.o)
  .rodata.__metal_driver_riscv_cpu_controller_interrupt_register
-                0x0000000020021a0c       0x74 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-riscv,cpu.o)
+                0x0000000020023e4c       0x74 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-riscv,cpu.o)
  .rodata.pll_configs
-                0x0000000020021a80      0x880 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-sifive,fe310-g000,pll.o)
+                0x0000000020023ec0      0x880 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-sifive,fe310-g000,pll.o)
  *(.gnu.linkonce.r.*)
 
-.rela.dyn       0x0000000020022300        0x0
- .rela.text     0x0000000020022300        0x0 build/benchmark.o
+.rela.dyn       0x0000000020024740        0x0
+ .rela.text     0x0000000020024740        0x0 build/benchmark.o
  .rela.text.metal.init.enter
-                0x0000000020022300        0x0 build/benchmark.o
+                0x0000000020024740        0x0 build/benchmark.o
  .rela.text.libgloss.start
-                0x0000000020022300        0x0 build/benchmark.o
+                0x0000000020024740        0x0 build/benchmark.o
  .rela.sdata.brk
-                0x0000000020022300        0x0 build/benchmark.o
+                0x0000000020024740        0x0 build/benchmark.o
  .rela.text._sbrk
-                0x0000000020022300        0x0 build/benchmark.o
+                0x0000000020024740        0x0 build/benchmark.o
  .rela.data.__metal_dt_clock_0
-                0x0000000020022300        0x0 build/benchmark.o
+                0x0000000020024740        0x0 build/benchmark.o
  .rela.data.__metal_dt_clock_2
-                0x0000000020022300        0x0 build/benchmark.o
+                0x0000000020024740        0x0 build/benchmark.o
  .rela.data.__metal_dt_clint_2000000
-                0x0000000020022300        0x0 build/benchmark.o
+                0x0000000020024740        0x0 build/benchmark.o
  .rela.data.__metal_dt_cpu_0
-                0x0000000020022300        0x0 build/benchmark.o
+                0x0000000020024740        0x0 build/benchmark.o
  .rela.data.__metal_dt_interrupt_controller
-                0x0000000020022300        0x0 build/benchmark.o
+                0x0000000020024740        0x0 build/benchmark.o
  .rela.data.__metal_dt_interrupt_controller_c000000
-                0x0000000020022300        0x0 build/benchmark.o
+                0x0000000020024740        0x0 build/benchmark.o
  .rela.data.__metal_dt_gpio_10012000
-                0x0000000020022300        0x0 build/benchmark.o
+                0x0000000020024740        0x0 build/benchmark.o
  .rela.data.__metal_dt_serial_10013000
-                0x0000000020022300        0x0 build/benchmark.o
+                0x0000000020024740        0x0 build/benchmark.o
  .rela.data.__metal_dt_clock_3
-                0x0000000020022300        0x0 build/benchmark.o
+                0x0000000020024740        0x0 build/benchmark.o
  .rela.data.__metal_dt_clock_1
-                0x0000000020022300        0x0 build/benchmark.o
+                0x0000000020024740        0x0 build/benchmark.o
  .rela.data.__metal_dt_clock_4
-                0x0000000020022300        0x0 build/benchmark.o
+                0x0000000020024740        0x0 build/benchmark.o
  .rela.data.__metal_dt_prci_10008000
-                0x0000000020022300        0x0 build/benchmark.o
+                0x0000000020024740        0x0 build/benchmark.o
  .rela.sdata.__metal_cpu_table
-                0x0000000020022300        0x0 build/benchmark.o
+                0x0000000020024740        0x0 build/benchmark.o
  .rela.text.metal_tty_putc
-                0x0000000020022300        0x0 build/benchmark.o
+                0x0000000020024740        0x0 build/benchmark.o
  .rela.text.metal_tty_init
-                0x0000000020022300        0x0 build/benchmark.o
+                0x0000000020024740        0x0 build/benchmark.o
  .rela.text.__metal_driver_cpu_get
-                0x0000000020022300        0x0 build/benchmark.o
+                0x0000000020024740        0x0 build/benchmark.o
  .rela.text.__metal_default_sw_handler
-                0x0000000020022300        0x0 build/benchmark.o
+                0x0000000020024740        0x0 build/benchmark.o
  .rela.text.__metal_exception_handler
-                0x0000000020022300        0x0 build/benchmark.o
+                0x0000000020024740        0x0 build/benchmark.o
  .rela.text.__metal_driver_cpu_timer_controller_interrupt
-                0x0000000020022300        0x0 build/benchmark.o
+                0x0000000020024740        0x0 build/benchmark.o
  .rela.text.__metal_driver_cpu_sw_controller_interrupt
-                0x0000000020022300        0x0 build/benchmark.o
+                0x0000000020024740        0x0 build/benchmark.o
  .rela.text.metal_sifive_fe310_g000_pll_init
-                0x0000000020022300        0x0 build/benchmark.o
+                0x0000000020024740        0x0 build/benchmark.o
  .rela.text.use_hfxosc
-                0x0000000020022300        0x0 build/benchmark.o
-                0x0000000020022300                . = ALIGN (0x4)
+                0x0000000020024740        0x0 build/benchmark.o
+                0x0000000020024740                . = ALIGN (0x4)
 
-.preinit_array  0x0000000020022300        0x0
-                0x0000000020022300                PROVIDE (__preinit_array_start = .)
+.preinit_array  0x0000000020024740        0x0
+                0x0000000020024740                PROVIDE (__preinit_array_start = .)
  *(.preinit_array)
-                0x0000000020022300                PROVIDE (__preinit_array_end = .)
+                0x0000000020024740                PROVIDE (__preinit_array_end = .)
 
-.init_array     0x0000000020022300        0xc
-                0x0000000020022300                PROVIDE (__init_array_start = .)
+.init_array     0x0000000020024740        0xc
+                0x0000000020024740                PROVIDE (__init_array_start = .)
  *(SORT_BY_INIT_PRIORITY(.init_array.*) SORT_BY_INIT_PRIORITY(.ctors.*))
  *(.init_array EXCLUDE_FILE(*crtend?.o *crtend.o *crtbegin?.o *crtbegin.o) .ctors)
- .init_array    0x0000000020022300        0x4 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-tty.o)
- .init_array    0x0000000020022304        0x8 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-sifive,fe310-g000,pll.o)
-                0x000000002002230c                PROVIDE (__init_array_end = .)
+ .init_array    0x0000000020024740        0x4 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-tty.o)
+ .init_array    0x0000000020024744        0x8 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-sifive,fe310-g000,pll.o)
+                0x000000002002474c                PROVIDE (__init_array_end = .)
 
-.finit_array    0x000000002002230c        0x0
+.finit_array    0x000000002002474c        0x0
                 [!provide]                        PROVIDE (__finit_array_start = .)
  *(SORT_BY_INIT_PRIORITY(.fini_array.*) SORT_BY_INIT_PRIORITY(.dtors.*))
  *(.fini_array EXCLUDE_FILE(*crtend?.o *crtend.o *crtbegin?.o *crtbegin.o) .dtors)
@@ -1675,11 +1696,11 @@ END GROUP
  *(SORT_BY_NAME(.dtors.*))
  *(.dtors)
 
-.litimalign     0x000000002002230c        0x0
-                0x000000002002230c                . = ALIGN (0x4)
-                0x000000002002230c                PROVIDE (metal_segment_itim_source_start = .)
+.litimalign     0x000000002002474c        0x0
+                0x000000002002474c                . = ALIGN (0x4)
+                0x000000002002474c                PROVIDE (metal_segment_itim_source_start = .)
 
-.ditimalign     0x0000000080000000        0x0 load address 0x000000002002230c
+.ditimalign     0x0000000080000000        0x0 load address 0x000000002002474c
                 0x0000000080000000                . = ALIGN (0x4)
                 0x0000000080000000                PROVIDE (metal_segment_itim_target_start = .)
 
@@ -1688,137 +1709,137 @@ END GROUP
                 0x0000000080000000                . = ALIGN (0x8)
                 0x0000000080000000                PROVIDE (metal_segment_itim_target_end = .)
 
-.lalign         0x000000002002230c        0x0
-                0x000000002002230c                . = ALIGN (0x4)
+.lalign         0x000000002002474c        0x0
+                0x000000002002474c                . = ALIGN (0x4)
                 [!provide]                        PROVIDE (_data_lma = .)
-                0x000000002002230c                PROVIDE (metal_segment_data_source_start = .)
+                0x000000002002474c                PROVIDE (metal_segment_data_source_start = .)
 
-.dalign         0x0000000080000000        0x0 load address 0x000000002002230c
+.dalign         0x0000000080000000        0x0 load address 0x000000002002474c
                 0x0000000080000000                . = ALIGN (0x4)
                 0x0000000080000000                PROVIDE (metal_segment_data_target_start = .)
 
-.data           0x0000000080000000     0x128c load address 0x000000002002230c
+.data           0x0000000080000000     0x226c load address 0x000000002002474c
  *(.data .data.*)
- .data          0x0000000080000000       0x40 build/benchmark.o
- .data          0x0000000080000040      0x428 /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-impure.o)
- .data          0x0000000080000468      0x408 /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-mallocr.o)
-                0x0000000080000468                __malloc_av_
- .data          0x0000000080000870      0x16c /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-locale.o)
-                0x0000000080000870                __global_locale
+ .data          0x0000000080000000     0x1020 build/benchmark.o
+ .data          0x0000000080001020      0x428 /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-impure.o)
+ .data          0x0000000080001448      0x408 /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-mallocr.o)
+                0x0000000080001448                __malloc_av_
+ .data          0x0000000080001850      0x16c /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-locale.o)
+                0x0000000080001850                __global_locale
  .data.__metal_dt_clock_0
-                0x00000000800009dc       0x1c /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-tty.o)
-                0x00000000800009dc                __metal_dt_clock_0
+                0x00000000800019bc       0x1c /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-tty.o)
+                0x00000000800019bc                __metal_dt_clock_0
  .data.__metal_dt_clock_2
-                0x00000000800009f8       0x1c /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-tty.o)
-                0x00000000800009f8                __metal_dt_clock_2
+                0x00000000800019d8       0x1c /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-tty.o)
+                0x00000000800019d8                __metal_dt_clock_2
  .data.__metal_dt_clint_2000000
-                0x0000000080000a14       0x24 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-tty.o)
-                0x0000000080000a14                __metal_dt_clint_2000000
+                0x00000000800019f4       0x24 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-tty.o)
+                0x00000000800019f4                __metal_dt_clint_2000000
  .data.__metal_dt_cpu_0
-                0x0000000080000a38       0x10 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-tty.o)
-                0x0000000080000a38                __metal_dt_cpu_0
+                0x0000000080001a18       0x10 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-tty.o)
+                0x0000000080001a18                __metal_dt_cpu_0
  .data.__metal_dt_interrupt_controller
-                0x0000000080000a48      0x3c0 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-tty.o)
-                0x0000000080000a48                __metal_dt_interrupt_controller
+                0x0000000080001a28      0x3c0 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-tty.o)
+                0x0000000080001a28                __metal_dt_interrupt_controller
  .data.__metal_dt_interrupt_controller_c000000
-                0x0000000080000e08      0x320 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-tty.o)
-                0x0000000080000e08                __metal_dt_interrupt_controller_c000000
+                0x0000000080001de8      0x320 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-tty.o)
+                0x0000000080001de8                __metal_dt_interrupt_controller_c000000
  .data.__metal_dt_gpio_10012000
-                0x0000000080001128       0x58 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-tty.o)
-                0x0000000080001128                __metal_dt_gpio_10012000
+                0x0000000080002108       0x58 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-tty.o)
+                0x0000000080002108                __metal_dt_gpio_10012000
  .data.__metal_dt_serial_10013000
-                0x0000000080001180       0x30 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-tty.o)
-                0x0000000080001180                __metal_dt_serial_10013000
+                0x0000000080002160       0x30 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-tty.o)
+                0x0000000080002160                __metal_dt_serial_10013000
  .data.__metal_dt_clock_3
-                0x00000000800011b0       0x24 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-tty.o)
-                0x00000000800011b0                __metal_dt_clock_3
+                0x0000000080002190       0x24 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-tty.o)
+                0x0000000080002190                __metal_dt_clock_3
  .data.__metal_dt_clock_1
-                0x00000000800011d4       0x24 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-tty.o)
-                0x00000000800011d4                __metal_dt_clock_1
+                0x00000000800021b4       0x24 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-tty.o)
+                0x00000000800021b4                __metal_dt_clock_1
  .data.__metal_dt_clock_4
-                0x00000000800011f8       0x34 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-tty.o)
-                0x00000000800011f8                __metal_dt_clock_4
+                0x00000000800021d8       0x34 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-tty.o)
+                0x00000000800021d8                __metal_dt_clock_4
  .data.__metal_dt_prci_10008000
-                0x000000008000122c        0xc /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-tty.o)
-                0x000000008000122c                __metal_dt_prci_10008000
+                0x000000008000220c        0xc /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-tty.o)
+                0x000000008000220c                __metal_dt_prci_10008000
  *(.gnu.linkonce.d.*)
-                0x0000000080001238                . = ALIGN (0x8)
-                0x0000000080001a38                PROVIDE (__global_pointer$ = (. + 0x800))
+                0x0000000080002218                . = ALIGN (0x8)
+                0x0000000080002a18                PROVIDE (__global_pointer$ = (. + 0x800))
  *(.sdata .sdata.* .sdata2.*)
- .sdata         0x0000000080001238        0x4 /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-impure.o)
-                0x0000000080001238                _impure_ptr
- .sdata         0x000000008000123c        0x8 /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-mallocr.o)
-                0x000000008000123c                __malloc_sbrk_base
-                0x0000000080001240                __malloc_trim_threshold
- .sdata.brk     0x0000000080001244        0x4 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal-gloss.a(sys_sbrk.o)
+ .sdata         0x0000000080002218        0x4 /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-impure.o)
+                0x0000000080002218                _impure_ptr
+ .sdata         0x000000008000221c        0x8 /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-mallocr.o)
+                0x000000008000221c                __malloc_sbrk_base
+                0x0000000080002220                __malloc_trim_threshold
+ .sdata.brk     0x0000000080002224        0x4 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal-gloss.a(sys_sbrk.o)
  .sdata2.__metal_driver_vtable_fixed_clock
-                0x0000000080001248        0x8 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-tty.o)
-                0x0000000080001248                __metal_driver_vtable_fixed_clock
+                0x0000000080002228        0x8 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-tty.o)
+                0x0000000080002228                __metal_driver_vtable_fixed_clock
  .sdata2.__metal_driver_vtable_sifive_fe310_g000_prci
-                0x0000000080001250        0x8 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-tty.o)
-                0x0000000080001250                __metal_driver_vtable_sifive_fe310_g000_prci
+                0x0000000080002230        0x8 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-tty.o)
+                0x0000000080002230                __metal_driver_vtable_sifive_fe310_g000_prci
  .sdata2.__metal_driver_vtable_sifive_fe310_g000_hfrosc
-                0x0000000080001258        0x8 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-tty.o)
-                0x0000000080001258                __metal_driver_vtable_sifive_fe310_g000_hfrosc
+                0x0000000080002238        0x8 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-tty.o)
+                0x0000000080002238                __metal_driver_vtable_sifive_fe310_g000_hfrosc
  .sdata2.__metal_driver_vtable_sifive_fe310_g000_hfxosc
-                0x0000000080001260        0x8 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-tty.o)
-                0x0000000080001260                __metal_driver_vtable_sifive_fe310_g000_hfxosc
+                0x0000000080002240        0x8 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-tty.o)
+                0x0000000080002240                __metal_driver_vtable_sifive_fe310_g000_hfxosc
  .sdata.__metal_cpu_table
-                0x0000000080001268        0x4 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-tty.o)
-                0x0000000080001268                __metal_cpu_table
+                0x0000000080002248        0x4 /home/stefan/Documents/Graduation/RISC-V-toolchain/freedom-e-sdk/bsp/sifive-hifive1-revb/install/lib/debug//libmetal.a(libriscv__mmachine__sifive-hifive1-revb_a-tty.o)
+                0x0000000080002248                __metal_cpu_table
  *(.gnu.linkonce.s.*)
-                0x0000000080001270                . = ALIGN (0x8)
- *fill*         0x000000008000126c        0x4 
+                0x0000000080002250                . = ALIGN (0x8)
+ *fill*         0x000000008000224c        0x4 
  *(.srodata.cst16)
  *(.srodata.cst8)
- .srodata.cst8  0x0000000080001270       0x10 /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-mprec.o)
- .srodata.cst8  0x0000000080001280        0x8 /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-s_frexp.o)
+ .srodata.cst8  0x0000000080002250       0x10 /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-mprec.o)
+ .srodata.cst8  0x0000000080002260        0x8 /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-s_frexp.o)
  *(.srodata.cst4)
  *(.srodata.cst2)
  *(.srodata .srodata.*)
- .srodata       0x0000000080001288        0x4 /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-impure.o)
-                0x0000000080001288                _global_impure_ptr
-                0x000000008000128c                . = ALIGN (0x4)
+ .srodata       0x0000000080002268        0x4 /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-impure.o)
+                0x0000000080002268                _global_impure_ptr
+                0x000000008000226c                . = ALIGN (0x4)
                 [!provide]                        PROVIDE (_edata = .)
                 [!provide]                        PROVIDE (edata = .)
-                0x000000008000128c                PROVIDE (metal_segment_data_target_end = .)
+                0x000000008000226c                PROVIDE (metal_segment_data_target_end = .)
                 [!provide]                        PROVIDE (_fbss = .)
                 [!provide]                        PROVIDE (__bss_start = .)
-                0x000000008000128c                PROVIDE (metal_segment_bss_target_start = .)
+                0x000000008000226c                PROVIDE (metal_segment_bss_target_start = .)
 
-.bss            0x000000008000128c       0x38
+.bss            0x000000008000226c       0x38
  *(.sbss*)
- .sbss          0x000000008000128c        0xc /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-mallocr.o)
-                0x000000008000128c                __malloc_max_total_mem
-                0x0000000080001290                __malloc_max_sbrked_mem
-                0x0000000080001294                __malloc_top_pad
+ .sbss          0x000000008000226c        0xc /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-mallocr.o)
+                0x000000008000226c                __malloc_max_total_mem
+                0x0000000080002270                __malloc_max_sbrked_mem
+                0x0000000080002274                __malloc_top_pad
  *(.gnu.linkonce.sb.*)
  *(.bss .bss.*)
- .bss           0x0000000080001298       0x28 /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-mallocr.o)
-                0x0000000080001298                __malloc_current_mallinfo
+ .bss           0x0000000080002278       0x28 /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-mallocr.o)
+                0x0000000080002278                __malloc_current_mallinfo
  *(.gnu.linkonce.b.*)
  *(COMMON)
- COMMON         0x00000000800012c0        0x4 /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-reent.o)
-                0x00000000800012c0                errno
-                0x00000000800012c4                . = ALIGN (0x4)
-                0x00000000800012c8                . = ALIGN (0x8)
+ COMMON         0x00000000800022a0        0x4 /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-reent.o)
+                0x00000000800022a0                errno
+                0x00000000800022a4                . = ALIGN (0x4)
+                0x00000000800022a8                . = ALIGN (0x8)
                 [!provide]                        PROVIDE (_end = .)
                 [!provide]                        PROVIDE (end = .)
-                0x00000000800012c8                PROVIDE (metal_segment_bss_target_end = .)
+                0x00000000800022a8                PROVIDE (metal_segment_bss_target_end = .)
 
-.stack          0x00000000800012c4     0x1800
+.stack          0x00000000800022a4     0x1800
                 [!provide]                        PROVIDE (metal_segment_stack_begin = .)
                 0x0000000000001800                . = __stack_size
- *fill*         0x00000000800012c4     0x1800 
+ *fill*         0x00000000800022a4     0x1800 
                 [!provide]                        PROVIDE (_sp = .)
-                0x0000000080002ac4                PROVIDE (metal_segment_stack_end = .)
+                0x0000000080003aa4                PROVIDE (metal_segment_stack_end = .)
 
-.heap           0x0000000080002ac4     0x153c
-                0x0000000080002ac4                PROVIDE (metal_segment_heap_target_start = .)
+.heap           0x0000000080003aa4      0x55c
+                0x0000000080003aa4                PROVIDE (metal_segment_heap_target_start = .)
                 0x0000000000000400                . = __heap_size
- *fill*         0x0000000080002ac4      0x400 
+ *fill*         0x0000000080003aa4      0x400 
                 0x0000000080004000                . = (__heap_size == 0x0)?0x0:(ORIGIN (ram) + LENGTH (ram))
- *fill*         0x0000000080002ec4     0x113c 
+ *fill*         0x0000000080003ea4      0x15c 
                 0x0000000080004000                PROVIDE (metal_segment_heap_target_end = .)
                 [!provide]                        PROVIDE (_heap_end = .)
 OUTPUT(build/program.elf elf32-littleriscv)
@@ -1827,6 +1848,7 @@ OUTPUT(build/program.elf elf32-littleriscv)
  .comment       0x0000000000000000       0x15 build/benchmark.o
                                          0x16 (size before relaxing)
  .comment       0x0000000000000015       0x16 build/main.o
+ .comment       0x0000000000000015       0x16 build/lib.a(onetime_auth.o)
  .comment       0x0000000000000015       0x16 build/lib.a(scalarmult.o)
  .comment       0x0000000000000015       0x11 /home/stefan/Documents/Graduation/RISC-V-toolchain/riscv64-unknown-elf-gcc/bin/../lib/gcc/riscv64-unknown-elf/8.2.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc.a(lib_a-fflush.o)
                                          0x12 (size before relaxing)
@@ -1928,6 +1950,8 @@ OUTPUT(build/program.elf elf32-littleriscv)
                 0x0000000000000000        0x0 build/benchmark.o
  .note.GNU-stack
                 0x0000000000000000        0x0 build/main.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 build/lib.a(onetime_auth.o)
  .note.GNU-stack
                 0x0000000000000000        0x0 build/lib.a(scalarmult.o)
 
