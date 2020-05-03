@@ -4,7 +4,7 @@ In this project the [NaCl](https://nacl.cr.yp.to/), created by Daniel J. Bernste
 
 ## Folder structure
 
-The RISC-V programs and code can be found in the Programs folder, in which subfolders exists for each implementation. In the folder of the implementation subfolder exist for each component of the NaCl library. A component exists out of a makefile, a main file, a benchmark file and the component itself. The main file is basic and only has a few print functions. The benchmark file is overwritten during testing(for more information see Correctness) and does 20 timed runs of a testcase.
+The RISC-V programs and code can be found in the Programs folder, in which subfolders exists for each implementation. In the folder of the implementation subfolder exist for each component of the NaCl library. A component can have different implementations. The fastest implementation is in the sub-folder opt or Radix2.26. To build the library make lib is used. This creates the library in the build directory. The include file can be found in the includes folder with all functions provided by the library. 
 
 The parsing, testframework and rstudio folder are all used for testing and analysis which is further explained in correctness.
 
