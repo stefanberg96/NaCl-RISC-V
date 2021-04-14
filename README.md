@@ -28,9 +28,9 @@ Below the list of implemented components can be found.
 
 ## Correctness
 
-To check that the functions behaves correctly a testframework is tested. 
+To check that the functions behaves correctly a testframework has been created. 
 
-The testframework will create a testcase and calculate the expected result. The it will write the benchmark file in the folder of which it is called. It will make the hex file and upload the file to the board. The board will be reset and start executing. The computer is at this time waiting for the result of the board on /dev/ttyACM1, so make sure that no other processes are accessing that file. The board will report back with the timing results, the branch mispredictions and the result. The result is checked and the other information is logged. The results of a test are in the subfolder results of the component. 
+The testframework will create a testcase and calculate the expected result. Afterwards it will write the benchmark file in the folder of which it is called. It will make the hex file and upload the file to the board. The board will be reset and start executing. The computer is at this time waiting for the result of the board on /dev/ttyACM1, so make sure that no other processes are accessing that file. The board will report back with the timing results, the branch mispredictions and the result. The result is checked and the other information is logged. The results of a test are in the subfolder results of the component. 
 
 At the end of a testcase the parsing tool can be used to extract the cycle counts, branch mispredictions, the result and expected result. It will parse each testcase and give it an id. This id in combination with the run id, which is a counter per testcase, will be a single run of the testcase with that id. Each run will become a line in the csv with the corresponding values. The csv is used in RStudio to analyze whether or not the cycle counts deviate a lot. The results of this can be found in the RStudio folder.
 
