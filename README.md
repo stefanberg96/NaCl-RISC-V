@@ -1,6 +1,6 @@
 # NaCl in RISC-V
 
-In this project the [NaCl](https://nacl.cr.yp.to/), created by Daniel J. Bernstein, Tanja Lange and Peter Schwabe,  is/has been implemented in RISC-V.  For this project the decision is made to go for the 32-bit base instruction set. The project provides code without any extensions, and one using the multiplication extension. The development board used during the project is the [Sifive Hifive1 rev-B](https://www.sifive.com/boards/hifive1-rev-b). 
+In this project the [NaCl](https://nacl.cr.yp.to/), created by Daniel J. Bernstein, Tanja Lange and Peter Schwabe,  is/has been implemented in RISC-V.  For this project the decision is made to go for the 32-bit base instruction set. The project provides code without any extensions, and one using the multiplication extension. The development board used during the project is the [Sifive Hifive1 rev-B](https://www.sifive.com/boards/hifive1-rev-b). A full report for this master thesis can be found on [this link](https://research.tue.nl/en/studentTheses/risc-v-implementation-of-the-nacl-library) 
 
 ## Folder structure
 
